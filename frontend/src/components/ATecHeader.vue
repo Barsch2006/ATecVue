@@ -6,7 +6,7 @@ export default {
 
 <template>
     <header>
-        <img src="/Atec_small.jpg" />
+        <img onclick="window.location.href = '/'" src="/Atec_small.jpg" />
         Aula Technik AG
     </header>
 </template>

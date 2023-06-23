@@ -21,7 +21,7 @@ const routes = [
         component: Homepage
     },
     {
-        path: "/eventform",
+        path: "/createevent",
         name: "EventForm",
         component: EventForm
     },
