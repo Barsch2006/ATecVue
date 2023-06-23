@@ -1,10 +1,5 @@
 <script lang="ts">
-import SubmitError from '@/components/SubmitError.vue';
-
 export default {
-    components: {
-        SubmitError,
-    },
     data() {
         return {
             rules: {
@@ -22,7 +17,7 @@ export default {
 </script>
 
 <template>
-    <v-form action="createevent" method="post">
+    <v-form action="/createevent" method="post">
         <v-card>
             <v-card-title>
                 Angaben über den Veranstalter
