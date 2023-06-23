@@ -20,7 +20,10 @@ interface IEvent {
     vga: boolean;
     usb: boolean;
     // special info
-    notes: string;
+    notes?: string;
+
+    // backend info
+    discordMessageId?: string;
 }
 
 export default IEvent;
