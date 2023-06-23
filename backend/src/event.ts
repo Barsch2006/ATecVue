@@ -1,7 +1,4 @@
-import { ObjectId } from "mongodb";
-
 interface IEvent {
-    id: ObjectId;
     // creator info
     name: string;
     lastname: string;
