@@ -17,7 +17,7 @@ export default {
 </script>
 
 <template>
-    <v-form action="/createevent" method="post">
+    <v-form action="/event" method="post">
         <v-card>
             <v-card-title>
                 Angaben über den Veranstalter
@@ -91,7 +91,7 @@ export default {
                 <v-textarea name="notes" clearable label="Sonstiges, Anmerkungen, Generalprobe.." />
             </v-card-text>
             <v-card-actions>
-                <v-btn type="submit" variant="outlined" width="100%">Absenden</v-btn>
+                <v-btn type="submit" variant="tonal" width="100%">Absenden</v-btn>
             </v-card-actions>
         </v-card>
     </v-form>

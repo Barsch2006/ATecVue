@@ -3,11 +3,7 @@ export default {
     data() {
         return {
             rules: {
-                required: (value: string) => !!value || 'Dieses Feld ist erforderlich.',
-                email: (value: string) => {
-                    const pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-                    return pattern.test(value) || 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
-                },
+                required: (value: string) => !!value || 'Dieses Feld ist erforderlich.'
             },
         };
     },
@@ -16,52 +12,19 @@ export default {
 
 
 <template>
-    <v-form action="/login" method="post">
-        <v-card>
-            <v-card-title>
-                Login
-            </v-card-title>
-            <v-card-text>
-                <v-text-field name="email" type="email" clearable label="E-Mail" density="compact"
-                    :rules="[rules.required, rules.email]" />
-                <v-text-field name="password" type="password" clearable label="Passwort" density="compact"
-                    :rules="[rules.required]" />
-            </v-card-text>
-            <v-card-actions>
-                <v-btn type="submit" variant="outlined" width="100%">Login</v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-form>
+    <div class="login-wrapper">
+        <v-form id="loginform" action="/login" method="post">
+            <img src="/Atec_small.jpg" alt="Dolphin School" />
+            <h1>Login</h1>
+            <v-text-field name="username" clearable label="Benutzername" density="compact"
+                :rules="[rules.required]" />
+            <v-text-field name="password" type="password" clearable label="Passwort" density="compact"
+                :rules="[rules.required]" />
+            <v-btn type="submit" variant="tonal" width="100%">Login</v-btn>
+        </v-form>
+    </div>
 </template>
 
 <style scoped>
-.v-card-title {
-    font-size: 1.5rem;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
-
-.v-form {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    flex-direction: column;
-    height: 100%;
-    padding-top: 40px;
-    gap: 20px;
-}
-
-.v-card {
-    width: 600px;
-}
-
-@media screen and (max-width: 900px) {
-    .v-card {
-        width: 80%;
-    }
-}
+@import url("../assets/login.css");
 </style>
