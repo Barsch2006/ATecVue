@@ -1,4 +1,5 @@
 import userinfo from 'Bot/actions/userinfo'
+import statistics from 'Bot/actions/statistics'
 
 import {
     CommandInteraction, Client, Interaction,
@@ -21,6 +22,9 @@ const handleSlashCommand = async (client: Client, interaction: CommandInteractio
     switch (interaction.commandName) {
         case 'userinfo':
             await userinfo(client, interaction, db);
+            break;
+        case 'statistics':
+            await statistics(client, interaction, db);
             break;
     }
 }

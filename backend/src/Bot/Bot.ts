@@ -1,4 +1,4 @@
-import { ChannelType, Client, Colors, Embed, EmbedBuilder, IntentsBitField } from 'discord.js';
+import { ChannelType, Client, Colors, EmbedBuilder, IntentsBitField } from 'discord.js';
 import interactionCreate from './listeners/interactionCreate';
 import registerCommands from './actions/registerCommands';
 import { Db } from 'mongodb';
