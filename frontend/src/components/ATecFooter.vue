@@ -11,11 +11,11 @@ export default {
                 <img src="/policy.svg" alt="Piktogramm Schutzschild mit Lupe">
                 <a href="">Impressum</a>
                 <a href="">Datenschutz</a>
-                <a href="">Cookie-Richtlinie</a>
             </div>
 
             <div class="admin linklist">
                 <img src="/admin.svg" alt="Piktogramm Admin-Bereich">
+                <a href="/">Login</a>
                 <a href="/home">Admin-Bereich</a>
             </div>
         </div>
