@@ -4,7 +4,8 @@ import Index from "./Index.vue";
 import Homepage from "./pages/Homepage.vue";
 import EventForm from "./pages/EventForm.vue";
 import Login from "./pages/Login.vue";
-import Admin from "./pages/UserDashboard.vue";
+import Admin from "./pages/Admin.vue";
+import Technician from "./pages/Technician.vue";
 
 import "vuetify/styles"
 import "@mdi/font/css/materialdesignicons.css";
@@ -17,6 +18,11 @@ import vuetify from "./plugins/vuetify";
 const routes = [
     {
         path: "/",
+        name: "Login",
+        component: Login
+    },
+    {
+        path: "/home",
         name: "Startseite",
         component: Homepage
     },
@@ -26,14 +32,14 @@ const routes = [
         component: EventForm
     },
     {
-        path: "/login",
-        name: "Login",
-        component: Login
-    },
-    {
         path: "/admin",
         name: "Admin",
         component: Admin
+    },
+    {
+        path: "/technician",
+        name: "Technician",
+        component: Technician
     },
 ];
 
