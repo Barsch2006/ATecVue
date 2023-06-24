@@ -4,7 +4,7 @@ import Index from "./Index.vue";
 import Homepage from "./pages/Homepage.vue";
 import EventForm from "./pages/EventForm.vue";
 import Login from "./pages/Login.vue";
-import Admin from "./pages/Admin.vue";
+import Admin from "./pages/UserDashboard.vue";
 
 import "vuetify/styles"
 import "@mdi/font/css/materialdesignicons.css";

@@ -5,9 +5,8 @@ export default {
 </script>
 
 <template>
-  <h1>
-    Admin
-  </h1>
+
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>
