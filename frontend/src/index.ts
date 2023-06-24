@@ -6,6 +6,7 @@ import EventForm from "./pages/EventForm.vue";
 import Login from "./pages/Login.vue";
 import Admin from "./pages/Admin.vue";
 import Technician from "./pages/Technician.vue";
+import About from "./pages/About.vue";
 
 import "vuetify/styles"
 import "@mdi/font/css/materialdesignicons.css";
@@ -40,6 +41,11 @@ const routes = [
         path: "/technician",
         name: "Technician",
         component: Technician
+    },
+    {
+        path: "/about",
+        name: "About",
+        component: About
     },
 ];
 
