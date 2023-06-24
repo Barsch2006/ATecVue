@@ -12,19 +12,20 @@ export default function createEvent(db: Db, discord: ATecBot): Router {
 
     router.post('/event', async (req, res) => {
 
-        if (!req.isAuthenticated()) {
+        if (!req.auth?.authenticated) {
             res.status(401).send("Unauthorized");
             return;
         }
 
         // check if the user is logged in and at least a user (not locked)
-        if (!req.user || req.user.permissionLevel === "locked") {
-            res.status(403).send("Unauthorized");
+        if (!req.auth?.user || req.auth?.user.permissionLevel === "locked") {
+            res.status(403).send("Forbidden");
             return;
         }
 
         // check if the body is valid and has all properties of IEvent
         if (!req.body || !validateBody(req.body)) {
+            console.log("Bad Request")
             res.status(400).send("Bad Request");
             return;
         }

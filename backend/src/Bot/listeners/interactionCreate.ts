@@ -1,20 +1,18 @@
-import userinfo from 'Bot/actions/userinfo'
-import statistics from 'Bot/actions/statistics'
+import userinfo from '../actions/userinfo'
 
 import {
     CommandInteraction, Client, Interaction,
     ButtonInteraction,
-    TextChannel,
 } from 'discord.js'
 import { Db } from 'mongodb'
-import IEvent from 'Event/event'
-import IUser from 'Auth/user'
-import buildEventEmbed from 'Bot/Embeds/buildEventEmbed'
+import IEvent from '../../Event/event'
+import IUser from '../../Auth/user'
+import buildEventEmbed from '../Embeds/buildEventEmbed'
 
 export default (client: Client, db: Db): void => {
     client.on('interactionCreate', async (interaction: Interaction) => {
         if (interaction.isCommand()) {
-            await handleSlashCommand(client, interaction, db)
+            await handleSlashCommand(interaction, db)
         }
         if (interaction.isButton()) {
             await handleButtonInteraction(interaction, db)
@@ -22,13 +20,10 @@ export default (client: Client, db: Db): void => {
     })
 }
 
-const handleSlashCommand = async (client: Client, interaction: CommandInteraction, db: Db): Promise<void> => {
+const handleSlashCommand = async (interaction: CommandInteraction, db: Db): Promise<void> => {
     switch (interaction.commandName) {
         case 'userinfo':
-            await userinfo(client, interaction, db);
-            break;
-        case 'statistics':
-            await statistics(client, interaction, db);
+            await userinfo(interaction, db);
             break;
     }
 }

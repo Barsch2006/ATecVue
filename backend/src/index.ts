@@ -3,12 +3,22 @@ dotenv();
 
 import express from "express";
 import cookieParser from "cookie-parser";
-import auth from "./Auth/auth";
 import createEvent from "./Event/create";
+import cors from "cors";
 const app = express();
 
 import ATecBot from "./Bot/Bot";
 import viewEvents from "./Event/view";
+import IUser from "./Auth/user";
+import auth from "./Auth/auth";
+import { WithId } from "mongodb";
+import { join } from "path";
+
+declare global {
+    namespace Express {
+        interface User extends WithId<IUser> {}
+    }
+}
 
 async function main() {
     if (!process.env.DB_URL) {
@@ -20,11 +30,19 @@ async function main() {
     if (!process.env.PORT) {
         console.warn("! WARN ! ENV: PORT is missing. 3000 is being used!");
     }
+
+    if (!process.env.SESSION_SECRET) {
+        throw new Error("ENV: SESSION_SECRET is missing!");
+    }
     // init mongodb
     const { MongoClient } = await import("mongodb");
     const client = new MongoClient(process.env.DB_URL);
     await client.connect();
     const db = client.db(process.env.DB_NAME ?? "ATec");
+
+    app.use(cors({
+        origin: process.env.CORS_ORIGIN,
+    }))
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
@@ -49,12 +67,21 @@ async function main() {
         event_channel: process.env.DISCORD_EVENT_CHANNEL ?? "",
     });
 
-    auth(app, db);
+    if (!process.env.SESSION_SECRET) throw new Error("ENV: SESSION_SECRET is missing!");
+
+
+    app.use(auth(db));
 
     app.use(createEvent(db, bot));
     app.use(viewEvents(db));
 
-    app.use(express.static("public"));
+    app.use(express.static(process.env.PUBLIC_DIR ?? "public"));
+    app.use((req, res) => {
+        if (req.method === "GET") {
+            res.sendFile(join(process.env.PUBLIC_DIR ?? "public", "index.html"));
+            return;
+        }
+    })
 
     app.listen(process.env.PORT ?? 3000, () => {
         console.log("INFO", `Server runs on localhost: ${process.env.PORT}`);

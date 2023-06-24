@@ -10,14 +10,14 @@ export default function viewEvents(db: Db): Router {
 
     router.get('/event/:id', async (req, res) => {
 
-        if (!req.isAuthenticated()) {
+        if (!req.auth?.authenticated) {
             res.status(401).send("Unauthorized");
             return;
         }
 
-        // check if the user is logged in and at least a atec member
-        if (!req.user || req.user.permissionLevel != "technician" && req.user.permissionLevel != "admin") {
-            res.status(403).send("Unauthorized");
+        // check if the user is logged in and at least a user (not locked)
+        if (!req.auth?.user || req.auth?.user.permissionLevel === "locked") {
+            res.status(403).send("Forbidden");
             return;
         }
 
@@ -31,14 +31,15 @@ export default function viewEvents(db: Db): Router {
 
     // get all events, sorted by date and in a short format
     router.get('/events', async (req, res) => {
-        if (!req.isAuthenticated()) {
+        
+        if (!req.auth?.authenticated) {
             res.status(401).send("Unauthorized");
             return;
         }
 
-        // check if the user is logged in and at least a atec member
-        if (!req.user || req.user.permissionLevel != "technician" && req.user.permissionLevel != "admin") {
-            res.status(403).send("Unauthorized");
+        // check if the user is logged in and at least a user (not locked)
+        if (!req.auth?.user || req.auth?.user.permissionLevel === "locked") {
+            res.status(403).send("Forbidden");
             return;
         }
 

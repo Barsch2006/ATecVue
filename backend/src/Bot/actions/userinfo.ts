@@ -1,12 +1,13 @@
-import { Client, CommandInteraction } from "discord.js";
+import IUser from "Auth/user";
+import { CommandInteraction } from "discord.js";
 import { Db } from "mongodb";
 
-export default async (client: Client, interaction: CommandInteraction, db: Db): Promise<void> => {
+export default async (interaction: CommandInteraction, db: Db): Promise<void> => {
     const target = interaction.options.getUser('target', true);
 
-    const userCollection = db.collection('users');
+    const userCollection = db.collection<IUser>('users');
 
-    const targetUser = await userCollection.findOne({ username: target.username });
+    const targetUser = await userCollection.findOne({ dId: target.id });
     if (targetUser === null) {
         interaction.reply(`Der Benutzer ${target.username} existiert nicht.`);
     } else {

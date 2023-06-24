@@ -1,92 +1,172 @@
-import { Express } from "express";
-import { Db, WithId, ObjectId } from "mongodb";
-import passport, { session } from "passport";
+import { Router } from "express";
 import IUser from "./user";
-
-import { Strategy as LocalStrategy } from "passport-local";
+import { Db, ObjectId, WithId } from "mongodb";
 import { compare } from "bcrypt";
+
+import { sign, verify } from "jsonwebtoken";
+import { randomBytes } from "crypto";
+
+interface ISession {
+    userId: ObjectId;
+    token: string;
+    expires: number;
+}
 
 declare global {
     namespace Express {
-        interface User extends WithId<IUser> {}
+        interface Request {
+            auth?: {
+                user?: WithId<IUser>;
+                authenticated: boolean;
+            }
+        }
     }
 }
 
-// express authentication with passport
-
-// function params: app: Express, db: Db
-export default function (app: Express, db: Db) {
-
-    if (!process.env.SESSION_SECRET) throw new Error("ENV: SESSION_SECRET is missing!");
-
-    // passport authentication
-    app.use(session(undefined));
-
-    app.use(passport.initialize());
-    app.use(passport.session());
-
-    // user collection
+export default function auth(db: Db): Router {
+    const router = Router();
     const userCollection = db.collection<IUser>("users");
+    const sessions = db.collection<ISession>("sessions");
 
-    passport.use(new LocalStrategy({ usernameField: 'username' }, async (username, password, done) => {
-        const user = await userCollection.findOne({ username });
+    if (!process.env.JWT_SECRET) {
+        throw new Error("JWT_SECRET not set");
+    }
+
+    router.post("/login", async (req, res) => {
+        if (!process.env.JWT_SECRET) {
+            throw new Error("JWT_SECRET not set");
+        }
+
+        // check if body includes username + password
+        if (!req.body || !req.body.username || !req.body.password) {
+            res.status(400).send("Bad Request");
+            return;
+        }
+
+        // get the user from the database
+        const user = await userCollection.findOne({ username: req.body.username });
+
+        // compare passwords with bcrypt
+
         if (!user) {
-            return done(null, false, { message: 'Login failed' });
+            res.status(401).send("Unauthorized");
+            return;
         }
 
-        if (await compare(user.password, password)) {
-            return done(null, user);
+        if (await compare(req.body.password, user.password)) {
+
+            // create a token
+            let token = randomBytes(32).toString("base64");
+
+            // sign token
+            let signed = sign({
+                userId: user._id.toHexString(),
+                token
+            }, process.env.JWT_SECRET, {
+                expiresIn: "1h"
+            });
+
+            // set cookie
+            res.cookie("token", signed, {
+                domain: "debug-676.heeecker.me",
+                httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                path: "/",
+            });
+            console.log("Cookie Set", signed);
+
+            // save token in database
+
+            await sessions.insertOne({
+                userId: user._id,
+                token,
+                expires: Date.now() + 1000 * 60 * 60
+            });
+
+            res.status(200).send("OK");
+            return;
         }
 
-        if (user.permissionLevel === "locked") {
-            return done(null, false, { message: 'Account locked' });
-        };
+        res.status(401).send("Unauthorized");
+    });
 
-        return done(null, false, { message: 'Login failed' });
 
-    }));
+    router.use(async (req, _, next) => {
 
-    passport.serializeUser((user, done) => {
+        console.log(req.cookies.token)
+        if (req.cookies.token) {
+            // check if token is valid and in db
+            if (!process.env.JWT_SECRET) {
+                throw new Error("JWT_SECRET not set");
+            }
 
-        if (user._id) {
-            return done(null, user._id.toHexString());
+            const data = verify(req.cookies.token, process.env.JWT_SECRET, {
+                ignoreExpiration: false,
+            }) as any;
+
+            // check if data is in db
+            const session = await sessions.findOne({
+                userId: new ObjectId(data.userId),
+                token: data.token
+            });
+
+            if (session) {
+                req.auth = {
+                    authenticated: true,
+                    user: await userCollection.findOne({
+                        _id: new ObjectId(data.userId)
+                    }) ?? undefined,
+                }
+                console.log("authenticated request")
+                next();
+                return;
+            }
+
         }
 
-        return done("User has no id", null);
+        req.auth = {
+            authenticated: false,
+            user: undefined,
+        }
+        console.log("not authenticated request")
+
+        next();
 
     });
 
-    passport.deserializeUser(async (id: string, done) => {
-
-        if (!/[a-f0-]{24}/.test(id)) {
-            return done("Invalid id", null);
+    router.get("/logout", async (req, res) => {
+        if (!req.auth?.authenticated) {
+            res.status(401).send("Unauthorized");
+            return;
+        }
+        if (!req.auth?.user) {
+            res.status(400).send("Bad Request");
+            return;
         }
 
-        if (!ObjectId.isValid(id)) {
-            return done("Invalid id", null);
-        }
-
-        const user = await userCollection.findOne({ _id: ObjectId.createFromHexString(id)})
-
-        if (!user) {
-            return done("User not found", null);
-        }
-
-        return done(null, user);
-
-    });
-
-    // login route
-    app.post('/login', passport.authenticate('local', {
-        successRedirect: '/admin',
-        failureRedirect: '/login?failed=true',
-    }));
-
-    // logout route
-    app.get('/logout', (req, res) => {
-        req.logout((err: any) => {
-            if (err) return res.status(500).send("Fehler beim Logout");
-            res.redirect('/');
+        // delete session from database
+        await sessions.deleteMany({
+            userId: req.auth.user._id
         });
+
+        // delete cookie
+        res.clearCookie("token");
+
+        res.status(200).send("OK");
+
     });
-};
+
+    setInterval(async () => {
+
+        await sessions.deleteMany({
+            expires: {
+                $lt: Date.now()
+            }
+        });
+
+    }, 1000 * 5 * 60);
+
+    return router;
+
+}

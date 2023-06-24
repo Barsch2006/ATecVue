@@ -11,13 +11,14 @@ export default function createEvent(db: Db): Router {
     const userCollection = db.collection<IUser>("users");
 
     router.post("/user", async (req, res) => {
-        if (!req.isAuthenticated()) {
+        
+        if (!req.auth?.authenticated) {
             res.status(401).send("Unauthorized");
             return;
         }
 
         // check if the user is logged in and at least a admin (not locked, not user)
-        if (!req.user || req.user.permissionLevel != "admin") {
+        if (!req.auth?.user || req.auth?.user.permissionLevel != "admin") {
             res.status(403).send("Unauthorized");
             return;
         }
@@ -45,13 +46,14 @@ export default function createEvent(db: Db): Router {
 
     // route to update a user
     router.patch("/user", async (req, res) => {
-        if (!req.isAuthenticated()) {
+        
+        if (!req.auth?.authenticated) {
             res.status(401).send("Unauthorized");
             return;
         }
 
-        // check if the user is logged in and at least a admin
-        if (!req.user || req.user.permissionLevel != "admin") {
+        // check if the user is logged in and at least a admin (not locked, not user)
+        if (!req.auth?.user || req.auth?.user.permissionLevel != "admin") {
             res.status(403).send("Unauthorized");
             return;
         }
