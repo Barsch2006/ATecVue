@@ -13,10 +13,15 @@ export default {
                 <a href="">Datenschutz</a>
             </div>
 
+            <div class="links linklist">
+                <img class="logo" src="/Atec_small.jpg" alt="ATec Logo">
+                <a href="/about">Über die ATec</a>
+                <a href="/rules">Aula-Regeln</a>
+            </div>
+
             <div class="admin linklist">
                 <img src="/admin.svg" alt="Piktogramm Admin-Bereich">
                 <a href="/">Login</a>
-                <a href="/home">Admin-Bereich</a>
             </div>
         </div>
 
@@ -79,6 +84,15 @@ a {
     margin-left: 0;
     margin-right: auto;
 }
+
+.links {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
 footer .copyright {
     display: flex;
     align-items: center;

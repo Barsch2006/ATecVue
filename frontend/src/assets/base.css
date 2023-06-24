@@ -31,6 +31,6 @@ a:hover {
   filter: contrast(0.73);
 }
 
-.logo.bg {
+.bg {
   z-index: 0;
 }

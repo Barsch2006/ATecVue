@@ -7,6 +7,7 @@ import Login from "./pages/Login.vue";
 import Admin from "./pages/Admin.vue";
 import Technician from "./pages/Technician.vue";
 import About from "./pages/About.vue";
+import ATecRules from "./pages/ATecRules.vue";
 
 import "vuetify/styles"
 import "@mdi/font/css/materialdesignicons.css";
@@ -47,6 +48,11 @@ const routes = [
         name: "About",
         component: About
     },
+    {
+        path: "/rules",
+        name: "Regeln",
+        component: ATecRules
+    }
 ];
 
 const router = createRouter({
