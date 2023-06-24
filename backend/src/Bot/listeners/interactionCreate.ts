@@ -30,7 +30,26 @@ const handleSlashCommand = async (client: Client, interaction: CommandInteractio
 }
 
 const handleButtonInteraction = async (client: Client, interaction: ButtonInteraction, db: Db): Promise<void> => {
-//     if (interaction.customId === 'event-participate') {
-//         return;
-//     }
+    if (interaction.customId === 'event-participate') {
+        await newParticipant(client, interaction, db)
+    }
+}
+
+async function newParticipant(client: Client<boolean>, interaction: ButtonInteraction, db: Db) {
+    const event_id = interaction.message.id
+    const event_obj = await db.collection('events').findOne({ message_id: event_id })
+    if (!event_obj) {
+        await interaction.reply({ content: 'Fehler. Event nicht gefunden.', ephemeral: true })
+        return
+    }
+    // get the user by username
+    const user = await db.collection('users').findOne({ username: interaction.user.username })
+
+    // check if users id is in the participants list of the event
+    if (event_obj.participants.includes(user?._id)) {
+        await interaction.reply({ content: 'Mehrfaches übernehmen ist nicht möglich', ephemeral: true })
+        return
+    }
+    await db.collection('event_participants').insertOne({ event_id: event_id, participant_id: interaction.user.id })
+    await interaction.reply({ content: 'Du übernimmst diese Veranstaltung.', ephemeral: true })
 }

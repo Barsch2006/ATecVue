@@ -1,4 +1,4 @@
-import { ChannelType, Client, Colors, EmbedBuilder, IntentsBitField } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, Client, Colors, EmbedBuilder, IntentsBitField } from 'discord.js';
 import interactionCreate from './listeners/interactionCreate';
 import registerCommands from './actions/registerCommands';
 import { Db } from 'mongodb';
@@ -10,6 +10,7 @@ class ATecBot {
     private client: Client;
     event_channel: string;
     default_channel: string;
+    db: Db;
 
     constructor(token: string, applicationId: string, db: Db, options: { default_channel: string, event_channel: string }) {
         this.default_channel = options.default_channel;
@@ -21,11 +22,12 @@ class ATecBot {
                 IntentsBitField.Flags.Guilds,
             ]
         });
-        this.init(db);
+        this.db = db;
+        this.init();
     }
 
-    async init(db: Db) {
-        interactionCreate(this.client, db);
+    async init() {
+        interactionCreate(this.client, this.db);
         registerCommands(this.client, this.token, this.applicationId);
         await this.client.login(this.token);
     }
@@ -43,7 +45,16 @@ class ATecBot {
         if (!channel || channel.type !== ChannelType.GuildText) {
             throw new Error("Text-Channel not found!");
         }
-        await channel.send({
+        const message = await channel.send({
+            components: [
+                new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    new ButtonBuilder()
+                        .setLabel("Übernehmen")
+                        .setEmoji('🛠️')
+                        .setCustomId('event-participate')
+                        .setStyle(ButtonStyle.Primary)
+                )
+            ],
             embeds: [new EmbedBuilder().setTitle(event.name)
                 .setDescription(event.description)
                 .addFields([
@@ -101,8 +112,10 @@ class ATecBot {
                 .setColor(Colors.DarkNavy)
                 .setURL(`localhost:1337/event/${event._id}}`)
                 .setTimestamp()
+                .setFooter({ iconURL: this.client.user?.avatarURL() ?? undefined, text: this.client.user?.username.toString() ?? '' })
             ]
         });
+        await this.db.collection('events').updateOne({ _id: event._id }, { $set: { message_id: message.id } });
     }
 
     async destroy() {
