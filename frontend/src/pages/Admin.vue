@@ -7,7 +7,14 @@ export default {
                 username: string;
                 permissionLevel: "locked" | "user" | "technician" | "admin";
                 password: string;
-            }>(),
+            }>(
+                {
+                    id: 0,
+                    username: "test",
+                    permissionLevel: "user",
+                    password: "test"
+                }
+            ),
             changeUser: false,
             createUser: false
         }
@@ -24,7 +31,7 @@ export default {
 
 <template>
     <div>
-        <v-table fixed-header height="300px">
+        <v-table fixed-header>
             <thead>
                 <tr>
                     <th class="text-left">
@@ -54,10 +61,10 @@ export default {
                     <td>{{ item.permissionLevel }}</td>
                     <td>{{ item.password }}</td>
                     <td>
-                        <v-btn @click="changeUser = true" icon="mdi-pencil"></v-btn>
+                        <v-btn elevation="0" @click="changeUser = true" icon="mdi-pencil"></v-btn>
                     </td>
                     <td>
-                        <v-btn icon="mdi-delete"></v-btn>
+                        <v-btn elevation="0" icon="mdi-delete"></v-btn>
                     </td>
                 </tr>
             </tbody>
@@ -99,15 +106,16 @@ export default {
             </v-form>
         </v-dialog>
 
-        <v-btn class="floating_action_btn" @click="createUser = true" color="primary" icon="mdi-plus" rounded title="Neuer Benutzer" />
+        <v-btn class="floating_action_btn" @click="createUser = true" color="primary" icon="mdi-plus" rounded
+            title="Neuer Benutzer" />
     </div>
 </template>
 
 <style scoped>
 .floating_action_btn {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  margin: 20px;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 20px;
 }
 </style>

@@ -7,7 +7,7 @@ export default {
                 background: "#222222",
                 surface: "#525252",
                 primary: "#207178",
-                secondary: "#50a4ab",
+                secondary: "#dddddd",
                 error: "#fa6a02",
                 info: "#2196f3",
                 success: "#19c719",

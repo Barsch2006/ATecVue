@@ -2,6 +2,8 @@
   margin: 0;
   padding: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  accent-color: #50a4ab;
+  user-select: none;
 }
 
 body {
@@ -17,15 +19,18 @@ footer {
 
 a {
   color: #50a4ab;
+  user-select: none !important;
 }
 
 a:hover {
   color: #34c4d1;
 }
 
-p.important {
-  padding: 5px;
-  border: 3px solid red;
-  color: red;
-  border-radius: 5px;
+.logo {
+  border-radius: 5%;
+  filter: contrast(0.73);
+}
+
+.logo.bg {
+  z-index: 0;
 }

@@ -14,7 +14,7 @@ export default {
 <template>
     <div class="login-wrapper">
         <v-form id="loginform" action="/login" method="post">
-            <img src="/Atec_small.jpg" alt="Dolphin School" />
+            <img class="logo" src="/Atec_small.jpg" alt="Dolphin School" />
             <h1>Login</h1>
             <v-text-field name="username" clearable label="Benutzername" density="compact"
                 :rules="[rules.required]" />
