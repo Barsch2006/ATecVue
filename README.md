@@ -6,7 +6,7 @@ The Website of the ATec of the GRB. It is implemented in Vue and with Vuetify in
 
 1. Finish Routes in the Backend
 2. Fetch and Requests in the Frontend
-3. Responses in the Frontend
+3. Response-Handling in the Frontend
 
 ## Routes
 
