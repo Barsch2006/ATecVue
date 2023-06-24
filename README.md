@@ -2,6 +2,12 @@
 
 The Website of the ATec of the GRB. It is implemented in Vue and with Vuetify in the frontend and with MongoDB and Express in the backend.
 
+## ToDo's
+
+1. Finish Routes in the Backend
+2. Fetch and Requests in the Frontend
+3. Responses in the Frontend
+
 ## Routes
 
 ### User
