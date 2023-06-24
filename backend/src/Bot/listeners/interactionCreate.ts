@@ -1,3 +1,5 @@
+import userinfo from 'Bot/actions/userinfo'
+
 import {
     CommandInteraction, Client, Interaction,
     ButtonInteraction,
@@ -17,8 +19,9 @@ export default (client: Client, db: Db): void => {
 
 const handleSlashCommand = async (client: Client, interaction: CommandInteraction, db: Db): Promise<void> => {
     switch (interaction.commandName) {
-        // case 'event':
-        //     break
+        case 'userinfo':
+            await userinfo(client, interaction, db);
+            break;
     }
 }
 
