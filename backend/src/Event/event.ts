@@ -1,4 +1,8 @@
+import { ObjectId } from "mongodb";
+
 interface IEvent {
+    // event id
+    _id?: ObjectId;
     // creator info
     name: string;
     lastname: string;
@@ -24,6 +28,7 @@ interface IEvent {
 
     // backend info
     discordMessageId?: string;
+    participantIds?: ObjectId[]; // the mongodb ids of the participants
 }
 
 export default IEvent;
