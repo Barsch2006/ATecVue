@@ -76,7 +76,6 @@ export default function (app: Express, db: Db) {
 
     });
 
-
     // login route
     app.post('/login', passport.authenticate('local', {
         successRedirect: '/admin',
