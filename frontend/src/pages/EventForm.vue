@@ -26,12 +26,54 @@ export default {
             beamer: false,
             hdmi: false,
             vga: false,
-            usb: false
+            usb: false,
+            error: {
+                show: false,
+                message: ""
+            }
         }
     },
     methods: {
-        sendData() {
-            return;
+        async sendData() {
+            const data = {
+                microphones: this.microphones,
+                headsets: this.headsets,
+                name: this.name,
+                lastname: this.lastname,
+                position: this.position,
+                email: this.email,
+                title: this.title,
+                description: this.description,
+                targetgroup: this.targetgroup,
+                start: new Date(`${this.date} ${this.start}`).getTime()/1000,
+                end: new Date(`${this.date} ${this.end}`).getTime()/1000,
+                location: this.location,
+                notes: this.notes,
+                beamer: this.beamer,
+                hdmi: this.hdmi,
+                vga: this.vga,
+                usb: this.usb
+            }
+
+            const result = await fetch("https://debug-137.heeecker.me/event", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }).catch(() => {
+                this.error.message = "Verbindung zum Server ist fehlgeschlagen!"
+                this.error.show = true;
+            })
+
+            if (!result) return;
+
+            if (result.status !== 200) {
+                this.error.message = "Hochladen fehlgeschlagen!"
+                this.error.show = true;
+            } else {
+                this.$router.push("/home");
+            }
         }
     }
 }
@@ -43,6 +85,9 @@ export default {
             <v-card-title>
                 Angaben über den Veranstalter
             </v-card-title>
+            <v-card color="error">
+                {{ error.message }}
+            </v-card>
             <v-card-text>
                 <v-text-field v-model="name" clearable label="Vorname" density="compact" :rules="[rules.required]" />
                 <v-text-field v-model="lastname" clearable label="Nachname" density="compact" :rules="[rules.required]" />
@@ -61,7 +106,8 @@ export default {
                 <v-text-field v-model="title" clearable label="Titel der Veranstaltung" density="compact"
                     :rules="[rules.required]" />
                 <v-textarea name="description" clearable label="Beschreibung" :rules="[rules.required]" />
-                <v-text-field v-model="targetgroup" clearable label="Zielgruppe" density="compact" :rules="[rules.required]" />
+                <v-text-field v-model="targetgroup" clearable label="Zielgruppe" density="compact"
+                    :rules="[rules.required]" />
             </v-card-text>
         </v-card>
 
@@ -100,7 +146,8 @@ export default {
                 <v-checkbox v-model="beamer" label="Beamer"></v-checkbox>
                 <v-checkbox :disabled="!beamer" v-model="hdmi" label="Mein Laptop hat einen HDMI Anschluss"></v-checkbox>
                 <v-checkbox :disabled="!beamer" v-model="vga" label="Mein Laptop hat einen VGA Anschluss"></v-checkbox>
-                <v-checkbox :disabled="!beamer" v-model="usb" label="Ich habe einen USB-Stick oder in der Cloud"></v-checkbox>
+                <v-checkbox :disabled="!beamer" v-model="usb"
+                    label="Ich habe einen USB-Stick oder in der Cloud"></v-checkbox>
             </v-card-text>
         </v-card>
 
