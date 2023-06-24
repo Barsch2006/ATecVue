@@ -150,4 +150,5 @@ export default {
     right: 0;
     bottom: 0;
     margin: 20px;
-}</style>
+}
+</style>

@@ -194,4 +194,5 @@ export default {
     .v-card {
         width: 80%;
     }
-}</style>
+}
+</style>
