@@ -223,56 +223,56 @@ export default {
                     Angaben über den Veranstalter
                 </v-card-title>
                 <v-card-text>
-                    <v-text-field disabled v-model="name" label="Vorname" density="compact" />
-                    <v-text-field disabled v-model="lastname" label="Nachname" density="compact" />
-                    <v-text-field disabled v-model="position" label="Position in der Schule" density="compact" />
-                    <v-text-field disabled v-model="email" type="email" label="E-Mail" density="compact" />
+                    <v-text-field readonly v-model="name" label="Vorname" density="compact" />
+                    <v-text-field readonly v-model="lastname" label="Nachname" density="compact" />
+                    <v-text-field readonly v-model="position" label="Position in der Schule" density="compact" />
+                    <v-text-field readonly v-model="email" type="email" label="E-Mail" density="compact" />
                 </v-card-text>
 
                 <v-card-title>
                     Veranstaltung
                 </v-card-title>
                 <v-card-text>
-                    <v-text-field disabled v-model="title" label="Titel der Veranstaltung" density="compact" />
-                    <v-textarea disabled v-model="description" label="Beschreibung" />
-                    <v-text-field disabled v-model="targetgroup" label="Zielgruppe" density="compact" />
+                    <v-text-field readonly v-model="title" label="Titel der Veranstaltung" density="compact" />
+                    <v-textarea readonly v-model="description" label="Beschreibung" />
+                    <v-text-field readonly v-model="targetgroup" label="Zielgruppe" density="compact" />
                 </v-card-text>
 
                 <v-card-title>
                     Zeitpunkt
                 </v-card-title>
                 <v-card-text>
-                    <v-text-field disabled v-model="date" label="Datum" density="compact" type="date" />
-                    <v-text-field disabled v-model="start" label="Start" density="compact" type="time" />
-                    <v-text-field disabled v-model="end" label="Vorraussichtliches Ende" density="compact" type="time" />
+                    <v-text-field readonly v-model="date" label="Datum" density="compact" type="date" />
+                    <v-text-field readonly v-model="start" label="Start" density="compact" type="time" />
+                    <v-text-field readonly v-model="end" label="Vorraussichtliches Ende" density="compact" type="time" />
                 </v-card-text>
 
                 <v-card-title>
                     Veranstaltungsort
                 </v-card-title>
                 <v-card-text>
-                    <v-select disabled v-model="location" label="Veranstaltungsort" density="compact" />
+                    <v-select readonly v-model="location" label="Veranstaltungsort" density="compact" />
                 </v-card-text>
 
                 <v-card-title>
                     Materialien
                 </v-card-title>
                 <v-card-text>
-                    <v-slider disabled v-model="microphones" :label="`Handmikrofone (${microphones})`" :max="10"
+                    <v-slider readonly v-model="microphones" :label="`Handmikrofone (${microphones})`" :max="10"
                         :min="0" :step="1" ticks="1" />
-                    <v-slider disabled v-model="headsets" :label="`Headsets (${headsets})`" :max="10" :min="0"
+                    <v-slider readonly v-model="headsets" :label="`Headsets (${headsets})`" :max="10" :min="0"
                         :step="1" ticks="1" />
-                    <v-checkbox disabled v-model="beamer" label="Beamer"></v-checkbox>
-                    <v-checkbox disabled v-model="hdmi" label="Mein Laptop hat einen HDMI Anschluss"></v-checkbox>
-                    <v-checkbox disabled v-model="vga" label="Mein Laptop hat einen VGA Anschluss"></v-checkbox>
-                    <v-checkbox disabled v-model="usb" label="Ich habe einen USB-Stick oder in der Cloud"></v-checkbox>
+                    <v-checkbox readonly v-model="beamer" label="Beamer"></v-checkbox>
+                    <v-checkbox readonly v-model="hdmi" label="Mein Laptop hat einen HDMI Anschluss"></v-checkbox>
+                    <v-checkbox readonly v-model="vga" label="Mein Laptop hat einen VGA Anschluss"></v-checkbox>
+                    <v-checkbox readonly v-model="usb" label="Ich habe einen USB-Stick oder in der Cloud"></v-checkbox>
                 </v-card-text>
 
                 <v-card-title>
                     Schluss
                 </v-card-title>
                 <v-card-text>
-                    <v-textarea disabled v-model="notes" clearable label="Sonstiges, Anmerkungen, Generalprobe.." />
+                    <v-textarea readonly v-model="notes" clearable label="Sonstiges, Anmerkungen, Generalprobe.." />
                 </v-card-text>
                 <v-card-actions>
                     <v-btn @click="viewEvent = false" variant="tonal" width="100%">Schließen</v-btn>

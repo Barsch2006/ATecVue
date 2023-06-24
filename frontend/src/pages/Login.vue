@@ -31,7 +31,7 @@ export default {
             // if successful, redirect to /home
             // else show error message
             const result = await fetch("https://debug-137.heeecker.me/login", {
-                method: "POST",
+                method: "post",
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -70,10 +70,10 @@ export default {
             <v-card color="error">
                 {{ error.message }}
             </v-card>
-            <v-text-field name="username" clearable label="Benutzername" density="compact" :rules="[rules.required]"
-                v-model="username" />
-            <v-text-field name="password" type="password" clearable label="Passwort" density="compact"
-                :rules="[rules.required]" v-model="password" />
+            <v-text-field v-model="username" clearable label="Benutzername" density="compact" :rules="[rules.required]"
+                name="username" />
+            <v-text-field v-model="password" type="password" clearable label="Passwort" density="compact"
+                :rules="[rules.required]" name="password" />
             <v-btn type="submit" variant="tonal" width="100%" :disabled="button.disabled"
                 :loading="button.loading">Login</v-btn>
         </v-form>
