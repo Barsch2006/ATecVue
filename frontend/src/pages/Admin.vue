@@ -79,7 +79,9 @@ export default {
                     <td>{{ item.permissionLevel }}</td>
                     <td>{{ item.password }}</td>
                     <td>
-                        <v-btn elevation="0" @click="changeId = item.id; changeName = item.username; changePwd = item.password; changeLevel = item.permissionLevel; changeUser = true;" icon="mdi-pencil"></v-btn>
+                        <v-btn elevation="0"
+                            @click="changeId = item.id; changeName = item.username; changePwd = item.password; changeLevel = item.permissionLevel; changeUser = true;"
+                            icon="mdi-pencil"></v-btn>
                     </td>
                     <td>
                         <v-btn elevation="0" @click="deleteUser(item.id)" icon="mdi-delete"></v-btn>
@@ -89,42 +91,41 @@ export default {
         </v-table>
 
         <v-dialog v-model="changeUser">
-            <v-form action="/changeuser" method="post">
-                <v-card>
-                    <v-card-title>
-                        Benutzer bearbeiten
-                    </v-card-title>
-                    <v-card-text>
-                        <v-form action="/updateuser" method="post">
-                            <v-text-field label="ID" name="id" v-model="changeId" />
-                            <v-text-field label="Benutzername" v-model="changeName" name="username" />
-                            <v-text-field label="Passwort" v-model="changePwd" name="password" />
-                            <v-select label="Permission-Level" name="permissionLevel" :items="['locked', 'user', 'technician', 'admin']" />
-                            <v-btn type="submit">
-                                Änderungen speichern
-                            </v-btn>
-                        </v-form>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn @click="changeUser = false">
-                            Änderungen verwerfen
+            <v-card>
+                <v-card-title>
+                    Benutzer bearbeiten
+                </v-card-title>
+                <v-card-text>
+                    <v-form action="/updateuser" method="post">
+                        <v-text-field label="ID" name="id" v-model="changeId" />
+                        <v-text-field label="Benutzername" v-model="changeName" name="username" />
+                        <v-text-field label="Passwort" v-model="changePwd" name="password" />
+                        <v-select label="Permission-Level" name="permissionLevel"
+                            :items="['locked', 'user', 'technician', 'admin']" />
+                        <v-btn type="submit">
+                            Änderungen speichern
                         </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-form>
+                    </v-form>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn @click="changeUser = false">
+                        Änderungen verwerfen
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
         </v-dialog>
 
         <v-dialog v-model="createUser">
-            <v-form action="/createuser" method="post">
                 <v-card>
                     <v-card-title>
                         neuer Benutzer
                     </v-card-title>
                     <v-card-text>
-                        <v-form action="/updateuser" method="post">
+                        <v-form action="/createuser" method="post">
                             <v-text-field label="Benutzername" name="username" />
                             <v-text-field label="Passwort" name="password" />
-                            <v-select label="Permission-Level" name="permissionLevel" :items="['locked', 'user', 'technician', 'admin']" />
+                            <v-select label="Permission-Level" name="permissionLevel"
+                                :items="['locked', 'user', 'technician', 'admin']" />
                             <v-btn type="submit">
                                 Änderungen speichern
                             </v-btn>
@@ -136,7 +137,6 @@ export default {
                         </v-btn>
                     </v-card-actions>
                 </v-card>
-            </v-form>
         </v-dialog>
 
         <v-btn class="floating_action_btn" @click="createUser = true" color="primary" icon="mdi-plus" rounded
@@ -150,5 +150,4 @@ export default {
     right: 0;
     bottom: 0;
     margin: 20px;
-}
-</style>
+}</style>
