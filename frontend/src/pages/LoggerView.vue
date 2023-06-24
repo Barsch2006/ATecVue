@@ -6,6 +6,7 @@ export default {
 
 <template>
     <div>
+        <!-- list of issues -->
         <v-btn class="floating_action_btn" @click="$router.push('/logger/create')" color="primary" icon="mdi-plus" rounded
             title="Neuer Eintrag" />
     </div>

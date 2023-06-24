@@ -55,12 +55,14 @@ export default {
                 usb: this.usb
             }
 
+            const testData = {"microphones":4,"headsets":2,"name":"Christian","lastname":"Fuchte","position":"SV","email":"christian0511@gmx.de","title":"Test004","description":"","targetgroup":"Tester ATec","start":1687644000,"end":1687687200,"location":"Aula","notes":"","beamer":true,"hdmi":false,"vga":true,"usb":false}
+
             const result = await fetch("https://debug-137.heeecker.me/event", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(testData)
             }).catch(() => {
                 this.error.message = "Verbindung zum Server ist fehlgeschlagen!"
                 this.error.show = true;
@@ -142,7 +144,7 @@ export default {
             <v-card-text>
                 <v-slider v-model="microphones" :label="`Handmikrofone (${microphones})`" :max="10" :min="0" :step="1"
                     ticks="1" />
-                <v-slider v-model="headsets" :label="`Headsets (${headsets})`" :max="10" :min="0" :step="1" ticks="1" />
+                <v-slider v-model="headsets" :label="`Headsets (${headsets})`" :max="5" :min="0" :step="1" ticks="1" />
                 <v-checkbox v-model="beamer" label="Beamer"></v-checkbox>
                 <v-checkbox :disabled="!beamer" v-model="hdmi" label="Mein Laptop hat einen HDMI Anschluss"></v-checkbox>
                 <v-checkbox :disabled="!beamer" v-model="vga" label="Mein Laptop hat einen VGA Anschluss"></v-checkbox>

@@ -4,7 +4,10 @@ export default {
         return {
             rules: {
                 required: (value: string) => !!value || 'Dieses Feld ist erforderlich.'
-            }
+            },
+            date: '',
+            start: '',
+            end: ''
         };
     }
 }
@@ -13,8 +16,19 @@ export default {
 <template>
     <v-form>
         <v-card>
-            
+            <v-card-title>
+                Zeitpunkt
+            </v-card-title>
+            <v-card-text>
+                <v-text-field v-model="date" clearable label="Datum" density="compact" :rules="[rules.required]"
+                    type="date" />
+                <v-text-field v-model="start" clearable label="Start" density="compact" :rules="[rules.required]"
+                    type="time" />
+                <v-text-field v-model="end" clearable label="Vorraussichtliches Ende" density="compact"
+                    :rules="[rules.required]" type="time" />
+            </v-card-text>
         </v-card>
+        <!--  more info -->
     </v-form>
 </template>
 
