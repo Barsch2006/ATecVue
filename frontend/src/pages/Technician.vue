@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { loadConfigFromFile } from 'vite';
 
 interface IEvent {
     // event id
@@ -63,13 +64,71 @@ export default {
                 }
             ),
             viewEvent: false,
-            viewingEvent: ref<IEvent>()
+            viewingEvent: ref<IEvent>(),
+
+            name: '',
+            lastname: '',
+            email: '',
+            position: '',
+            title: '',
+            description: '',
+            targetgroup: '',
+            date: '',
+            start: '',
+            end: '',
+            location: '',
+            beamer: false,
+            hdmi: false,
+            vga: false,
+            usb: false,
+            microphones: '0',
+            headsets: '0',
+            notes: '',
         }
     },
     methods: {
         openEvent(id: string) {
             console.log(id);
-            this.viewingEvent = undefined;
+            this.viewingEvent = {
+                _id: '0',
+                name: 'Christian',
+                lastname: 'Fuchte',
+                email: 'christian0511@gmx.de',
+                position: 'SV',
+                title: 'VV',
+                description: 'Vollversammlung',
+                targetgroup: 'Schüler',
+                date: '2021-06-24',
+                start: '12:00',
+                end: '13:00',
+                location: 'Aula',
+                beamer: true,
+                hdmi: true,
+                vga: false,
+                usb: false,
+                microphones: '2',
+                headsets: '0',
+                notes: 'keine Generalprobe; eigene Techniker',
+            };
+            this.name = this.viewingEvent?.name ?? '';
+            this.lastname = this.viewingEvent?.lastname ?? '';
+            this.email = this.viewingEvent?.email ?? '';
+            this.position = this.viewingEvent?.position ?? '';
+            this.title = this.viewingEvent?.title ?? '';
+            this.description = this.viewingEvent?.description ?? '';
+            this.targetgroup = this.viewingEvent?.targetgroup ?? '';
+            this.date = this.viewingEvent?.date ?? '';
+            this.start = this.viewingEvent?.start ?? '';
+            this.end = this.viewingEvent?.end ?? '';
+            this.location = this.viewingEvent?.location ?? '';
+            this.beamer = this.viewingEvent?.beamer ?? false;
+            this.hdmi = this.viewingEvent?.hdmi ?? false;
+            this.vga = this.viewingEvent?.vga ?? false;
+            this.usb = this.viewingEvent?.usb ?? false;
+            this.microphones = this.viewingEvent?.microphones ?? '0';
+            this.headsets = this.viewingEvent?.headsets ?? '0';
+            this.notes = this.viewingEvent?.notes ?? '';
+
             this.viewEvent = true
         },
     },
@@ -161,15 +220,62 @@ export default {
         <v-dialog v-model="viewEvent">
             <v-card>
                 <v-card-title>
-
+                    Angaben über den Veranstalter
                 </v-card-title>
                 <v-card-text>
-                    <!-- todo -->
+                    <v-text-field disabled v-model="name" label="Vorname" density="compact" />
+                    <v-text-field disabled v-model="lastname" label="Nachname" density="compact" />
+                    <v-text-field disabled v-model="position" label="Position in der Schule" density="compact" />
+                    <v-text-field disabled v-model="email" type="email" label="E-Mail" density="compact" />
+                </v-card-text>
+
+                <v-card-title>
+                    Veranstaltung
+                </v-card-title>
+                <v-card-text>
+                    <v-text-field disabled v-model="title" label="Titel der Veranstaltung" density="compact" />
+                    <v-textarea disabled v-model="description" label="Beschreibung" />
+                    <v-text-field disabled v-model="targetgroup" label="Zielgruppe" density="compact" />
+                </v-card-text>
+
+                <v-card-title>
+                    Zeitpunkt
+                </v-card-title>
+                <v-card-text>
+                    <v-text-field disabled v-model="date" label="Datum" density="compact" type="date" />
+                    <v-text-field disabled v-model="start" label="Start" density="compact" type="time" />
+                    <v-text-field disabled v-model="end" label="Vorraussichtliches Ende" density="compact" type="time" />
+                </v-card-text>
+
+                <v-card-title>
+                    Veranstaltungsort
+                </v-card-title>
+                <v-card-text>
+                    <v-select disabled v-model="location" label="Veranstaltungsort" density="compact" />
+                </v-card-text>
+
+                <v-card-title>
+                    Materialien
+                </v-card-title>
+                <v-card-text>
+                    <v-slider disabled v-model="microphones" :label="`Handmikrofone (${microphones})`" :max="10"
+                        :min="0" :step="1" ticks="1" />
+                    <v-slider disabled v-model="headsets" :label="`Headsets (${headsets})`" :max="10" :min="0"
+                        :step="1" ticks="1" />
+                    <v-checkbox disabled v-model="beamer" label="Beamer"></v-checkbox>
+                    <v-checkbox disabled v-model="hdmi" label="Mein Laptop hat einen HDMI Anschluss"></v-checkbox>
+                    <v-checkbox disabled v-model="vga" label="Mein Laptop hat einen VGA Anschluss"></v-checkbox>
+                    <v-checkbox disabled v-model="usb" label="Ich habe einen USB-Stick oder in der Cloud"></v-checkbox>
+                </v-card-text>
+
+                <v-card-title>
+                    Schluss
+                </v-card-title>
+                <v-card-text>
+                    <v-textarea disabled v-model="notes" clearable label="Sonstiges, Anmerkungen, Generalprobe.." />
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn @click="viewEvent = false">
-                        Schließen
-                    </v-btn>
+                    <v-btn @click="viewEvent = false" variant="tonal" width="100%">Schließen</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>

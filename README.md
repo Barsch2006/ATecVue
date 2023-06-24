@@ -6,38 +6,42 @@ The Website of the ATec of the GRB. It is implemented in Vue and with Vuetify in
 
 ### User
 
-#### /login POST
+- /login POST
 
-Login
+    Login
 
-#### /logout GET
+- /logout GET
 
-Logout
+    Logout
 
 ### Events
 
-#### /event POST
+- /event POST
 
-Create Event
+    Create Event
 
-#### /event/:id GET
+- /event/:id GET
 
-Get full data of a specific event
+    Get full data of a specific event
 
-#### /events GET
+- /events GET
 
-Get minimalized data of all events
+     Get minimalized data of all events
 
 ### Admin
 
-#### /users GET
+- /users GET
 
-List of all users
+    List of all users
 
-#### /createuser POST
+- /createuser POST
 
-Create a new user
+    Create a new user
 
-#### /updateuser POST
+- /updateuser POST
 
-Update a user
+    Update a user
+
+- /deleteuser POST
+
+    Delete a user

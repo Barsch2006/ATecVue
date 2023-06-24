@@ -16,7 +16,11 @@ export default {
                 }
             ),
             changeUser: false,
-            createUser: false
+            createUser: false,
+            changeId: String() || null || undefined || Number(),
+            changeName: String() || null || undefined || Number(),
+            changePwd: String() || null || undefined || Number(),
+            changeLevel: String() || null || undefined || Number()
         }
     },
     beforeMount() {
@@ -25,6 +29,20 @@ export default {
                 this.users = data;
             });
         });
+    },
+    methods: {
+        deleteUser(id: number) {
+            fetch('/deleteuser', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id: id
+                })
+            }).then((response) => {
+                response.json().then((data) => {
+                    this.users = data;
+                });
+            });
+        }
     }
 }
 </script>
@@ -61,10 +79,10 @@ export default {
                     <td>{{ item.permissionLevel }}</td>
                     <td>{{ item.password }}</td>
                     <td>
-                        <v-btn elevation="0" @click="changeUser = true" icon="mdi-pencil"></v-btn>
+                        <v-btn elevation="0" @click="changeId = item.id; changeName = item.username; changePwd = item.password; changeLevel = item.permissionLevel; changeUser = true;" icon="mdi-pencil"></v-btn>
                     </td>
                     <td>
-                        <v-btn elevation="0" icon="mdi-delete"></v-btn>
+                        <v-btn elevation="0" @click="deleteUser(item.id)" icon="mdi-delete"></v-btn>
                     </td>
                 </tr>
             </tbody>
@@ -77,7 +95,15 @@ export default {
                         Benutzer bearbeiten
                     </v-card-title>
                     <v-card-text>
-                        <!-- todo -->
+                        <v-form action="/updateuser" method="post">
+                            <v-text-field label="ID" name="id" v-model="changeId" />
+                            <v-text-field label="Benutzername" v-model="changeName" name="username" />
+                            <v-text-field label="Passwort" v-model="changePwd" name="password" />
+                            <v-select label="Permission-Level" name="permissionLevel" :items="['locked', 'user', 'technician', 'admin']" />
+                            <v-btn type="submit">
+                                Änderungen speichern
+                            </v-btn>
+                        </v-form>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn @click="changeUser = false">
@@ -95,7 +121,14 @@ export default {
                         neuer Benutzer
                     </v-card-title>
                     <v-card-text>
-                        <!-- todo -->
+                        <v-form action="/updateuser" method="post">
+                            <v-text-field label="Benutzername" name="username" />
+                            <v-text-field label="Passwort" name="password" />
+                            <v-select label="Permission-Level" name="permissionLevel" :items="['locked', 'user', 'technician', 'admin']" />
+                            <v-btn type="submit">
+                                Änderungen speichern
+                            </v-btn>
+                        </v-form>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn @click="createUser = false">
