@@ -1,8 +1,6 @@
 import { ObjectId } from "mongodb";
 
 interface IEvent {
-    // event id
-    _id?: ObjectId;
     // creator info
     name: string;
     lastname: string;
@@ -12,13 +10,12 @@ interface IEvent {
     title: string;
     description: string;
     targetgroup: string;
-    date: string;
-    start: string;
-    end: string;
+    start: number;
+    end: number;
     location: string;
     // material info
-    microphones: string;
-    headsets: string;
+    microphones: number;
+    headsets: number;
     beamer: boolean;
     hdmi: boolean;
     vga: boolean;
@@ -28,7 +25,7 @@ interface IEvent {
 
     // backend info
     discordMessageId?: string;
-    participantIds?: ObjectId[]; // the mongodb ids of the participants
+    participants?: ObjectId[]; // the mongodb ids of the participants
 }
 
 export default IEvent;

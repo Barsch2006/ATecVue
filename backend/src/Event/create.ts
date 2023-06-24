@@ -1,9 +1,10 @@
 import { Db } from "mongodb";
 import IEvent from "./event";
 import { Router } from "express";
+import ATecBot from "../Bot/Bot";
 
 // return a router with the event create route
-export default function createEvent(db: Db): Router {
+export default function createEvent(db: Db, discord: ATecBot): Router {
 
     const router = Router();
 
@@ -37,6 +38,15 @@ export default function createEvent(db: Db): Router {
             return;
         }
 
+        const dcMessageId = await discord.sendEventForm({ ...req.body, _id: result.insertedId });
+
+        if (!dcMessageId) {
+            res.status(500).send("Internal Server Error");
+            return;
+        }
+
+        await eventCollection.updateOne({ _id: result.insertedId }, { $set: { dcMessageId } });
+
         // send the id of the event back to the client
         res.status(200).send(result.insertedId);    
 
@@ -55,9 +65,8 @@ function validateBody (body: any): body is IEvent {
     if (!body.title || typeof body.title !== "string") return false;
     if (!body.description || typeof body.description !== "string") return false;
     if (!body.targetgroup || typeof body.targetgroup !== "string") return false;
-    if (!body.date || typeof body.date !== "string") return false;
-    if (!body.start || typeof body.start !== "string") return false;
-    if (!body.end || typeof body.end !== "string") return false;
+    if (!body.start || typeof body.start !== "number") return false;
+    if (!body.end || typeof body.end !== "number") return false;
     if (!body.location || typeof body.location !== "string") return false;
     if (!body.microphones || typeof body.microphones !== "number") return false;
     if (!body.headsets || typeof body.headsets !== "number") return false;

@@ -3,12 +3,12 @@ dotenv();
 
 import express from "express";
 import cookieParser from "cookie-parser";
-import auth from "Auth/auth";
-import createEvent from "Event/create";
+import auth from "./Auth/auth";
+import createEvent from "./Event/create";
 const app = express();
 
-import ATecBot from "Bot/Bot";
-import viewEvents from "Event/view";
+import ATecBot from "./Bot/Bot";
+import viewEvents from "./Event/view";
 
 async function main() {
     if (!process.env.DB_URL) {
@@ -51,7 +51,7 @@ async function main() {
 
     auth(app, db);
 
-    app.use(createEvent(db));
+    app.use(createEvent(db, bot));
     app.use(viewEvents(db));
 
     app.use(express.static("public"));

@@ -6,7 +6,7 @@ import EventForm from "./pages/EventForm.vue";
 import Login from "./pages/Login.vue";
 import Admin from "./pages/Admin.vue";
 import Technician from "./pages/Technician.vue";
-import About from "./pages/About.vue";
+// import About from "./pages/About.vue";
 import ATecRules from "./pages/ATecRules.vue";
 
 import "vuetify/styles"
@@ -43,11 +43,11 @@ const routes = [
         name: "Technician",
         component: Technician
     },
-    {
-        path: "/about",
-        name: "About",
-        component: About
-    },
+    // {
+    //     path: "/about",
+    //     name: "About",
+    //     component: About
+    // },
     {
         path: "/rules",
         name: "Regeln",
@@ -59,6 +59,8 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 });
+
+document.body.setAttribute("data-server-address", "https://debug-113.heeecker.me/")
 
 createApp(Index)
     .use(router)

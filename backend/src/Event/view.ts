@@ -47,7 +47,6 @@ export default function viewEvents(db: Db): Router {
                 _id: event._id,
                 title: event.title,
                 description: event.description,
-                date: event.date,
                 start: event.start,
                 end: event.end,
                 location: event.location,
