@@ -3,6 +3,7 @@ import interactionCreate from './listeners/interactionCreate';
 import registerCommands from './actions/registerCommands';
 import { Db } from 'mongodb';
 import IEvent from 'Event/event';
+import IUser from 'Auth/user';
 
 class ATecBot {
     private token: string;
@@ -106,6 +107,17 @@ class ATecBot {
                     {
                         name: "Notizen",
                         value: event.notes || "Keine",
+                        inline: true
+                    },
+                    {
+                        name: "Teilnehmer",
+                        value: event.participantIds ? event.participantIds.map(async id => {
+                            // get user of the db
+                            const user = await this.db.collection('users').findOne({ _id: id }) as IUser | null;
+                            if (user) {
+                                return user.username
+                            }
+                        }).join('\n') : 'Niemand',
                         inline: true
                     }
                 ])

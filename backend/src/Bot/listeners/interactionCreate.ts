@@ -4,6 +4,7 @@ import statistics from 'Bot/actions/statistics'
 import {
     CommandInteraction, Client, Interaction,
     ButtonInteraction,
+    TextChannel,
 } from 'discord.js'
 import { Db } from 'mongodb'
 
@@ -52,4 +53,10 @@ async function newParticipant(client: Client<boolean>, interaction: ButtonIntera
     }
     await db.collection('event_participants').insertOne({ event_id: event_id, participant_id: interaction.user.id })
     await interaction.reply({ content: 'Du übernimmst diese Veranstaltung.', ephemeral: true })
+
+    // update the Teilnehmer field of the event message. add the user to the list
+    const channel = client.channels.cache.get(event_obj.channel_id) as TextChannel
+    const message = await channel.messages.fetch(event_id)
+    const participants = message.embeds[0].fields[2].value
+    message.embeds[0].fields[10].value = `${participants}\n${interaction.user.username}`
 }
