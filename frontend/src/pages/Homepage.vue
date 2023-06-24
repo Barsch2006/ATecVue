@@ -2,7 +2,7 @@
 export default {
   data() {
     return {
-      width: window.innerWidth < 900 ? '80%' : '600px' ,
+      width: window.innerWidth < 900 ? '80%' : '600px',
     };
   },
 }
@@ -23,13 +23,13 @@ export default {
     </v-card>
     <v-card :width="width">
       <v-card-title>
-        Als Admin anmelden
+        Abmelden
       </v-card-title>
       <v-card-subtitle>
-        Hier geht es zum Admin-Login.
+        Hier können Sie sich ausloggen
       </v-card-subtitle>
       <v-card-actions>
-        <v-btn variant="tonal" width="100%" href="/login">zum Login</v-btn>
+        <v-btn variant="tonal" width="100%" href="/logout">Logout</v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -39,6 +39,7 @@ export default {
 .v-card {
   padding: 20px;
 }
+
 .v-card-title {
   padding: 6px;
   align-items: center;

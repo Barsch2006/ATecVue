@@ -5,6 +5,9 @@ import Homepage from "./pages/Homepage.vue";
 import EventForm from "./pages/EventForm.vue";
 import Login from "./pages/Login.vue";
 import Admin from "./pages/Admin.vue";
+import Technician from "./pages/Technician.vue";
+import About from "./pages/About.vue";
+import ATecRules from "./pages/ATecRules.vue";
 
 import "vuetify/styles"
 import "@mdi/font/css/materialdesignicons.css";
@@ -17,6 +20,11 @@ import vuetify from "./plugins/vuetify";
 const routes = [
     {
         path: "/",
+        name: "Login",
+        component: Login
+    },
+    {
+        path: "/home",
         name: "Startseite",
         component: Homepage
     },
@@ -26,15 +34,25 @@ const routes = [
         component: EventForm
     },
     {
-        path: "/login",
-        name: "Login",
-        component: Login
-    },
-    {
         path: "/admin",
         name: "Admin",
         component: Admin
     },
+    {
+        path: "/technician",
+        name: "Technician",
+        component: Technician
+    },
+    {
+        path: "/about",
+        name: "About",
+        component: About
+    },
+    {
+        path: "/rules",
+        name: "Regeln",
+        component: ATecRules
+    }
 ];
 
 const router = createRouter({

@@ -63,7 +63,7 @@ export default {
                 Veranstaltungsort
             </v-card-title>
             <v-card-text>
-                <v-autocomplete name="location" :items="['Aula', 'Sporthalle', 'Sportplatz']" :rules="[rules.required]"
+                <v-select name="location" :items="['Aula', 'Sporthalle', 'Sportplatz']" :rules="[rules.required]"
                     clearable label="Veranstaltungsort" density="compact" />
             </v-card-text>
         </v-card>

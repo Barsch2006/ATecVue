@@ -76,4 +76,17 @@ export default function (app: Express, db: Db) {
 
     });
 
+    // login route
+    app.post('/login', passport.authenticate('local', {
+        successRedirect: '/admin',
+        failureRedirect: '/login?failed=true',
+    }));
+
+    // logout route
+    app.get('/logout', (req, res) => {
+        req.logout((err: any) => {
+            if (err) return res.status(500).send("Fehler beim Logout");
+            res.redirect('/');
+        });
+    });
 };
