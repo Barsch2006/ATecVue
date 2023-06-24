@@ -4,6 +4,7 @@ import statistics from 'Bot/actions/statistics'
 import {
     CommandInteraction, Client, Interaction,
     ButtonInteraction,
+    TextChannel,
 } from 'discord.js'
 import { Db } from 'mongodb'
 import IEvent from 'Event/event'

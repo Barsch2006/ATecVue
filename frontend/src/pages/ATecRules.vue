@@ -5,89 +5,25 @@ export default {
 </script>
 
 <template>
-    <v-expansion-panels>
-        <v-expansion-panel title="1. Einleitung">
-            <v-expansion-panel-text>
-                
-            </v-expansion-panel-text>
-        </v-expansion-panel>
+    <v-expansion-panels style="padding: 40px;">
+        <v-expansion-panels-title>
+            <h3>
+                Bestimmungen über die Verwaltung, Nutzung und Wartung der Aula und der entsprechenden Veranstaltungstechnik, sowie
+                über
+                Veranstaltungen und deren Ablauf
+            </h3>
+        </v-expansion-panels-title>
 
+        <h1 style="color: orange;">
+            <br>
+            <br>
+            Es gelten die mit der Schulleitungs ausgemachten Bestimmungen.
+        </h1>
+    </v-expansion-panels>
+</template>
 
-        <v-expansion-panel title="2. Geltungsbereich">
-            <v-expansion-panel-text>
-                
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
-        <v-expansion-panel title="3. Rechte der ATec">
-            <v-expansion-panel-text>
-
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
-        <v-expansion-panel title="4. Pflichten der ATec">
-            <v-expansion-panel-text>
-                
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
-
-        <v-expansion-panel title="5. Anmeldungen von Veranstaltungen">
-            <v-expansion-panel-text>
-                
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
-
-        <v-expansion-panel title="6. Kommunikation">
-            <v-expansion-panel-text>
-                
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
-
-        <v-expansion-panel title="7. Ablauf von Veranstaltungen">
-            <v-expansion-panel-text>
-                
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
-
-        <v-expansion-panel title="8. Ordnung auf Veranstaltungen">
-            <v-expansion-panel-text>
-                
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
-        <v-expansion-panel title="9. Ordnung nach Veranstaltungen">
-            <v-expansion-panel-text>
-                
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
-        <v-expansion-panel title="10. Ordnung in der Aula">
-            <v-expansion-panel-text>
-               
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
-        <v-expansion-panel title="11. Ordnung in der Technik">
-            <v-expansion-panel-text>
-
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
-        <v-expansion-panel title="12. Nutzung der Technik">
-            <v-expansion-panel-text>
-
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-
-        <v-expansion-panel title="42. Verweigerung von Veranstaltungen">
-        <v-expansion-panel-text>
-
-        </v-expansion-panel-text>
-    </v-expansion-panel>
-</v-expansion-panels></template>
-
-<style scoped></style>
+<style scoped>
+h3 {
+    text-align: center;
+}
+</style>
