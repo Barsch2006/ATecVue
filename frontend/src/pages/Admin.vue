@@ -20,7 +20,7 @@ export default {
             changeId: String() || null || undefined || Number(),
             changeName: String() || null || undefined || Number(),
             changePwd: String() || null || undefined || Number(),
-            changeLevel: String() || null || undefined || Number()
+            changeLevel: String() || null || undefined || Number(),
         }
     },
     beforeMount() {
@@ -97,10 +97,10 @@ export default {
                 </v-card-title>
                 <v-card-text>
                     <v-form action="/updateuser" method="post">
-                        <v-text-field label="ID" name="id" v-model="changeId" />
-                        <v-text-field label="Benutzername" v-model="changeName" name="username" />
-                        <v-text-field label="Passwort" v-model="changePwd" name="password" />
-                        <v-select label="Permission-Level" name="permissionLevel"
+                        <v-text-field label="ID" />
+                        <v-text-field label="Benutzername" />
+                        <v-text-field label="Passwort" />
+                        <v-select label="Permission-Level"
                             :items="['locked', 'user', 'technician', 'admin']" />
                         <v-btn type="submit">
                             Änderungen speichern
@@ -122,9 +122,9 @@ export default {
                     </v-card-title>
                     <v-card-text>
                         <v-form action="/createuser" method="post">
-                            <v-text-field label="Benutzername" name="username" />
-                            <v-text-field label="Passwort" name="password" />
-                            <v-select label="Permission-Level" name="permissionLevel"
+                            <v-text-field label="Benutzername" />
+                            <v-text-field label="Passwort" />
+                            <v-select label="Permission-Level"
                                 :items="['locked', 'user', 'technician', 'admin']" />
                             <v-btn type="submit">
                                 Änderungen speichern

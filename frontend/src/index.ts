@@ -8,6 +8,8 @@ import Admin from "./pages/Admin.vue";
 import Technician from "./pages/Technician.vue";
 // import About from "./pages/About.vue";
 import ATecRules from "./pages/ATecRules.vue";
+import LoggerCreate from "./pages/LoggerCreate.vue";
+import LoggerView from "./pages/LoggerView.vue";
 
 import "vuetify/styles"
 import "@mdi/font/css/materialdesignicons.css";
@@ -52,7 +54,17 @@ const routes = [
         path: "/rules",
         name: "Regeln",
         component: ATecRules
-    }
+    },
+    {
+        path: "/logger/create",
+        name: "LoggerCreate",
+        component: LoggerCreate
+    },
+    {
+        path: "/logger",
+        name: "LoggerView",
+        component: LoggerView
+    },
 ];
 
 const router = createRouter({
