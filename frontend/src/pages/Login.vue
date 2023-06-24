@@ -31,7 +31,7 @@ export default {
             // if successful, redirect to /home
             // else show error message
             const result = await fetch("https://debug-137.heeecker.me/login", {
-                method: "POST",
+                method: "post",
                 headers: {
                     "Content-Type": "application/json"
                 },

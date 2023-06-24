@@ -33,7 +33,7 @@ export default {
     methods: {
         deleteUser(id: number) {
             fetch('/deleteuser', {
-                method: 'POST',
+                method: 'post',
                 body: JSON.stringify({
                     id: id
                 })

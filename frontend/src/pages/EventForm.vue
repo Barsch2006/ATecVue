@@ -56,7 +56,7 @@ export default {
             }
 
             const result = await fetch("https://debug-137.heeecker.me/event", {
-                method: "POST",
+                method: "post",
                 headers: {
                     "Content-Type": "application/json"
                 },
