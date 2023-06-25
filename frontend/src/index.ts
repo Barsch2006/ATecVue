@@ -10,6 +10,8 @@ import Technician from "./pages/Technician.vue";
 import ATecRules from "./pages/ATecRules.vue";
 import LoggerCreate from "./pages/LoggerCreate.vue";
 import LoggerView from "./pages/LoggerView.vue";
+import Datenschutz from "./pages/Datenschutz.vue";
+import Impressum from "./pages/Impressum.vue";
 
 import "vuetify/styles"
 import "@mdi/font/css/materialdesignicons.css";
@@ -65,6 +67,16 @@ const routes = [
         name: "LoggerView",
         component: LoggerView
     },
+    {
+        path: "/datenschutz",
+        name: "Datenschutz",
+        component: Datenschutz
+    },
+    {
+        path: "/impressum",
+        name: "Impressum",
+        component: Impressum
+    }
 ];
 
 const router = createRouter({

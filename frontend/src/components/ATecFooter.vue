@@ -9,8 +9,8 @@ export default {
         <div class="linklists">
             <div class="legals linklist">
                 <img src="/policy.svg" alt="Piktogramm Schutzschild mit Lupe">
-                <a href="">Impressum</a>
-                <a href="">Datenschutz</a>
+                <a href="/impressum">Impressum</a>
+                <a href="/datenschutz">Datenschutz</a>
             </div>
 
             <div class="links linklist">
@@ -26,9 +26,11 @@ export default {
         </div>
 
         <div class="copyright">
-            &copy; &nbsp;<a href="https://github.com/filip326">Filip Lukas Paidar</a>, &nbsp;<a
-                href="https://github.com/Barsch2006/">Christian F</a>, &nbsp;<a href="https://github.com/lukiboss31">Lukáš
-                Boššani</a>&nbsp;2023
+            &copy; &nbsp;
+            <a href="https://github.com/filip326">Filip Lukas Paidar</a>, 
+            &nbsp;
+            <a href="https://github.com/Barsch2006/">Christian F</a>, 
+            &nbsp; 2023
         </div>
         Alle Rechte vorbehalten
     </footer>
