@@ -42,14 +42,12 @@ export default {
   data() {
     return {
       events: Array<{
-        id: string;
+        _id: string;
         title: string;
         date: string;
         start: string;
         end: string;
         location: string;
-        description: string;
-        notes: string;
       }>(),
       viewEvent: false,
       viewingEvent: ref<IEvent>(),
@@ -90,9 +88,10 @@ export default {
           this.events = data;
           // modify data so start and end (UTC) are converted to local time
           this.events.forEach((event) => {
-            event.start = new Date(event.start).toLocaleTimeString();
-            event.end = new Date(event.end).toLocaleTimeString();
-            event.date = new Date(event.start).toISOString().split("T")[0];
+            event.date = new Date(parseInt(event.start) * 1000).toISOString().split('T')[0];
+            event.start = new Date(event.start).toLocaleTimeString().split(':').slice(0, -1).join(':');
+            event.end = new Date(event.end).toLocaleTimeString().split(':').slice(0, -1).join(':');
+            console.log(event.start + " | " + event.end + " | " + event.date)
           });
         });
       })
@@ -133,9 +132,9 @@ export default {
       this.title = this.viewingEvent?.title ?? "";
       this.description = this.viewingEvent?.description ?? "";
       this.targetgroup = this.viewingEvent?.targetgroup ?? "";
-      this.date = this.viewingEvent?.date ?? "";
-      this.start = this.viewingEvent?.start ?? "";
-      this.end = this.viewingEvent?.end ?? "";
+      this.date = new Date(parseInt(this.viewingEvent?.start ?? "") * 1000).toISOString().split('T')[0];
+      this.start = new Date( this.viewingEvent?.start ?? "").toLocaleTimeString().split(':').slice(0, -1).join(':');
+      this.end = new Date(this.viewingEvent?.end ?? "").toLocaleTimeString().split(':').slice(0, -1).join(':');
       this.location = this.viewingEvent?.location ?? "";
       this.beamer = this.viewingEvent?.beamer ?? false;
       this.hdmi = this.viewingEvent?.hdmi ?? false;
@@ -184,14 +183,12 @@ export default {
           <th class="text-left">Start</th>
           <th class="text-left">Ende</th>
           <th class="text-left">Ort</th>
-          <th class="text-left">Beschreibung</th>
-          <th class="text-left">Notizen</th>
         </tr>
       </thead>
       <tbody>
-        <tr @click="openEvent(item.id)" v-for="item in events" :key="item.id">
+        <tr @click="openEvent(item._id)" v-for="item in events" :key="item._id">
           <td>
-            {{ item.id }}
+            {{ item._id }}
           </td>
           <td>
             {{ item.title }}
@@ -208,12 +205,6 @@ export default {
           <td>
             {{ item.location }}
           </td>
-          <td class="wrap-text">
-            {{ item.description.slice(0, 200) + "..." }}
-          </td>
-          <td class="wrap-text">
-            {{ item.notes?.slice(0, 200) + "..." ?? "" }}
-          </td>
         </tr>
       </tbody>
     </v-table>
@@ -225,119 +216,44 @@ export default {
         <v-card-text>
           <v-text-field readonly v-model="name" label="Vorname" density="compact" />
           <v-text-field readonly v-model="lastname" label="Nachname" density="compact" />
-          <v-text-field
-            readonly
-            v-model="position"
-            label="Position in der Schule"
-            density="compact"
-          />
-          <v-text-field
-            readonly
-            v-model="email"
-            type="email"
-            label="E-Mail"
-            density="compact"
-          />
+          <v-text-field readonly v-model="position" label="Position in der Schule" density="compact" />
+          <v-text-field readonly v-model="email" type="email" label="E-Mail" density="compact" />
         </v-card-text>
 
         <v-card-title> Veranstaltung </v-card-title>
         <v-card-text>
-          <v-text-field
-            readonly
-            v-model="title"
-            label="Titel der Veranstaltung"
-            density="compact"
-          />
+          <v-text-field readonly v-model="title" label="Titel der Veranstaltung" density="compact" />
           <v-textarea readonly v-model="description" label="Beschreibung" />
-          <v-text-field
-            readonly
-            v-model="targetgroup"
-            label="Zielgruppe"
-            density="compact"
-          />
+          <v-text-field readonly v-model="targetgroup" label="Zielgruppe" density="compact" />
         </v-card-text>
 
         <v-card-title> Zeitpunkt </v-card-title>
         <v-card-text>
-          <v-text-field
-            readonly
-            v-model="date"
-            label="Datum"
-            density="compact"
-            type="date"
-          />
-          <v-text-field
-            readonly
-            v-model="start"
-            label="Start"
-            density="compact"
-            type="time"
-          />
-          <v-text-field
-            readonly
-            v-model="end"
-            label="Vorraussichtliches Ende"
-            density="compact"
-            type="time"
-          />
+          <v-text-field readonly v-model="date" label="Datum" density="compact" />
+          <v-text-field readonly v-model="start" label="Start" density="compact" />
+          <v-text-field readonly v-model="end" label="Vorraussichtliches Ende" density="compact" />
         </v-card-text>
 
         <v-card-title> Veranstaltungsort </v-card-title>
         <v-card-text>
-          <v-select
-            readonly
-            v-model="location"
-            label="Veranstaltungsort"
-            density="compact"
-          />
+          <v-select readonly v-model="location" label="Veranstaltungsort" density="compact" />
         </v-card-text>
 
         <v-card-title> Materialien </v-card-title>
         <v-card-text>
-          <v-slider
-            readonly
-            v-model="microphones"
-            :label="`Handmikrofone (${microphones})`"
-            :max="10"
-            :min="0"
-            :step="1"
-            ticks="1"
-          />
-          <v-slider
-            readonly
-            v-model="headsets"
-            :label="`Headsets (${headsets})`"
-            :max="10"
-            :min="0"
-            :step="1"
-            ticks="1"
-          />
+          <v-slider readonly v-model="microphones" :label="`Handmikrofone (${microphones})`" :max="10" :min="0" :step="1"
+            ticks="1" />
+          <v-slider readonly v-model="headsets" :label="`Headsets (${headsets})`" :max="10" :min="0" :step="1"
+            ticks="1" />
           <v-checkbox readonly v-model="beamer" label="Beamer"></v-checkbox>
-          <v-checkbox
-            readonly
-            v-model="hdmi"
-            label="Mein Laptop hat einen HDMI Anschluss"
-          ></v-checkbox>
-          <v-checkbox
-            readonly
-            v-model="vga"
-            label="Mein Laptop hat einen VGA Anschluss"
-          ></v-checkbox>
-          <v-checkbox
-            readonly
-            v-model="usb"
-            label="Ich habe einen USB-Stick oder in der Cloud"
-          ></v-checkbox>
+          <v-checkbox readonly v-model="hdmi" label="Mein Laptop hat einen HDMI Anschluss"></v-checkbox>
+          <v-checkbox readonly v-model="vga" label="Mein Laptop hat einen VGA Anschluss"></v-checkbox>
+          <v-checkbox readonly v-model="usb" label="Ich habe einen USB-Stick oder in der Cloud"></v-checkbox>
         </v-card-text>
 
         <v-card-title> Schluss </v-card-title>
         <v-card-text>
-          <v-textarea
-            readonly
-            v-model="notes"
-            clearable
-            label="Sonstiges, Anmerkungen, Generalprobe.."
-          />
+          <v-textarea readonly v-model="notes" clearable label="Sonstiges, Anmerkungen, Generalprobe.." />
         </v-card-text>
         <v-card-actions>
           <v-btn @click="viewEvent = false" variant="tonal" width="100%">Schließen</v-btn>
