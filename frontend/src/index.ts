@@ -8,10 +8,11 @@ import Admin from "./pages/Admin.vue";
 import Technician from "./pages/Technician.vue";
 // import About from "./pages/About.vue";
 import ATecRules from "./pages/ATecRules.vue";
-import LoggerCreate from "./pages/LoggerCreate.vue";
+import IssueCreate from "./pages/IssueCreate.vue";
 import LoggerView from "./pages/LoggerView.vue";
 import Datenschutz from "./pages/Datenschutz.vue";
 import Impressum from "./pages/Impressum.vue";
+import CheckInOut from "./pages/CheckInOut.vue";
 
 import "vuetify/styles"
 import "@mdi/font/css/materialdesignicons.css";
@@ -59,8 +60,8 @@ const routes = [
     },
     {
         path: "/logger/create",
-        name: "LoggerCreate",
-        component: LoggerCreate
+        name: "IssueCreate",
+        component: IssueCreate
     },
     {
         path: "/logger",
@@ -80,8 +81,8 @@ const routes = [
     {
         path: "/checkin",
         name: "Checkin",
-        component: () => import("./pages/Checkin.vue")
-    }
+        component: CheckInOut
+    },
 ];
 
 const router = createRouter({
