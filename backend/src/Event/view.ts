@@ -20,18 +20,21 @@ export default function viewEvents(db: Db): Router {
             res.status(403).send("Forbidden");
             return;
         }
-
-        const event = await eventCollection.findOne({ _id: new ObjectId(req.params.id) });
-        if (event) {
-            res.send(event);
-        } else {
+        try {
+            const event = await eventCollection.findOne({ _id: new ObjectId(req.params.id) });
+            if (event) {
+                res.send(event);
+            } else {
+                res.status(404).send("Event not found");
+            }
+        } catch {
             res.status(404).send("Event not found");
         }
     });
 
     // get all events, sorted by date and in a short format
     router.get('/events', async (req, res) => {
-        
+
         if (!req.auth?.authenticated) {
             res.status(401).send("Unauthorized");
             return;

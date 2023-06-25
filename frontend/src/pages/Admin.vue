@@ -3,28 +3,34 @@ export default {
     data() {
         return {
             users: Array<{
-                id: number;
+                _id: number | string;
                 username: string;
                 permissionLevel: "locked" | "user" | "technician" | "admin";
                 password: string;
+                contactAdress: string;
+                dId: string;
             }>(),
             changeUser: false,
             createUser: false,
-            changeId: Number() || null,
+            changeId: Number() || String() || null,
             changeName: String() || null,
             changePwd: String() || null,
             changeLevel: String() || null,
             createName: String() || null,
             createPwd: String() || null,
-            createLevel: String() || null
+            createLevel: String() || null,
+            createContactAdress: String() || null,
+            changeContactAdress: String() || null,
+            createdId: String() || null,
+            changedId: String() || null
         }
     },
     beforeMount() {
         fetch("/users", {
             method: "get",
             headers: {
-                    "Content-Type": "application/json"
-                },
+                "Content-Type": "application/json"
+            },
         }).then((response) => {
             response.json().then((data) => {
                 this.users = data;
@@ -32,8 +38,8 @@ export default {
         });
     },
     methods: {
-        deleteUser(id: number) {
-            fetch(`/user/${id}`, {
+        deleteUser(id: number | string) {
+            fetch(`/user/${id.toString()}`, {
                 method: 'delete',
                 headers: {
                     "Content-Type": "application/json"
@@ -42,14 +48,17 @@ export default {
         },
         updateUser() {
             fetch('/user', {
-                method: 'put',
+                method: 'patch',
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    id: this.changeId,
                     username: this.changeName,
                     password: this.changePwd,
-                    permissionLevel: this.changeLevel
+                    permissionLevel: this.changeLevel,
+                    contactAdress: this.changeContactAdress,
+                    dId: this.changedId
                 })
             });
         },
@@ -62,7 +71,9 @@ export default {
                 body: JSON.stringify({
                     username: this.createName,
                     password: this.createName,
-                    permissionLevel: this.createName
+                    permissionLevel: this.createName,
+                    contactAdress: this.createContactAdress,
+                    dId: this.createdId
                 })
             });
         }
@@ -88,6 +99,12 @@ export default {
                         Passwort
                     </th>
                     <th class="text-left">
+                        Kontaktadresse
+                    </th>
+                    <th class="text-left">
+                        Discord-ID
+                    </th>
+                    <th class="text-left">
                         Bearbeiten
                     </th>
                     <th class="text-left">
@@ -96,18 +113,20 @@ export default {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in users" :key="item.id">
-                    <td>{{ item.id }}</td>
+                <tr v-for="item in users" :key="item._id">
+                    <td>{{ item._id }}</td>
                     <td>{{ item.username }}</td>
                     <td>{{ item.permissionLevel }}</td>
                     <td>{{ item.password }}</td>
+                    <td>{{ item.contactAdress }}</td>
+                    <td>{{ item.dId }}</td>
                     <td>
                         <v-btn elevation="0"
-                            @click="changeId = item.id; changeName = item.username; changePwd = item.password; changeLevel = item.permissionLevel; changeUser = true;"
+                            @click="changeId = item._id; changeId = item.dId; changeContactAdress = item.contactAdress; changeName = item.username; changePwd = item.password; changeLevel = item.permissionLevel; changeUser = true;"
                             icon="mdi-pencil"></v-btn>
                     </td>
                     <td>
-                        <v-btn elevation="0" @click="deleteUser(item.id)" icon="mdi-delete"></v-btn>
+                        <v-btn elevation="0" @click="deleteUser(item._id)" icon="mdi-delete"></v-btn>
                     </td>
                 </tr>
             </tbody>
@@ -123,6 +142,8 @@ export default {
                         <v-text-field v-model="changeId" label="ID" />
                         <v-text-field v-model="changeName" label="Benutzername" />
                         <v-text-field v-model="changePwd" label="Passwort" />
+                        <v-text-field v-model="changeContactAdress" label="KontaktAdresse" />
+                        <v-text-field v-model="changedId" label="Discord-ID" />
                         <v-select v-model="changeLevel" label="Permission-Level"
                             :items="['locked', 'user', 'technician', 'admin']" />
                         <v-btn type="submit">
@@ -147,6 +168,8 @@ export default {
                     <v-form @submit.prevent="createNewUser()">
                         <v-text-field v-model="createName" label="Benutzername" />
                         <v-text-field v-model="createPwd" label="Passwort" />
+                        <v-text-field v-model="createContactAdress" label="KontaktAdresse" />
+                        <v-text-field v-model="createdId" label="Discord-ID" />
                         <v-select v-model="createLevel" label="Permission-Level"
                             :items="['locked', 'user', 'technician', 'admin']" />
                         <v-btn type="submit">

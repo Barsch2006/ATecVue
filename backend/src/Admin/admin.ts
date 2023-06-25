@@ -41,7 +41,7 @@ export default function createEvent(db: Db): Router {
         }
 
         // check if the user is logged in and at least a admin (not locked, not user)
-        if (!req.auth?.user || req.auth?.user.permissionLevel != "admin") {
+        if (!req.auth?.user || req.auth?.user.permissionLevel != "admin" || req.params.id != req.auth?.user?._id.toHexString()) {
             res.status(403).send("Unauthorized");
             return;
         }
