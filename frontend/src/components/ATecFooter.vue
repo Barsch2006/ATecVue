@@ -15,7 +15,7 @@ export default {
 
             <div class="links linklist">
                 <img class="logo" src="/Atec_small.jpg" alt="ATec Logo">
-                <a href="/about">Über die ATec</a>
+                <a href="/home">User Zugang</a>
                 <a href="/rules">Aula-Regeln</a>
             </div>
 
@@ -29,7 +29,7 @@ export default {
             &copy; &nbsp;
             <a href="https://github.com/filip326">Filip Lukas Paidar</a>, 
             &nbsp;
-            <a href="https://github.com/Barsch2006/">Christian F</a>, 
+            <a href="https://github.com/Barsch2006/">Christian Fuchte</a>
             &nbsp; 2023
         </div>
         Alle Rechte vorbehalten
