@@ -52,7 +52,7 @@ class ATecBot extends Client {
                 )
             ],
             embeds: [
-                await buildEventEmbed(event, this.db)
+                await buildEventEmbed(this, event, this.db)
             ]
         });
         return message.id;

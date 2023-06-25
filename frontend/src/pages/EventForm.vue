@@ -111,7 +111,7 @@ export default {
                 usb: this.usb
             }
 
-            const result = await fetch("https://debug-137.heeecker.me/event", {
+            const result = await fetch("/event", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json"

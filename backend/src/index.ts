@@ -74,6 +74,8 @@ async function main() {
         if (req.method === "GET") {
             res.sendFile(join(process.env.PUBLIC_DIR ?? "public", "index.html"));
             return;
+        } else {
+            return;
         }
     })
 

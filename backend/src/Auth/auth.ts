@@ -68,11 +68,11 @@ export default function auth(db: Db): Router {
 
             // set cookie
             res.cookie("token", signed, {
-                httpOnly: true,
-                secure: true,
-                sameSite: "none",
-                path: "/",
                 expires: new Date(Date.now() + 1000 * 60 * 60),
+                sameSite: "none",
+                secure: true,
+                httpOnly: true,
+                maxAge: 1000 * 60 * 60,
             });
             console.log("Cookie Set", signed);
 
@@ -84,7 +84,7 @@ export default function auth(db: Db): Router {
                 expires: Date.now() + 1000 * 60 * 60
             });
 
-            res.status(200).send("OK");
+            res.end("OK");
             return;
         }
 

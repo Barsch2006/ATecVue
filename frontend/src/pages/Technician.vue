@@ -51,18 +51,7 @@ export default {
                 location: string;
                 description: string;
                 notes: string;
-            }>(
-                {
-                    id: '0',
-                    title: 'Test',
-                    date: '2023-06-24',
-                    start: '12:00',
-                    end: '13:00',
-                    location: 'Aula',
-                    description: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minima repellat nostrum suscipit, alias atque sint recusandae hic odio, non beatae consectetur sapiente dicta quo numquam debitis dolores aperiam quam totam veniam autem repellendus tempore. Ratione quia laudantium quae soluta. Quisquam velit fuga, modi rem distinctio illo saepe? Numquam ratione quas sapiente mollitia deserunt at iste, aspernatur qui accusantium enim dolore eum? Provident quas, enim cupiditate necessitatibus ea temporibus alias eveniet. Ipsum excepturi dolorum officia, obcaecati tempore iure doloremque mollitia cupiditate eligendi a officiis qui incidunt possimus, aut assumenda maxime perspiciatis sunt voluptatem neque enim! Officiis fugit aut eum nam ipsam?`,
-                    notes: `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minima repellat nostrum suscipit, alias atque sint recusandae hic odio, non beatae consectetur sapiente dicta quo numquam debitis dolores aperiam quam totam veniam autem repellendus tempore. Ratione quia laudantium quae soluta. Quisquam velit fuga, modi rem distinctio illo saepe? Numquam ratione quas sapiente mollitia deserunt at iste, aspernatur qui accusantium enim dolore eum? Provident quas, enim cupiditate necessitatibus ea temporibus alias eveniet. Ipsum excepturi dolorum officia, obcaecati tempore iure doloremque mollitia cupiditate eligendi a officiis qui incidunt possimus, aut assumenda maxime perspiciatis sunt voluptatem neque enim! Officiis fugit aut eum nam ipsam?`,
-                }
-            ),
+            }>(),
             viewEvent: false,
             viewingEvent: ref<IEvent>(),
 
@@ -83,33 +72,39 @@ export default {
             usb: false,
             microphones: '0',
             headsets: '0',
-            notes: '',
+            notes: String() || null,
         }
+    },
+    beforeMount() {
+        fetch("/events", {
+            method: "get",
+            headers: {
+                    "Content-Type": "application/json"
+                },
+        }).then((response) => {
+            response.json().then((data) => {
+                this.events = data;
+                // modify data so start and end (UTC) are converted to local time
+                this.events.forEach((event) => {
+                    event.start = new Date(event.start).toLocaleTimeString();
+                    event.end = new Date(event.end).toLocaleTimeString();
+                    event.date = new Date(event.start).toISOString().split('T')[0];
+                });
+            });
+        });
     },
     methods: {
         openEvent(id: string) {
-            console.log(id);
-            this.viewingEvent = {
-                _id: '0',
-                name: 'Christian',
-                lastname: 'Fuchte',
-                email: 'christian0511@gmx.de',
-                position: 'SV',
-                title: 'VV',
-                description: 'Vollversammlung',
-                targetgroup: 'Schüler',
-                date: '2021-06-24',
-                start: '12:00',
-                end: '13:00',
-                location: 'Aula',
-                beamer: true,
-                hdmi: true,
-                vga: false,
-                usb: false,
-                microphones: '2',
-                headsets: '0',
-                notes: 'keine Generalprobe; eigene Techniker',
-            };
+            fetch(`/event/${id}`, {
+                method: 'get',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            }).then((response) => {
+                response.json().then((data) => {
+                    this.viewingEvent = data;
+                });
+            });
             this.name = this.viewingEvent?.name ?? '';
             this.lastname = this.viewingEvent?.lastname ?? '';
             this.email = this.viewingEvent?.email ?? '';
@@ -211,7 +206,7 @@ export default {
                         {{ item.description.slice(0, 200) + '...' }}
                     </td>
                     <td class="wrap-text">
-                        {{ item.notes.slice(0, 200) + '...' }}
+                        {{ item.notes?.slice(0, 200) + '...' ?? '' }}
                     </td>
                 </tr>
             </tbody>
@@ -258,10 +253,10 @@ export default {
                     Materialien
                 </v-card-title>
                 <v-card-text>
-                    <v-slider readonly v-model="microphones" :label="`Handmikrofone (${microphones})`" :max="10"
-                        :min="0" :step="1" ticks="1" />
-                    <v-slider readonly v-model="headsets" :label="`Headsets (${headsets})`" :max="10" :min="0"
+                    <v-slider readonly v-model="microphones" :label="`Handmikrofone (${microphones})`" :max="10" :min="0"
                         :step="1" ticks="1" />
+                    <v-slider readonly v-model="headsets" :label="`Headsets (${headsets})`" :max="10" :min="0" :step="1"
+                        ticks="1" />
                     <v-checkbox readonly v-model="beamer" label="Beamer"></v-checkbox>
                     <v-checkbox readonly v-model="hdmi" label="Mein Laptop hat einen HDMI Anschluss"></v-checkbox>
                     <v-checkbox readonly v-model="vga" label="Mein Laptop hat einen VGA Anschluss"></v-checkbox>

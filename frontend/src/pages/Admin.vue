@@ -7,24 +7,25 @@ export default {
                 username: string;
                 permissionLevel: "locked" | "user" | "technician" | "admin";
                 password: string;
-            }>(
-                {
-                    id: 0,
-                    username: "test",
-                    permissionLevel: "user",
-                    password: "test"
-                }
-            ),
+            }>(),
             changeUser: false,
             createUser: false,
-            changeId: String() || null || undefined || Number(),
-            changeName: String() || null || undefined || Number(),
-            changePwd: String() || null || undefined || Number(),
-            changeLevel: String() || null || undefined || Number(),
+            changeId: Number() || null,
+            changeName: String() || null,
+            changePwd: String() || null,
+            changeLevel: String() || null,
+            createName: String() || null,
+            createPwd: String() || null,
+            createLevel: String() || null
         }
     },
     beforeMount() {
-        fetch('/admin/users').then((response) => {
+        fetch("/users", {
+            method: "get",
+            headers: {
+                    "Content-Type": "application/json"
+                },
+        }).then((response) => {
             response.json().then((data) => {
                 this.users = data;
             });
@@ -32,15 +33,37 @@ export default {
     },
     methods: {
         deleteUser(id: number) {
-            fetch('/deleteuser', {
-                method: 'post',
+            fetch(`/user/${id}`, {
+                method: 'delete',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
+        },
+        updateUser() {
+            fetch('/user', {
+                method: 'put',
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify({
-                    id: id
+                    username: this.changeName,
+                    password: this.changePwd,
+                    permissionLevel: this.changeLevel
                 })
-            }).then((response) => {
-                response.json().then((data) => {
-                    this.users = data;
-                });
+            });
+        },
+        createNewUser() {
+            fetch('/user', {
+                method: 'post',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: this.createName,
+                    password: this.createName,
+                    permissionLevel: this.createName
+                })
             });
         }
     }
@@ -96,11 +119,11 @@ export default {
                     Benutzer bearbeiten
                 </v-card-title>
                 <v-card-text>
-                    <v-form action="/updateuser" method="post">
-                        <v-text-field label="ID" />
-                        <v-text-field label="Benutzername" />
-                        <v-text-field label="Passwort" />
-                        <v-select label="Permission-Level"
+                    <v-form @submit.prevent="updateUser()">
+                        <v-text-field v-model="changeId" label="ID" />
+                        <v-text-field v-model="changeName" label="Benutzername" />
+                        <v-text-field v-model="changePwd" label="Passwort" />
+                        <v-select v-model="changeLevel" label="Permission-Level"
                             :items="['locked', 'user', 'technician', 'admin']" />
                         <v-btn type="submit">
                             Änderungen speichern
@@ -116,27 +139,27 @@ export default {
         </v-dialog>
 
         <v-dialog v-model="createUser">
-                <v-card>
-                    <v-card-title>
-                        neuer Benutzer
-                    </v-card-title>
-                    <v-card-text>
-                        <v-form action="/createuser" method="post">
-                            <v-text-field label="Benutzername" />
-                            <v-text-field label="Passwort" />
-                            <v-select label="Permission-Level"
-                                :items="['locked', 'user', 'technician', 'admin']" />
-                            <v-btn type="submit">
-                                Änderungen speichern
-                            </v-btn>
-                        </v-form>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn @click="createUser = false">
-                            Änderungen verwerfen
+            <v-card>
+                <v-card-title>
+                    neuer Benutzer
+                </v-card-title>
+                <v-card-text>
+                    <v-form @submit.prevent="createNewUser()">
+                        <v-text-field v-model="createName" label="Benutzername" />
+                        <v-text-field v-model="createPwd" label="Passwort" />
+                        <v-select v-model="createLevel" label="Permission-Level"
+                            :items="['locked', 'user', 'technician', 'admin']" />
+                        <v-btn type="submit">
+                            Änderungen speichern
                         </v-btn>
-                    </v-card-actions>
-                </v-card>
+                    </v-form>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn @click="createUser = false">
+                        Änderungen verwerfen
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
         </v-dialog>
 
         <v-btn class="floating_action_btn" @click="createUser = true" color="primary" icon="mdi-plus" rounded

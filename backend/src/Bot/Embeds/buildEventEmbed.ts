@@ -3,10 +3,10 @@
 import { EmbedBuilder } from "@discordjs/builders";
 import IEvent from "../../Event/event";
 import { Db, WithId } from "mongodb";
-import { Colors } from "discord.js";
+import { Client, Colors } from "discord.js";
 import IUser from "./../../Auth/user";
 
-export default async function buildEventEmbed(event: WithId<IEvent>, db: Db): Promise<EmbedBuilder> {
+export default async function buildEventEmbed(client: Client, event: WithId<IEvent>, db: Db): Promise<EmbedBuilder> {
 
     const embed = new EmbedBuilder()
 
@@ -79,9 +79,10 @@ export default async function buildEventEmbed(event: WithId<IEvent>, db: Db): Pr
     )
 
     embed.setColor(Colors.DarkNavy)
+    embed.setURL("https://debug-676.heeecker.me/event/" + event._id);
 
     embed.setFooter({
-        text: "ATec-Bot",
+        text: client.user?.username ?? "ATec Bot",
     })
 
     return embed;

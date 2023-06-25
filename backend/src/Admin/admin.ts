@@ -10,6 +10,56 @@ export default function createEvent(db: Db): Router {
 
     const userCollection = db.collection<IUser>("users");
 
+    router.get("/users", async (req, res) => {
+        if (!req.auth?.authenticated) {
+            res.status(401).send("Unauthorized");
+            return;
+        }
+
+        // check if the user is logged in and at least a admin (not locked, not user)
+        if (!req.auth?.user || req.auth?.user.permissionLevel != "admin") {
+            res.status(403).send("Unauthorized");
+            return;
+        }
+
+        // get all users from the database
+        const users = await userCollection.find().toArray();
+
+        if (!users) {
+            res.status(404).send("Not Found");
+            return;
+        }
+
+        // send the users
+        res.send(users);
+    });
+
+    router.delete("/user/:id", async (req, res) => {
+        if (!req.auth?.authenticated) {
+            res.status(401).send("Unauthorized");
+            return;
+        }
+
+        // check if the user is logged in and at least a admin (not locked, not user)
+        if (!req.auth?.user || req.auth?.user.permissionLevel != "admin") {
+            res.status(403).send("Unauthorized");
+            return;
+        }
+
+        // get the user from the database
+        const user = await userCollection.findOne({ _id: ObjectId.createFromHexString(req.params.id) });
+        if (!user) {
+            res.status(404).send("Not Found");
+            return;
+        }
+
+        // delete the user from the database
+        const result = await userCollection.deleteOne({ _id: ObjectId.createFromHexString(req.params.id) });
+
+        // send the result
+        res.status(200).send(result.acknowledged);
+    });
+
     router.post("/user", async (req, res) => {
         
         if (!req.auth?.authenticated) {

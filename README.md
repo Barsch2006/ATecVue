@@ -40,14 +40,14 @@ The Website of the ATec of the GRB. It is implemented in Vue and with Vuetify in
 
     List of all users
 
-- /createuser POST
+- /user POST
 
     Create a new user
 
-- /updateuser POST
+- /user PATCH
 
     Update a user
 
-- /deleteuser POST
+- /user DELERE
 
     Delete a user

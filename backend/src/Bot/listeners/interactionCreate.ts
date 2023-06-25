@@ -15,7 +15,7 @@ export default (client: Client, db: Db): void => {
             await handleSlashCommand(interaction, db)
         }
         if (interaction.isButton()) {
-            await handleButtonInteraction(interaction, db)
+            await handleButtonInteraction(client, interaction, db)
         }
     })
 }
@@ -28,13 +28,13 @@ const handleSlashCommand = async (interaction: CommandInteraction, db: Db): Prom
     }
 }
 
-const handleButtonInteraction = async (interaction: ButtonInteraction, db: Db): Promise<void> => {
+const handleButtonInteraction = async (client: Client, interaction: ButtonInteraction, db: Db): Promise<void> => {
     if (interaction.customId === 'event-participate') {
-        await newParticipant(interaction, db)
+        await newParticipant(client, interaction, db)
     }
 }
 
-async function newParticipant(interaction: ButtonInteraction, db: Db) {
+async function newParticipant(client: Client, interaction: ButtonInteraction, db: Db) {
     const event_id = interaction.message.id
     const event_obj = await db.collection<IEvent>('events').findOne({ discordMessageId: { $eq: event_id } })
     if (!event_obj) {
@@ -67,7 +67,7 @@ async function newParticipant(interaction: ButtonInteraction, db: Db) {
     if (interaction.message.editable) {
         interaction.message.edit({
             embeds: [
-                await buildEventEmbed(event_obj, db)
+                await buildEventEmbed(client, event_obj, db)
             ]
         })
     }
