@@ -44,11 +44,9 @@ export default {
     },
     methods: {
         checkIn() {
-            return;
             // todo
         },
         checkOut() {
-            return;
             // todo
         }
     }
@@ -153,6 +151,7 @@ export default {
                             Absenden
                         </v-card-title>
                         <v-card-text>
+                            <v-alert v-if="error.show" color="error" :title="error.message"></v-alert>
                             <v-btn type="submit">Absenden</v-btn>
                         </v-card-text>
                     </v-card>
@@ -248,6 +247,7 @@ export default {
                             Absenden
                         </v-card-title>
                         <v-card-text>
+                            <v-alert v-if="error.show" color="error" :title="error.message"></v-alert>
                             <v-btn type="submit">Absenden</v-btn>
                         </v-card-text>
                     </v-card>
