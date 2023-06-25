@@ -18,7 +18,7 @@ export default {
     },
     methods: {
         submitLogger() {
-            fetch('/logger', {
+            fetch('/logs', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json'
@@ -72,7 +72,8 @@ export default {
                 <v-select v-model="type" clearable label="Typ des Loggings" density="compact" :rules="[rules.required]"
                     :items="[
                         'Nutzung',
-                        'Misstand'
+                        'Misstand',
+                        'Sonstiges'
                     ]" />
                 <v-textarea v-model="text" clearable label="Beschreibung/ etc." :rules="[rules.required]"></v-textarea>
             </v-card-text>
