@@ -67,9 +67,7 @@ export default {
         <v-form id="loginform" @submit.prevent="login()">
             <img class="logo" src="/Atec_small.jpg" alt="Dolphin School" />
             <h1>Login</h1>
-            <v-card color="error">
-                {{ error.message }}
-            </v-card>
+            <v-alert color="error" :title="error.message"></v-alert>
             <v-text-field v-model="username" clearable label="Benutzername" density="compact" :rules="[rules.required]"
                 name="username" />
             <v-text-field v-model="password" type="password" clearable label="Passwort" density="compact"

@@ -159,9 +159,7 @@ export default {
             <v-card-title>
                 Angaben über den Veranstalter
             </v-card-title>
-            <v-card color="error">
-                {{ error.message }}
-            </v-card>
+            <v-alert v-if="error.show" color="error" :title="error.message"></v-alert>
             <v-card-text>
                 <v-text-field @update:model-value="cacheFormInput()" v-model="name" clearable label="Vorname"
                     density="compact" :rules="[rules.required]" />
@@ -240,9 +238,7 @@ export default {
                 <v-textarea @update:model-value="cacheFormInput()" name="notes" clearable
                     label="Sonstiges, Anmerkungen, Generalprobe.." />
             </v-card-text>
-            <v-card color="error">
-                {{ error.message }}
-            </v-card>
+            <v-alert color="error" v-if="error.show" :title="error.message"></v-alert>
             <v-card-actions>
                 <v-btn type="reset" variant="tonal">Zurücksetzen</v-btn>
                 <v-btn
