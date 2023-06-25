@@ -162,7 +162,6 @@ export default {
         eventClick: (info: any) => {
           this.openEvent(info.event.id);
         },
-        height: "60vh",
       };
     },
   },
