@@ -79,7 +79,7 @@ export default async function buildEventEmbed(client: Client, event: WithId<IEve
     )
 
     embed.setColor(Colors.DarkNavy)
-    embed.setURL("https://debug-676.heeecker.me/technician#" + event._id);
+    embed.setURL("https://atec.heeecker.me/technician#" + event._id);
 
     embed.setFooter({
         text: client.user?.username ?? "ATec Bot",
