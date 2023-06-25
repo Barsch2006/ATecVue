@@ -3,11 +3,14 @@ import userinfo from '../actions/userinfo'
 import {
     CommandInteraction, Client, Interaction,
     ButtonInteraction,
+    ActionRowBuilder,
+    ButtonStyle,
 } from 'discord.js'
 import { Db } from 'mongodb'
 import IEvent from '../../Event/event'
 import IUser from '../../Auth/user'
 import buildEventEmbed from '../Embeds/buildEventEmbed'
+import { ButtonBuilder } from '@discordjs/builders'
 
 export default (client: Client, db: Db): void => {
     client.on('interactionCreate', async (interaction: Interaction) => {
@@ -65,10 +68,100 @@ async function newParticipant(client: Client, interaction: ButtonInteraction, db
 
     // update the event message
     if (interaction.message.editable) {
-        interaction.message.edit({
+        await interaction.message.edit({
             embeds: [
                 await buildEventEmbed(client, event_obj, db)
             ]
         })
     }
+}
+
+
+async function updateEventMessage(interaction: ButtonInteraction, db: Db) {
+    const messageId = interaction.message.id;
+    const event = await db.collection<IEvent>('events').findOne({ discordMessageId: { $eq: messageId } });
+    if (!event) {
+        await interaction.reply({ content: 'Fehler. Event nicht gefunden.', ephemeral: true })
+        return
+    }
+    if (interaction.message.editable) {
+        await interaction.message.edit({
+            embeds: [
+                await buildEventEmbed(interaction.client, event, db)
+            ]
+        })
+    } else {
+        await interaction.reply({ content: 'Fehler. Event Nachricht nicht editierbar.', ephemeral: true })
+    }
+}
+
+async function deleteEventMessage(interaction: ButtonInteraction, db: Db) {
+
+    // check if user is admin
+    const user = await db.collection<IUser>('users').findOne({ dId: interaction.user.id })
+    if (!user) {
+        await interaction.reply({ content: 'Fehler. User nicht gefunden.', ephemeral: true })
+        return
+    }
+    if (user.permissionLevel !== "admin") {
+        await interaction.reply({ content: 'Fehler: Dir fehlt die Berechtigung', ephemeral: true })
+        return
+    }
+
+    if (!interaction.message.deletable) {
+        await interaction.reply({ content: 'Fehler. Event Nachricht nicht löschbar.', ephemeral: true })
+        return
+    }
+
+    // confirm message
+    const confirmMessage = await interaction.reply({
+        content: 'Bist du sicher, dass du diese Veranstaltung löschen möchtest? (Button funktionier 10s lang)', ephemeral: true, components: [
+            new ActionRowBuilder<ButtonBuilder>()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('event-delete-confirm')
+                        .setLabel('Ja')
+                        .setStyle(ButtonStyle.Danger),
+                ),
+        ]
+    })
+
+    // wait for confirmation
+    const filter = (i: Interaction) => {
+        if (!i.isButton()) return false;
+        return i.message.id === confirmMessage.id;
+    };
+    const collector = interaction.channel?.createMessageComponentCollector({
+        filter,
+        time: 10_000
+    });
+
+    collector?.on("collect", (i) => {
+        if (!i.isButton()) return;
+        if (i.message.id !== confirmMessage.id) return;
+        if (i.customId === "event-delete-confirm" && interaction.message.deletable) {
+            interaction.message.delete();
+            confirmMessage.delete();
+            collector.stop();
+            return;
+        }
+        if (!interaction.message.deletable) {
+            i.reply({ content: 'Fehler. Event Nachricht nicht löschbar.', ephemeral: true });
+            confirmMessage.delete();
+            collector.stop();
+            return;
+        }
+        if (interaction.customId === "event-delete-cancel") {
+            i.reply({ content: 'Löschen abgebrochen', ephemeral: true });
+            confirmMessage.delete();
+            collector.stop();
+            return;
+        }
+    })
+
+    collector?.on("end", () => {
+        confirmMessage.delete();
+    });
+
+
 }

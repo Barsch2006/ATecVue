@@ -48,7 +48,17 @@ class ATecBot extends Client {
                         .setLabel("Übernehmen")
                         .setEmoji('🛠️')
                         .setCustomId('event-participate')
-                        .setStyle(ButtonStyle.Primary)
+                        .setStyle(ButtonStyle.Primary),
+                    // update button
+                    new ButtonBuilder()
+                        .setEmoji('🔄')
+                        .setCustomId('event-update')
+                        .setStyle(ButtonStyle.Secondary),
+                    // delete button
+                    new ButtonBuilder()
+                        .setEmoji('🗑️')
+                        .setCustomId('event-delete')
+                        .setStyle(ButtonStyle.Danger)
                 )
             ],
             embeds: [

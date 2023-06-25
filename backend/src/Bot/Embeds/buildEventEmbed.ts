@@ -25,46 +25,46 @@ export default async function buildEventEmbed(client: Client, event: WithId<IEve
         {
             name: "Zeitraum",
             value: `<t:${event.start}:F> - <t:${event.end}:t>`,
-            inline: true
+            inline: false
         },
         {
             name: "Ort",
             value: event.location,
-            inline: true
+            inline: false
         },
         {
             name: "Mikrofone",
             value: event.microphones.toString(),
-            inline: true
+            inline: false
         },
         {
             name: "Headsets",
             value: event.headsets.toString(),
-            inline: true
+            inline: false
         },
         ...((event.beamer) ? [{
             name: "Beamer",
             value: event.beamer ? "Ja" : "Nein",
-            inline: true
+            inline: false
         },
         {
             name: "HDMI",
             value: event.hdmi ? "Ja" : "Nein",
-            inline: true
+            inline: false
         },
         {
             name: "VGA",
             value: event.vga ? "Ja" : "Nein",
-            inline: true
+            inline: false
         },
         {
             name: "USB",
             value: event.usb ? "Ja" : "Nein",
-            inline: true
+            inline: false
         }] : [{
             name: "Beamer",
             value: "Nein",
-            inline: true
+            inline: false
         }]),
         ...(event.notes ? [{
             name: "Notizen",
