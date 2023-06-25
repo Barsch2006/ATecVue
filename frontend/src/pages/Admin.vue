@@ -12,7 +12,7 @@ export default {
             }>(),
             changeUser: false,
             createUser: false,
-            changeId: Number() || String() || null,
+            changeId: String() || null,
             changeName: String() || null,
             changePwd: String() || null,
             changeLevel: String() || null,
@@ -47,13 +47,13 @@ export default {
             });
         },
         updateUser() {
-            fetch('/user', {
-                method: 'patch',
+            fetch('/user/update', {
+                method: 'post',
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    id: this.changeId,
+                    _id: this.changeId,
                     username: this.changeName,
                     password: this.changePwd,
                     permissionLevel: this.changeLevel,
@@ -70,8 +70,8 @@ export default {
                 },
                 body: JSON.stringify({
                     username: this.createName,
-                    password: this.createName,
-                    permissionLevel: this.createName,
+                    password: this.createPwd,
+                    permissionLevel: this.createLevel,
                     contactAdress: this.createContactAdress,
                     dId: this.createdId
                 })
@@ -122,7 +122,7 @@ export default {
                     <td>{{ item.dId }}</td>
                     <td>
                         <v-btn elevation="0"
-                            @click="changeId = item._id; changeId = item.dId; changeContactAdress = item.contactAdress; changeName = item.username; changePwd = item.password; changeLevel = item.permissionLevel; changeUser = true;"
+                            @click="changeId = item._id.toString(); changedId = item.dId; changeContactAdress = item.contactAdress; changeName = item.username; changePwd = item.password; changeLevel = item.permissionLevel; changeUser = true;"
                             icon="mdi-pencil"></v-btn>
                     </td>
                     <td>

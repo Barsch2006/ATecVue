@@ -41,7 +41,7 @@ export default function createEvent(db: Db): Router {
         }
 
         // check if the user is logged in and at least a admin (not locked, not user)
-        if (!req.auth?.user || req.auth?.user.permissionLevel != "admin" || req.params.id != req.auth?.user?._id.toHexString()) {
+        if (!req.auth?.user || req.auth?.user.permissionLevel != "admin" || req.params.id === req.auth?.user?._id.toHexString()) {
             res.status(403).send("Unauthorized");
             return;
         }
@@ -95,7 +95,7 @@ export default function createEvent(db: Db): Router {
     });
 
     // route to update a user
-    router.patch("/user", async (req, res) => {
+    router.post("/user/update", async (req, res) => {
         
         if (!req.auth?.authenticated) {
             res.status(401).send("Unauthorized");
@@ -141,10 +141,11 @@ export default function createEvent(db: Db): Router {
 
 
 function validateBody(body: any): body is IUser {
+    console.log(body)
     if (!body) return false;
     if (!body.username || !body.password || !body.permissionLevel || !body.contactAdress) return false;
     if (typeof body.username !== "string" || typeof body.password !== "string" || typeof body.permissionLevel !== "string" || typeof body.contactAdress !== "string") return false;
-    if (body.permissionLevel !== "locked" && body.permissionLevel !== "user" && body.permissionLevel !== "technician" && body.permissionLevel !== "admin") return false;
+    if (typeof body.permissionLevel !== "string" || (body.permissionLevel !== "locked" && body.permissionLevel !== "user" && body.permissionLevel !== "technician" && body.permissionLevel !== "admin")) return false;
     if (body.dId !== undefined && typeof body.dId !== "string") return false;
     return true;
 }
