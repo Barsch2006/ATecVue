@@ -52,16 +52,16 @@ const routes = [
         name: "Regeln",
         component: ATecRules
     },
-    {
-        path: "/logger/create",
-        name: "IssueCreate",
-        component: IssueCreate
-    },
-    {
-        path: "/logger",
-        name: "LoggerView",
-        component: LoggerView
-    },
+    // {
+    //     path: "/logger/create",
+    //     name: "IssueCreate",
+    //     component: IssueCreate
+    // },
+    // {
+    //     path: "/logger",
+    //     name: "LoggerView",
+    //     component: LoggerView
+    // },
     {
         path: "/datenschutz",
         name: "Datenschutz",

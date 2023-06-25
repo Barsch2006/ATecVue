@@ -74,6 +74,7 @@ export default {
         show: false,
         message: "",
       },
+      loadingEvent: false,
     };
   },
   beforeMount() {
@@ -110,6 +111,7 @@ export default {
   },
   methods: {
     openEvent(id: string) {
+      this.loadingEvent = true;
       fetch(`/event/${id}`, {
         method: "get",
         headers: {
@@ -118,33 +120,34 @@ export default {
       })
         .then((response) => {
           response.json().then((data) => {
+            this.loadingEvent = false;
             this.viewingEvent = data;
+            this.name = this.viewingEvent?.name ?? "";
+            this.lastname = this.viewingEvent?.lastname ?? "";
+            this.email = this.viewingEvent?.email ?? "";
+            this.position = this.viewingEvent?.position ?? "";
+            this.title = this.viewingEvent?.title ?? "";
+            this.description = this.viewingEvent?.description ?? "";
+            this.targetgroup = this.viewingEvent?.targetgroup ?? "";
+            this.date = new Date(parseInt(this.viewingEvent?.start ?? "") * 1000).toISOString().split('T')[0];
+            this.start = new Date(this.viewingEvent?.start ?? "").toLocaleTimeString().split(':').slice(0, -1).join(':');
+            this.end = new Date(this.viewingEvent?.end ?? "").toLocaleTimeString().split(':').slice(0, -1).join(':');
+            this.location = this.viewingEvent?.location ?? "";
+            this.beamer = this.viewingEvent?.beamer ?? false;
+            this.hdmi = this.viewingEvent?.hdmi ?? false;
+            this.vga = this.viewingEvent?.vga ?? false;
+            this.usb = this.viewingEvent?.usb ?? false;
+            this.microphones = this.viewingEvent?.microphones ?? "0";
+            this.headsets = this.viewingEvent?.headsets ?? "0";
+            this.notes = this.viewingEvent?.notes ?? "";
+            this.viewEvent = true;
           });
         })
         .catch((err) => {
+          this.loadingEvent = false;
           this.error.show = true;
           this.error.message = err;
         });
-      this.name = this.viewingEvent?.name ?? "";
-      this.lastname = this.viewingEvent?.lastname ?? "";
-      this.email = this.viewingEvent?.email ?? "";
-      this.position = this.viewingEvent?.position ?? "";
-      this.title = this.viewingEvent?.title ?? "";
-      this.description = this.viewingEvent?.description ?? "";
-      this.targetgroup = this.viewingEvent?.targetgroup ?? "";
-      this.date = new Date(parseInt(this.viewingEvent?.start ?? "") * 1000).toISOString().split('T')[0];
-      this.start = new Date( this.viewingEvent?.start ?? "").toLocaleTimeString().split(':').slice(0, -1).join(':');
-      this.end = new Date(this.viewingEvent?.end ?? "").toLocaleTimeString().split(':').slice(0, -1).join(':');
-      this.location = this.viewingEvent?.location ?? "";
-      this.beamer = this.viewingEvent?.beamer ?? false;
-      this.hdmi = this.viewingEvent?.hdmi ?? false;
-      this.vga = this.viewingEvent?.vga ?? false;
-      this.usb = this.viewingEvent?.usb ?? false;
-      this.microphones = this.viewingEvent?.microphones ?? "0";
-      this.headsets = this.viewingEvent?.headsets ?? "0";
-      this.notes = this.viewingEvent?.notes ?? "";
-
-      this.viewEvent = true;
     },
   },
   computed: {
@@ -154,14 +157,18 @@ export default {
         initialView: "dayGridMonth",
         events: this.events.map((event: any) => {
           return {
-            id: event.id,
             title: event.title,
             date: event.date,
+            extendedProps: {
+              objectId: event._id
+            }
           };
         }),
         eventClick: (info: any) => {
-          this.openEvent(info.event.id);
+          const objectId = info.event.extendedProps.objectId;
+          this.openEvent(objectId);
         },
+        height: "80vh"
       };
     },
   },
@@ -170,6 +177,8 @@ export default {
 
 <template>
   <div>
+    <v-progress-circular v-if="loadingEvent" style="position: fixed; left: 50%; transform: translateX(-50%); top: 100px; z-index: 20;"
+      indeterminate></v-progress-circular>
     <v-alert v-if="error.show" color="error" :title="error.message"></v-alert>
     <FullCalendar :options="fullCalenderOptions" />
 
