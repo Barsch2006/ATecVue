@@ -18,7 +18,7 @@ export default {
     },
     methods: {
         submitLogger() {
-            fetch('/logs', {
+            fetch('/log', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json'

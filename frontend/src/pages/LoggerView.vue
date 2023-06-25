@@ -45,22 +45,18 @@ export default {
         </v-alert>
 
         <v-expansion-panels>
-            <v-expansion-panel disable-icon-rotate v-for="(issue, index) in issues" :key="index">>
-                <v-expansion-panel-title>
-                    <v-expansion-panel-header-title>
-                        <template v-slot:actions>
-                            <v-icon v-if="issue.type == 'Nutzung'" color="success" icon="mdi-alert-information-slab-circle-outline"></v-icon>
-                            <v-icon v-if="issue.type == 'Misstand'" color="error" icon="mdi-alert-circle"></v-icon>
-                            <v-icon v-if="issue.type == 'Sonstiges'" color="info" icon="mdi-help-circle-outline"></v-icon>
-                        </template>
-                        {{ issue.date }} {{ issue.time }}
-                    </v-expansion-panel-header-title>
-                    <v-expansion-panel-header-subtitle>
-                        {{ issue.name }}
-                    </v-expansion-panel-header-subtitle>
+            <v-expansion-panel disable-icon-rotate v-for="(issue, index) in issues" :key="index">
+                <v-expansion-panel-title disable-icon-rotate>
+                    {{ issue.date }} | {{ issue.time }}
+                    <template v-slot:actions>
+                        <v-icon v-if="issue.type == 'Nutzung'" color="success" icon="mdi-information"></v-icon>
+                        <v-icon v-if="issue.type == 'Misstand'" color="error" icon="mdi-alert-circle"></v-icon>
+                        <v-icon v-if="issue.type == 'Sonstiges'" color="info" icon="mdi-help-circle-outline"></v-icon>
+                    </template>
                 </v-expansion-panel-title>
                 <v-expansion-panel-text>
-                    <v-textarea disabled v-model="issue.text"></v-textarea>
+                    <v-text-field label="Name" readonly v-model="issue.name"></v-text-field>
+                    <v-textarea label="Beschreibung" readonly v-model="issue.text"></v-textarea>
                 </v-expansion-panel-text>
             </v-expansion-panel>
         </v-expansion-panels>
