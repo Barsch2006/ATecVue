@@ -6,15 +6,53 @@ export default {
                 required: (value: string) => !!value || 'Dieses Feld ist erforderlich.'
             },
             date: '',
-            start: '',
-            end: ''
+            time: '',
+            name: '',
+            type: '',
+            text: '',
+            error: {
+                show: false,
+                message: ''
+            }
         };
+    },
+    methods: {
+        submitLogger() {
+            fetch('/logger', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    date: this.date,
+                    time: this.time,
+                    name: this.name,
+                    type: this.type,
+                    text: this.text
+                })
+            }).then((response) => {
+                if (response.status != 200) {
+                    this.error.show = true;
+                    this.error.message = response.statusText;
+                } else {
+                    this.$router.push('/logger');
+                }
+            });
+        }
     }
 }
 </script>
 
 <template>
-    <v-form>
+    <v-form @submit.prevent="submitLogger()">
+        <v-card>
+            <v-card-title>
+                Angaben über die Person
+            </v-card-title>
+            <v-card-text>
+                <v-text-field v-model="name" clearable label="Name" density="compact" :rules="[rules.required]" />
+            </v-card-text>
+        </v-card>
         <v-card>
             <v-card-title>
                 Zeitpunkt
@@ -22,13 +60,34 @@ export default {
             <v-card-text>
                 <v-text-field v-model="date" clearable label="Datum" density="compact" :rules="[rules.required]"
                     type="date" />
-                <v-text-field v-model="start" clearable label="Start" density="compact" :rules="[rules.required]"
+                <v-text-field v-model="time" clearable label="Uhrzeit" density="compact" :rules="[rules.required]"
                     type="time" />
-                <v-text-field v-model="end" clearable label="Vorraussichtliches Ende" density="compact"
-                    :rules="[rules.required]" type="time" />
             </v-card-text>
         </v-card>
-        <!--  more info -->
+        <v-card>
+            <v-card-title>
+                Logging-Type
+            </v-card-title>
+            <v-card-text>
+                <v-select v-model="type" clearable label="Typ des Loggings" density="compact" :rules="[rules.required]"
+                    :items="[
+                        'Nutzung',
+                        'Misstand'
+                    ]" />
+                <v-textarea v-model="text" clearable label="Beschreibung/ etc." :rules="[rules.required]"></v-textarea>
+            </v-card-text>
+        </v-card>
+        <v-card>
+            <v-card-title>
+                Senden
+            </v-card-title>
+            <v-card-text>
+                <v-alert v-if="error.show" color="error" :title="error.message"></v-alert>
+                <v-btn type="submit">
+                    Senden
+                </v-btn>
+            </v-card-text>
+        </v-card>
     </v-form>
 </template>
 
