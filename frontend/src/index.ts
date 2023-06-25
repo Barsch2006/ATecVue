@@ -6,7 +6,6 @@ import EventForm from "./pages/EventForm.vue";
 import Login from "./pages/Login.vue";
 import Admin from "./pages/Admin.vue";
 import Technician from "./pages/Technician.vue";
-// import About from "./pages/About.vue";
 import ATecRules from "./pages/ATecRules.vue";
 import IssueCreate from "./pages/IssueCreate.vue";
 import LoggerView from "./pages/LoggerView.vue";
@@ -48,11 +47,6 @@ const routes = [
         name: "Technician",
         component: Technician
     },
-    // {
-    //     path: "/about",
-    //     name: "About",
-    //     component: About
-    // },
     {
         path: "/rules",
         name: "Regeln",
@@ -78,11 +72,11 @@ const routes = [
         name: "Impressum",
         component: Impressum
     },
-    {
-        path: "/checkin",
-        name: "Checkin",
-        component: CheckInOut
-    },
+    // {
+    //     path: "/checkin",
+    //     name: "Checkin",
+    //     component: CheckInOut
+    // },
 ];
 
 const router = createRouter({

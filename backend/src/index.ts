@@ -13,7 +13,7 @@ import auth from "./Auth/auth";
 import { WithId } from "mongodb";
 import { join } from "path";
 import admin from "./Admin/admin";
-import logger from "./Logs/logs";
+// import logger from "./Logs/logs";
 
 declare global {
     namespace Express {
@@ -70,7 +70,7 @@ async function main() {
     app.use(createEvent(db, bot));
     app.use(viewEvents(db));
     app.use(admin(db));
-    app.use(logger(db));
+    // app.use(logger(db));
 
     app.use(express.static(process.env.PUBLIC_DIR ?? "public"));
     app.use((req, res) => {
