@@ -36,7 +36,7 @@ class ATecBot extends Client {
         await channel.send(message);
     }
 
-    async sendEventForm(event: WithId<IEvent>): Promise<{ message: string, thread: string}>{
+    async sendEventForm(event: WithId<IEvent>) {
         const channel = await this.channels.fetch(this.event_channel);
         if (!channel || channel.type !== ChannelType.GuildText) {
             throw new Error("Text-Channel not found!");
@@ -60,17 +60,7 @@ class ATecBot extends Client {
                 await buildEventEmbed(this, event, this.db)
             ]
         });
-
-        const thread = await channel.threads.create({
-            startMessage: message,
-            name: event.title,
-        })
-
-        return {
-            message: message.id,
-            thread: thread.id,
-        }
-        
+        return message.id;
     }
 }
 
