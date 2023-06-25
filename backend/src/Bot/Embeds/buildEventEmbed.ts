@@ -75,16 +75,15 @@ export default async function buildEventEmbed(event: WithId<IEvent>, db: Db): Pr
             name: "Techniker",
             value: techniker.map(id => `<@${id}>`).join(", "),
             inline: false,
-        }]: [])
+        }] : [])
     )
 
-embed.setURL(`localhost:1337/event/${event._id}}`)
-embed.setColor(Colors.DarkNavy)
+    embed.setColor(Colors.DarkNavy)
 
-embed.setFooter({
-    text: "ATec-Bot",
-})
+    embed.setFooter({
+        text: "ATec-Bot",
+    })
 
-return embed;
+    return embed;
 
 }

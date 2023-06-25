@@ -48,21 +48,19 @@ export default {
                 start: new Date(`${this.date} ${this.start}`).getTime()/1000,
                 end: new Date(`${this.date} ${this.end}`).getTime()/1000,
                 location: this.location,
-                notes: this.notes,
+                notes: this.notes || undefined,
                 beamer: this.beamer,
                 hdmi: this.hdmi,
                 vga: this.vga,
                 usb: this.usb
             }
 
-            const testData = {"microphones":4,"headsets":2,"name":"Christian","lastname":"Fuchte","position":"SV","email":"christian0511@gmx.de","title":"Test004","description":"","targetgroup":"Tester ATec","start":1687644000,"end":1687687200,"location":"Aula","notes":"","beamer":true,"hdmi":false,"vga":true,"usb":false}
-
             const result = await fetch("https://debug-137.heeecker.me/event", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(testData)
+                body: JSON.stringify(data)
             }).catch(() => {
                 this.error.message = "Verbindung zum Server ist fehlgeschlagen!"
                 this.error.show = true;
@@ -107,7 +105,7 @@ export default {
             <v-card-text>
                 <v-text-field v-model="title" clearable label="Titel der Veranstaltung" density="compact"
                     :rules="[rules.required]" />
-                <v-textarea name="description" clearable label="Beschreibung" :rules="[rules.required]" />
+                <v-textarea v-model="description" clearable label="Beschreibung" :rules="[rules.required]" />
                 <v-text-field v-model="targetgroup" clearable label="Zielgruppe" density="compact"
                     :rules="[rules.required]" />
             </v-card-text>

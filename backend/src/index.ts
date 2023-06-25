@@ -4,7 +4,6 @@ dotenv();
 import express from "express";
 import cookieParser from "cookie-parser";
 import createEvent from "./Event/create";
-import cors from "cors";
 const app = express();
 
 import ATecBot from "./Bot/Bot";
@@ -40,12 +39,7 @@ async function main() {
     await client.connect();
     const db = client.db(process.env.DB_NAME ?? "ATec");
 
-    app.use(cors({
-        origin: process.env.CORS_ORIGIN,
-    }))
-
     app.use(express.json());
-    app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser());
 
     // discord bot

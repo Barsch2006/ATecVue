@@ -36,7 +36,7 @@ const handleButtonInteraction = async (interaction: ButtonInteraction, db: Db): 
 
 async function newParticipant(interaction: ButtonInteraction, db: Db) {
     const event_id = interaction.message.id
-    const event_obj = await db.collection<IEvent>('events').findOne({ discordMessageId: event_id })
+    const event_obj = await db.collection<IEvent>('events').findOne({ discordMessageId: { $eq: event_id } })
     if (!event_obj) {
         await interaction.reply({ content: 'Fehler. Event nicht gefunden.', ephemeral: true })
         return
@@ -52,11 +52,15 @@ async function newParticipant(interaction: ButtonInteraction, db: Db) {
     event_obj.participants = event_obj.participants ?? [];
 
     // check if users id is in the participants list of the event
-    if (event_obj.participants.includes(user?._id)) {
+    if (event_obj.participants.some((id) => id.equals(user._id))) {
         await interaction.reply({ content: 'Du übernimmst diese Veranstaltung bereits', ephemeral: true })
         return;
     }
-    await db.collection('event_participants').insertOne({ event_id: event_id, participant_id: interaction.user.id })
+    await db.collection<IEvent>('events').updateOne({ _id: event_obj._id }, {
+        $push: {
+            participants: user._id
+        }
+    })
     await interaction.reply({ content: 'Du wurdest in die Veranstaltung eingetragen', ephemeral: true })
 
     // update the event message
