@@ -101,6 +101,14 @@ export default {
         this.error.message = err;
       });
   },
+  mounted() {
+    if (window.location.hash) {
+      // get the hash
+      const hash = window.location.hash.substring(1);
+      // open the event
+      this.openEvent(hash);
+    }
+  },
   methods: {
     openEvent(id: string) {
       fetch(`/event/${id}`, {
