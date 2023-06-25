@@ -114,14 +114,11 @@ export default function createEvent(db: Db): Router {
             return;
         }
 
-        if (req.body.password) req.body.password = await hash(req.body.password, 10)
-
         // update the user in the database
         const result = await userCollection.updateOne(
             { _id: ObjectId.createFromHexString(req.body._id) },
             {
                 $set: {
-                    password: req.body.password,
                     permissionLevel: req.body.permissionLevel,
                     contactAdress: req.body.contactAdress,
                     dId: req.body.dId,
@@ -153,7 +150,6 @@ function validateBody(body: any): body is IUser {
 interface IUserPatch {
     _id: string;
     username?: string;
-    password?: string;
     permissionLevel?: "locked" | "user" | "technician" | "admin";
     contactAdress?: string;
     dId?: string;
@@ -162,5 +158,6 @@ interface IUserPatch {
 function validatePatchBody(body: any): body is IUserPatch {
     if (!body._id) return false;
     if (!ObjectId.isValid(body._id)) return false;
+    if (body.permissionLevel !== undefined && (body.permissionLevel !== "locked" && body.permissionLevel !== "user" && body.permissionLevel !== "technician" && body.permissionLevel !== "admin")) return false;    
     return true;
 }

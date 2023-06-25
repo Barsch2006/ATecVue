@@ -14,6 +14,7 @@ import { WithId } from "mongodb";
 import { join } from "path";
 import admin from "./Admin/admin";
 // import logger from "./Logs/logs";
+import reminder from "./Reminders/remind";
 
 declare global {
     namespace Express {
@@ -62,6 +63,8 @@ async function main() {
         default_channel: process.env.DISCORD_DEFAULT_CHANNEL ?? "",
         event_channel: process.env.DISCORD_EVENT_CHANNEL ?? "",
     });
+
+    reminder(bot, db);
 
     if (!process.env.SESSION_SECRET) throw new Error("ENV: SESSION_SECRET is missing!");
 

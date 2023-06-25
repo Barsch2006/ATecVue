@@ -25,6 +25,7 @@ interface IEvent {
 
     // backend info
     discordMessageId?: string;
+    discordThreadId?: string;
     participants?: ObjectId[]; // the mongodb ids of the participants
 }
 

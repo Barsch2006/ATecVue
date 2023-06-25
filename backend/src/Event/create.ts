@@ -50,7 +50,7 @@ export default function createEvent(db: Db, discord: ATecBot): Router {
             hdmi: req.body.hdmi,
             vga: req.body.vga,
             usb: req.body.usb,
-            headsets: req.body.headsets,            
+            headsets: req.body.headsets,
         });
 
         // check if the event was written to the database
@@ -59,14 +59,20 @@ export default function createEvent(db: Db, discord: ATecBot): Router {
             return;
         }
 
-        const dcMessageId = await discord.sendEventForm({ ...req.body, _id: result.insertedId });
+        const dcIds = await discord.sendEventForm({ ...req.body, _id: result.insertedId });
 
-        if (!dcMessageId) {
+        if (!dcIds) {
             res.status(500).send("Internal Server Error");
             return;
         }
 
-        await eventCollection.updateOne({ _id: result.insertedId }, { $set: { discordMessageId: dcMessageId } });
+        // create a thread below the message
+
+        await eventCollection.updateOne(
+            { _id: result.insertedId },
+            {
+                $set: { discordMessageId: dcIds.message, discordThreadId: dcIds.thread }
+            });
 
         // send the id of the event back to the client
         res.status(200).send(result.insertedId);
