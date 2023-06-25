@@ -57,24 +57,44 @@ export default function createEvent(db: Db, discord: ATecBot): Router {
                 return;
             }
 
-            const dcMessageId = await discord.;
+            const dcMessageId = await discord.sendEventForm({
+                _id: result.insertedId,
+                name: req.body.name,
+                lastname: req.body.lastname,
+                email: req.body.email,
+                position: req.body.position,
+                title: req.body.title,
+                description: req.body.description,
+                targetgroup: req.body.targetgroup,
+                start: req.body.start,
+                end: req.body.end,
+                location: req.body.location,
+                participants: [],
+                microphones: req.body.microphones,
+                notes: req.body.notes,
+                beamer: req.body.beamer,
+                hdmi: req.body.hdmi,
+                vga: req.body.vga,
+                usb: req.body.usb,
+                headsets: req.body.headsets,
+            });
 
-                if(!dcMessageId) {
-                    res.status(500).send("Internal Server Error");
-            return;
+            if (!dcMessageId) {
+                res.status(500).send("Internal Server Error");
+                return;
+            }
+
+            await eventCollection.updateOne({ _id: result.insertedId }, { $set: { discordMessageId: dcMessageId } });
+
+            // send the id of the event back to the client
+            res.status(200).send(result.insertedId);
+        } catch (error) {
+            console.error("Error creating event:", error);
+            res.status(500).send("Internal Server Error");
         }
+    });
 
-        await eventCollection.updateOne({ _id: result.insertedId }, { $set: { discordMessageId: dcMessageId } });
-
-        // send the id of the event back to the client
-        res.status(200).send(result.insertedId);
-    } catch (error) {
-        console.error("Error creating event:", error);
-        res.status(500).send("Internal Server Error");
-    }
-});
-
-return router;
+    return router;
 }
 
 function validateBody(body: any): body is IEvent {
