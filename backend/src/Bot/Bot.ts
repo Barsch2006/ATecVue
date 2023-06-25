@@ -54,11 +54,6 @@ class ATecBot extends Client {
                         .setEmoji('🔄')
                         .setCustomId('event-update')
                         .setStyle(ButtonStyle.Secondary),
-                    // delete button
-                    new ButtonBuilder()
-                        .setEmoji('🗑️')
-                        .setCustomId('event-delete')
-                        .setStyle(ButtonStyle.Danger)
                 )
             ],
             embeds: [

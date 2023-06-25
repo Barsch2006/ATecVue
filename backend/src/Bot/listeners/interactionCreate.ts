@@ -35,6 +35,9 @@ const handleButtonInteraction = async (client: Client, interaction: ButtonIntera
     if (interaction.customId === 'event-participate') {
         await newParticipant(client, interaction, db)
     }
+    if (interaction.customId === 'event-update') {
+        await updateEventMessage(interaction, db)
+    }
 }
 
 async function newParticipant(client: Client, interaction: ButtonInteraction, db: Db) {
@@ -90,78 +93,8 @@ async function updateEventMessage(interaction: ButtonInteraction, db: Db) {
                 await buildEventEmbed(interaction.client, event, db)
             ]
         })
+        await interaction.reply({ content: 'Event Nachricht aktualisiert', ephemeral: true })
     } else {
         await interaction.reply({ content: 'Fehler. Event Nachricht nicht editierbar.', ephemeral: true })
     }
-}
-
-async function deleteEventMessage(interaction: ButtonInteraction, db: Db) {
-
-    // check if user is admin
-    const user = await db.collection<IUser>('users').findOne({ dId: interaction.user.id })
-    if (!user) {
-        await interaction.reply({ content: 'Fehler. User nicht gefunden.', ephemeral: true })
-        return
-    }
-    if (user.permissionLevel !== "admin") {
-        await interaction.reply({ content: 'Fehler: Dir fehlt die Berechtigung', ephemeral: true })
-        return
-    }
-
-    if (!interaction.message.deletable) {
-        await interaction.reply({ content: 'Fehler. Event Nachricht nicht löschbar.', ephemeral: true })
-        return
-    }
-
-    // confirm message
-    const confirmMessage = await interaction.reply({
-        content: 'Bist du sicher, dass du diese Veranstaltung löschen möchtest? (Button funktionier 10s lang)', ephemeral: true, components: [
-            new ActionRowBuilder<ButtonBuilder>()
-                .addComponents(
-                    new ButtonBuilder()
-                        .setCustomId('event-delete-confirm')
-                        .setLabel('Ja')
-                        .setStyle(ButtonStyle.Danger),
-                ),
-        ]
-    })
-
-    // wait for confirmation
-    const filter = (i: Interaction) => {
-        if (!i.isButton()) return false;
-        return i.message.id === confirmMessage.id;
-    };
-    const collector = interaction.channel?.createMessageComponentCollector({
-        filter,
-        time: 10_000
-    });
-
-    collector?.on("collect", (i) => {
-        if (!i.isButton()) return;
-        if (i.message.id !== confirmMessage.id) return;
-        if (i.customId === "event-delete-confirm" && interaction.message.deletable) {
-            interaction.message.delete();
-            confirmMessage.delete();
-            collector.stop();
-            return;
-        }
-        if (!interaction.message.deletable) {
-            i.reply({ content: 'Fehler. Event Nachricht nicht löschbar.', ephemeral: true });
-            confirmMessage.delete();
-            collector.stop();
-            return;
-        }
-        if (interaction.customId === "event-delete-cancel") {
-            i.reply({ content: 'Löschen abgebrochen', ephemeral: true });
-            confirmMessage.delete();
-            collector.stop();
-            return;
-        }
-    })
-
-    collector?.on("end", () => {
-        confirmMessage.delete();
-    });
-
-
 }
