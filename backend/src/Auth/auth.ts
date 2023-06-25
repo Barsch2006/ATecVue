@@ -63,16 +63,16 @@ export default function auth(db: Db): Router {
                 userId: user._id.toHexString(),
                 token
             }, process.env.JWT_SECRET, {
-                expiresIn: "1h"
+                expiresIn: "2h"
             });
 
             // set cookie
             res.cookie("token", signed, {
-                domain: "debug-676.heeecker.me",
                 httpOnly: true,
                 secure: true,
                 sameSite: "none",
                 path: "/",
+                expires: new Date(Date.now() + 1000 * 60 * 60),
             });
             console.log("Cookie Set", signed);
 
@@ -93,32 +93,37 @@ export default function auth(db: Db): Router {
 
 
     router.use(async (req, _, next) => {
-
-        console.log(req.cookies.token)
         if (req.cookies.token) {
             // check if token is valid and in db
             if (!process.env.JWT_SECRET) {
                 throw new Error("JWT_SECRET not set");
             }
+            try {
+                const data = verify(req.cookies.token, process.env.JWT_SECRET, {
+                    ignoreExpiration: true,
+                }) as any;
 
-            const data = verify(req.cookies.token, process.env.JWT_SECRET, {
-                ignoreExpiration: false,
-            }) as any;
+                // check if data is in db
+                const session = await sessions.findOne({
+                    userId: new ObjectId(data.userId),
+                    token: data.token
+                });
 
-            // check if data is in db
-            const session = await sessions.findOne({
-                userId: new ObjectId(data.userId),
-                token: data.token
-            });
-
-            if (session) {
-                req.auth = {
-                    authenticated: true,
-                    user: await userCollection.findOne({
-                        _id: new ObjectId(data.userId)
-                    }) ?? undefined,
+                if (session) {
+                    req.auth = {
+                        authenticated: true,
+                        user: await userCollection.findOne({
+                            _id: new ObjectId(data.userId)
+                        }) ?? undefined,
+                    }
+                    next();
+                    return;
                 }
-                console.log("authenticated request")
+            } catch (e) {
+                req.auth = {
+                    authenticated: false,
+                    user: undefined,
+                }
                 next();
                 return;
             }
@@ -129,7 +134,6 @@ export default function auth(db: Db): Router {
             authenticated: false,
             user: undefined,
         }
-        console.log("not authenticated request")
 
         next();
 

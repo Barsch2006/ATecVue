@@ -12,8 +12,7 @@ export default function createEvent(db: Db, discord: ATecBot): Router {
 
     router.post('/event', async (req, res) => {
 
-
-        console.log(req.body);
+        console.log(req.auth?.authenticated)
 
         if (!req.auth?.authenticated) {
             res.status(401).send("Unauthorized");

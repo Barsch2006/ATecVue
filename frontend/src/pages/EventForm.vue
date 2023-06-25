@@ -1,5 +1,27 @@
 <script lang="ts">
 export default {
+    mounted() {
+        // Retrieve cached form data from browser storage
+        const cachedData = JSON.parse(localStorage.getItem('formCache') || '{}');
+        this.name = cachedData.name || '';
+        this.lastname = cachedData.lastname || '';
+        this.position = cachedData.position || '';
+        this.email = cachedData.email || '';
+        this.title = cachedData.title || '';
+        this.description = cachedData.description || '';
+        this.targetgroup = cachedData.targetgroup || '';
+        this.date = cachedData.date || '';
+        this.start = cachedData.start || '';
+        this.end = cachedData.end || '';
+        this.location = cachedData.location || '';
+        this.notes = cachedData.notes || '';
+        this.microphones = cachedData.microphones || 0;
+        this.headsets = cachedData.headsets || 0;
+        this.beamer = cachedData.beamer || false;
+        this.hdmi = cachedData.hdmi || false;
+        this.vga = cachedData.vga || false;
+        this.usb = cachedData.usb || false;
+    },
     data() {
         return {
             rules: {
@@ -30,11 +52,45 @@ export default {
             error: {
                 show: false,
                 message: ""
+            },
+            button: {
+                disabled: false,
+                loading: false,
+                text: "Absenden",
+                icon: "mdi-send",
+                color: "",
+                allowSend: true,
             }
         }
     },
     methods: {
+        cacheFormInput() {
+            // Cache form data in browser storage
+            localStorage.setItem('formCache', JSON.stringify({
+                microphones: this.microphones,
+                headsets: this.headsets,
+                name: this.name,
+                lastname: this.lastname,
+                position: this.position,
+                email: this.email,
+                title: this.title,
+                description: this.description,
+                targetgroup: this.targetgroup,
+                date: this.date,
+                start: this.start,
+                end: this.end,
+                location: this.location,
+                notes: this.notes,
+                beamer: this.beamer,
+                hdmi: this.hdmi,
+                vga: this.vga,
+                usb: this.usb
+            }));
+        },
         async sendData() {
+            if (!this.button.allowSend) return;
+            this.button.allowSend = false;
+            this.button.loading = true;
             const data = {
                 microphones: this.microphones,
                 headsets: this.headsets,
@@ -45,8 +101,8 @@ export default {
                 title: this.title,
                 description: this.description,
                 targetgroup: this.targetgroup,
-                start: new Date(`${this.date} ${this.start}`).getTime()/1000,
-                end: new Date(`${this.date} ${this.end}`).getTime()/1000,
+                start: new Date(`${this.date} ${this.start}`).getTime() / 1000,
+                end: new Date(`${this.date} ${this.end}`).getTime() / 1000,
                 location: this.location,
                 notes: this.notes || undefined,
                 beamer: this.beamer,
@@ -69,10 +125,28 @@ export default {
             if (!result) return;
 
             if (result.status !== 200) {
-                this.error.message = "Hochladen fehlgeschlagen!"
+                this.error.message = "Eintrag fehlgeschlagen. Bitte versuchen Sie es erneut!"
+                if (result.status === 401) {
+                    this.error.message = "Sie sind nicht angemeldet!";
+                    this.button.color = "error";
+                    this.button.icon = "mdi-alert";
+                    this.button.text = "Login erforderlich";
+                    this.button.disabled = false;
+                    setTimeout(() => {this.$router.push("/");}, 1500);
+                } else {
+                    this.button.allowSend = true;
+                }
                 this.error.show = true;
+                this.button.loading = false;
             } else {
-                this.$router.push("/home");
+                // clear all fields in cache
+                localStorage.setItem('formCache', JSON.stringify({}));
+                this.button.loading = false;
+                this.button.disabled = false;
+                this.button.text = "Erfolgreich!";
+                this.button.color = "success";
+                this.button.icon = "mdi-check";
+                setTimeout(() => {this.$router.push("/home");}, 1500);
             }
         }
     }
@@ -89,12 +163,14 @@ export default {
                 {{ error.message }}
             </v-card>
             <v-card-text>
-                <v-text-field v-model="name" clearable label="Vorname" density="compact" :rules="[rules.required]" />
-                <v-text-field v-model="lastname" clearable label="Nachname" density="compact" :rules="[rules.required]" />
-                <v-text-field v-model="position" clearable label="Position in der Schule" density="compact"
-                    :rules="[rules.required]" />
-                <v-text-field v-model="email" type="email" clearable label="E-Mail" density="compact"
-                    :rules="[rules.required, rules.email]" />
+                <v-text-field @update:model-value="cacheFormInput()" v-model="name" clearable label="Vorname"
+                    density="compact" :rules="[rules.required]" />
+                <v-text-field @update:model-value="cacheFormInput()" v-model="lastname" clearable label="Nachname"
+                    density="compact" :rules="[rules.required]" />
+                <v-text-field @update:model-value="cacheFormInput()" v-model="position" clearable
+                    label="Position in der Schule" density="compact" :rules="[rules.required]" />
+                <v-text-field @update:model-value="cacheFormInput()" v-model="email" type="email" clearable label="E-Mail"
+                    density="compact" :rules="[rules.required, rules.email]" />
             </v-card-text>
         </v-card>
 
@@ -103,11 +179,12 @@ export default {
                 Veranstaltung
             </v-card-title>
             <v-card-text>
-                <v-text-field v-model="title" clearable label="Titel der Veranstaltung" density="compact"
+                <v-text-field @update:model-value="cacheFormInput()" v-model="title" clearable
+                    label="Titel der Veranstaltung" density="compact" :rules="[rules.required]" />
+                <v-textarea @update:model-value="cacheFormInput()" v-model="description" clearable label="Beschreibung"
                     :rules="[rules.required]" />
-                <v-textarea v-model="description" clearable label="Beschreibung" :rules="[rules.required]" />
-                <v-text-field v-model="targetgroup" clearable label="Zielgruppe" density="compact"
-                    :rules="[rules.required]" />
+                <v-text-field @update:model-value="cacheFormInput()" v-model="targetgroup" clearable label="Zielgruppe"
+                    density="compact" :rules="[rules.required]" />
             </v-card-text>
         </v-card>
 
@@ -116,12 +193,12 @@ export default {
                 Zeitpunkt
             </v-card-title>
             <v-card-text>
-                <v-text-field v-model="date" clearable label="Datum" density="compact" :rules="[rules.required]"
-                    type="date" />
-                <v-text-field v-model="start" clearable label="Start" density="compact" :rules="[rules.required]"
-                    type="time" />
-                <v-text-field v-model="end" clearable label="Vorraussichtliches Ende" density="compact"
-                    :rules="[rules.required]" type="time" />
+                <v-text-field @update:model-value="cacheFormInput()" v-model="date" clearable label="Datum"
+                    density="compact" :rules="[rules.required]" type="date" />
+                <v-text-field @update:model-value="cacheFormInput()" v-model="start" clearable label="Start"
+                    density="compact" :rules="[rules.required]" type="time" />
+                <v-text-field @update:model-value="cacheFormInput()" v-model="end" clearable label="Vorraussichtliches Ende"
+                    density="compact" :rules="[rules.required]" type="time" />
             </v-card-text>
         </v-card>
 
@@ -130,8 +207,9 @@ export default {
                 Veranstaltungsort
             </v-card-title>
             <v-card-text>
-                <v-select v-model="location" :items="['Aula', 'Sporthalle', 'Sportplatz']" :rules="[rules.required]"
-                    clearable label="Veranstaltungsort" density="compact" />
+                <v-select @update:model-value="cacheFormInput()" v-model="location"
+                    :items="['Aula', 'Sporthalle', 'Sportplatz']" :rules="[rules.required]" clearable
+                    label="Veranstaltungsort" density="compact" />
             </v-card-text>
         </v-card>
 
@@ -140,13 +218,16 @@ export default {
                 Materialien
             </v-card-title>
             <v-card-text>
-                <v-slider v-model="microphones" :label="`Handmikrofone (${microphones})`" :max="10" :min="0" :step="1"
-                    ticks="1" />
-                <v-slider v-model="headsets" :label="`Headsets (${headsets})`" :max="5" :min="0" :step="1" ticks="1" />
-                <v-checkbox v-model="beamer" label="Beamer"></v-checkbox>
-                <v-checkbox :disabled="!beamer" v-model="hdmi" label="Mein Laptop hat einen HDMI Anschluss"></v-checkbox>
-                <v-checkbox :disabled="!beamer" v-model="vga" label="Mein Laptop hat einen VGA Anschluss"></v-checkbox>
-                <v-checkbox :disabled="!beamer" v-model="usb"
+                <v-slider @update:model-value="cacheFormInput()" v-model="microphones"
+                    :label="`Handmikrofone (${microphones})`" :max="10" :min="0" :step="1" ticks="1" />
+                <v-slider @update:model-value="cacheFormInput()" v-model="headsets" :label="`Headsets (${headsets})`"
+                    :max="5" :min="0" :step="1" ticks="1" />
+                <v-checkbox @update:model-value="cacheFormInput()" v-model="beamer" label="Beamer"></v-checkbox>
+                <v-checkbox @update:model-value="cacheFormInput()" :disabled="!beamer" v-model="hdmi"
+                    label="Mein Laptop hat einen HDMI Anschluss"></v-checkbox>
+                <v-checkbox @update:model-value="cacheFormInput()" :disabled="!beamer" v-model="vga"
+                    label="Mein Laptop hat einen VGA Anschluss"></v-checkbox>
+                <v-checkbox @update:model-value="cacheFormInput()" :disabled="!beamer" v-model="usb"
                     label="Ich habe einen USB-Stick oder in der Cloud"></v-checkbox>
             </v-card-text>
         </v-card>
@@ -156,10 +237,24 @@ export default {
                 Schluss
             </v-card-title>
             <v-card-text>
-                <v-textarea name="notes" clearable label="Sonstiges, Anmerkungen, Generalprobe.." />
+                <v-textarea @update:model-value="cacheFormInput()" name="notes" clearable
+                    label="Sonstiges, Anmerkungen, Generalprobe.." />
             </v-card-text>
+            <v-card color="error">
+                {{ error.message }}
+            </v-card>
             <v-card-actions>
-                <v-btn type="submit" variant="tonal" width="100%">Absenden</v-btn>
+                <v-btn type="reset" variant="tonal">Zurücksetzen</v-btn>
+                <v-btn
+                    type="submit"
+                    variant="tonal"
+                    :disabled="button.disabled"
+                    :loading="button.loading"
+                    :prepend-icon="button.icon"
+                    :color="button.color || undefined"
+                >
+                    {{ button.text}}
+                </v-btn>
             </v-card-actions>
         </v-card>
     </v-form>
@@ -190,9 +285,14 @@ export default {
     width: 600px;
 }
 
+.v-card-actions {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 5px;
+}
+
 @media screen and (max-width: 900px) {
     .v-card {
         width: 80%;
     }
-}
-</style>
+}</style>
