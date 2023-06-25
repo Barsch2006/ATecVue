@@ -76,6 +76,11 @@ const routes = [
         path: "/impressum",
         name: "Impressum",
         component: Impressum
+    },
+    {
+        path: "/checkin",
+        name: "Checkin",
+        component: () => import("./pages/Checkin.vue")
     }
 ];
 
