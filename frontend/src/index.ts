@@ -84,8 +84,6 @@ const router = createRouter({
     routes
 });
 
-document.body.setAttribute("data-server-address", "https://debug-113.heeecker.me/")
-
 createApp(Index)
     .use(router)
     .use(vuetify)
