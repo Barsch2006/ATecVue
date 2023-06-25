@@ -32,6 +32,9 @@ const handleButtonInteraction = async (client: Client, interaction: ButtonIntera
     if (interaction.customId === 'event-participate') {
         await newParticipant(client, interaction, db)
     }
+    if (interaction.customId === 'event-update') {
+        await updateEventMessage(interaction, db)
+    }
 }
 
 async function newParticipant(client: Client, interaction: ButtonInteraction, db: Db) {
@@ -65,10 +68,30 @@ async function newParticipant(client: Client, interaction: ButtonInteraction, db
 
     // update the event message
     if (interaction.message.editable) {
-        interaction.message.edit({
+        await interaction.message.edit({
             embeds: [
                 await buildEventEmbed(client, event_obj, db)
             ]
         })
+    }
+}
+
+
+async function updateEventMessage(interaction: ButtonInteraction, db: Db) {
+    const messageId = interaction.message.id;
+    const event = await db.collection<IEvent>('events').findOne({ discordMessageId: { $eq: messageId } });
+    if (!event) {
+        await interaction.reply({ content: 'Fehler. Event nicht gefunden.', ephemeral: true })
+        return
+    }
+    if (interaction.message.editable) {
+        await interaction.message.edit({
+            embeds: [
+                await buildEventEmbed(interaction.client, event, db)
+            ]
+        })
+        await interaction.reply({ content: 'Event Nachricht aktualisiert', ephemeral: true })
+    } else {
+        await interaction.reply({ content: 'Fehler. Event Nachricht nicht editierbar.', ephemeral: true })
     }
 }
