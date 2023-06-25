@@ -14,6 +14,10 @@ if (window.location.href.includes('/home') && !loggedIn()) {
   window.location.href = '/';
 }
 
+if (loggedIn() && window.location.href.includes('/')) {
+  window.location.href = '/home';
+}
+
 function loggedIn(): boolean {
   // check if cookie "token" exists if yes return true
   if (document.cookie.includes('token')) {

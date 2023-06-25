@@ -15,7 +15,7 @@ export default function viewEvents(db: Db): Router {
       }
 
       // check if the user is logged in and at least a user (not locked)
-      if (!req.auth?.user || req.auth?.user.permissionLevel === "locked") {
+      if (!req.auth?.user || (req.auth?.user.permissionLevel != "technician" && req.auth?.user.permissionLevel != "admin")) {
         res.status(403).send("Forbidden");
         return;
       }
@@ -48,7 +48,7 @@ export default function viewEvents(db: Db): Router {
       }
 
       // check if the user is logged in and at least a user (not locked)
-      if (!req.auth?.user || req.auth?.user.permissionLevel === "locked") {
+      if (!req.auth?.user || (req.auth?.user.permissionLevel != "technician" && req.auth?.user.permissionLevel != "admin")) {
         res.status(403).send("Forbidden");
         return;
       }
