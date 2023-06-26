@@ -181,7 +181,7 @@ export default function auth(db: Db): Router {
             // delete cookie
             res.clearCookie("token");
 
-            res.status(200).send("OK");
+            res.status(200).send("Logout erfolgreich");
         } catch {
             res.status(500).send("Internal Server Error");
         }

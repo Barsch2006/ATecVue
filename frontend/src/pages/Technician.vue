@@ -85,6 +85,12 @@ export default {
       },
     })
       .then((response) => {
+
+        if (response.status !== 200) {
+          this.$router.push("/")
+          return;
+        }
+
         response.json().then((data) => {
           this.events = data;
           // modify data so start and end (UTC) are converted to local time
@@ -177,7 +183,8 @@ export default {
 
 <template>
   <div>
-    <v-progress-circular v-if="loadingEvent" style="position: fixed; left: 50%; transform: translateX(-50%); top: 100px; z-index: 20;"
+    <v-progress-circular v-if="loadingEvent"
+      style="position: fixed; left: 50%; transform: translateX(-50%); top: 100px; z-index: 20;"
       indeterminate></v-progress-circular>
     <v-alert v-if="error.show" color="error" :title="error.message"></v-alert>
     <FullCalendar :options="fullCalenderOptions" />

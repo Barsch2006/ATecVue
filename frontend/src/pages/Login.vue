@@ -57,6 +57,17 @@ export default {
                 this.$router.push("/home");
             }
         }
+    },
+    beforeMount() {
+        this.button.loading = true;
+        fetch("/checkaccess", { method: "GET" })
+            .then((response) => {
+                if (response.status === 200) {
+                    this.$router.push("/home");
+                    return;
+                }
+                this.button.loading = false;
+            })
     }
 };
 </script>

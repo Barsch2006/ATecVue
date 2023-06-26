@@ -21,8 +21,6 @@ export default function reminder(client: ATecBot, db: Db) {
         // check if it is 7:30 CET
         if (checkTimeCET(7, 30)) {
 
-            console.info("Sending reminders");
-
             // get the reminders channel
             const channel = await client.channels.fetch(process.env.DISCORD_REMINDER_CHANNEL);
 
@@ -92,14 +90,8 @@ export default function reminder(client: ATecBot, db: Db) {
 }
 function checkTimeCET(hour: number, minute: number): boolean {
     if (new Date().toLocaleTimeString("de-DE", { timeZone: "Europe/Berlin" }).startsWith(`${hour}:${(minute < 10 ? "0" : "") + minute}`)) {
-        console.log("Time matches")
         return true;
     }
-    console.log(
-        new Date().toLocaleTimeString("de-DE", { timeZone: "Europe/Berlin" }),
-        `${hour}:${(minute < 10 ? "0" : "") + minute}`
-    )
-    console.log("Time does not match")
     return false;
 }
 

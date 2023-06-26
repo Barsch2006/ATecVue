@@ -291,4 +291,13 @@ export default {
     .v-card {
         width: 80%;
     }
-}</style>
+}
+
+@media screen and (max-width: 600px) {
+    .v-card-actions {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(2, 1fr);
+    }
+}
+
+</style>

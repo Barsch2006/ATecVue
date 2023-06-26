@@ -66,6 +66,7 @@ export default {
         if (response.status !== 200) {
           this.error.show = true;
           this.error.message = response.statusText;
+          this.$router.push("/")
         } else {
           try {
             response.json().then((data) => {
