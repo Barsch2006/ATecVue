@@ -11,7 +11,7 @@ import IssueCreate from "./pages/IssueCreate.vue";
 import LoggerView from "./pages/LoggerView.vue";
 import Datenschutz from "./pages/Datenschutz.vue";
 import Impressum from "./pages/Impressum.vue";
-import CheckInOut from "./pages/CheckInOut.vue";
+import ChPwd from "./pages/ChPwd.vue";
 
 import "vuetify/styles"
 import "@mdi/font/css/materialdesignicons.css";
@@ -72,6 +72,11 @@ const routes = [
         name: "Impressum",
         component: Impressum
     },
+    {
+        path: "/chpwd",
+        name: "ChangePassword",
+        component: ChPwd
+    }
     // {
     //     path: "/checkin",
     //     name: "Checkin",

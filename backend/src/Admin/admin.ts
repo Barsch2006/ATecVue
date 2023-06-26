@@ -34,7 +34,12 @@ export default function createEvent(db: Db): Router {
             }
 
             // send the users
-            res.send(users);
+            res.send(users.map((user) => {
+                return {
+                    ...user,
+                    password: undefined,
+                }
+            }));
         } catch (error) {
             console.error("Error getting users:", error);
             res.status(500).send("Internal Server Error");
@@ -157,6 +162,48 @@ export default function createEvent(db: Db): Router {
             }
         } catch (error) {
             console.error("Error updating user:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    });
+
+    router.post("/user/update/password", async (req, res) => {
+        try {
+            if (!req.auth?.authenticated) {
+                res.status(401).send("Unauthorized");
+                return;
+            }
+
+            // check if the user is logged in and at least an admin (not locked, not user)
+            if (!req.auth?.user || req.auth?.user.permissionLevel != "admin") {
+                res.status(403).send("Unauthorized");
+                return;
+            }
+
+            // check if the request body is valid
+            if (req.body.userid === undefined || req.body.password === undefined) {
+                res.status(400).send("Bad Request");
+                return;
+            }
+
+            // hash passwort
+            const password = await hash(req.body.password, 10);
+
+            // update the user in the database
+            const result = await userCollection.updateOne(
+                { _id: ObjectId.createFromHexString(req.body.userid) },
+                {
+                    $set: {
+                        password: password,
+                    },
+                }
+            );
+
+            if (result.acknowledged) {
+                res.status(200).send(true);
+            } else {
+                res.status(500).send(false);
+            }
+        } catch (error) {
             res.status(500).send("Internal Server Error");
         }
     });

@@ -3,8 +3,26 @@ export default {
   data() {
     return {
       width: window.innerWidth < 900 ? '80%' : '600px',
+      technicianAccess: "loading",
+      adminAccess: "loading",
     };
   },
+  beforeMount() {
+    fetch("/checkaccess", { method: "GET"})
+      .then((response) => {
+
+        if (response.status === 401) {
+          this.$router.push("/login");
+          return undefined;
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        this.technicianAccess = data.technicianAccess;
+        this.adminAccess = data.adminAccess;
+      });
+  }
 }
 </script>
 
@@ -23,13 +41,15 @@ export default {
     </v-card>
     <v-card :width="width">
       <v-card-title>
-        Abmelden
+        Actions
       </v-card-title>
-      <v-card-subtitle>
-        Hier können Sie sich ausloggen
-      </v-card-subtitle>
       <v-card-actions>
-        <v-btn variant="tonal" width="100%" href="/logout">Logout</v-btn>
+        <v-btn class="action-button">
+
+        </v-btn>
+        <v-btn class="action-button">
+
+        </v-btn>
       </v-card-actions>
     </v-card>
   </div>
