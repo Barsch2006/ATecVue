@@ -85,6 +85,11 @@ export default function auth(db: Db): Router {
                         maxAge: 1000 * 60 * 60,
                     });
 
+                    res.cookie("usertype", user.permissionLevel, {
+                        expires: new Date(Date.now() + 1000 * 60 * 60),
+                        maxAge: 1000 * 60 * 60,
+                    });
+
                     // save token in database
 
                     await sessions.insertOne({
@@ -180,6 +185,7 @@ export default function auth(db: Db): Router {
 
             // delete cookie
             res.clearCookie("token");
+            res.clearCookie("usertype");
 
             res.status(200).send("Logout erfolgreich");
         } catch {

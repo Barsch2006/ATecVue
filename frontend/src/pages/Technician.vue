@@ -41,6 +41,7 @@ export default {
   },
   data() {
     return {
+      isAdmin: document.cookie.includes("usertype=admin"),
       events: Array<{
         _id: string;
         title: string;
@@ -151,6 +152,27 @@ export default {
         })
         .catch((err) => {
           this.loadingEvent = false;
+          this.error.show = true;
+          this.error.message = err;
+        });
+    },
+    deleteEvent() {
+      fetch(`/event/${this.viewingEvent?._id}`, {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            this.viewEvent = false;
+            this.$router.push("/technician");
+          } else {
+            this.error.show = true;
+            this.error.message = "Fehler beim Löschen des Events";
+          }
+        })
+        .catch((err) => {
           this.error.show = true;
           this.error.message = err;
         });
@@ -270,6 +292,9 @@ export default {
         <v-card-text>
           <v-textarea readonly v-model="notes" clearable label="Sonstiges, Anmerkungen, Generalprobe.." />
         </v-card-text>
+        <v-card-actions v-if="isAdmin">
+          <v-btn @click="deleteEvent()" variant="tonal" width="100%">Event Löschen</v-btn>
+        </v-card-actions>
         <v-card-actions>
           <v-btn @click="viewEvent = false" variant="tonal" width="100%">Schließen</v-btn>
         </v-card-actions>

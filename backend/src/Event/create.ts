@@ -1,4 +1,4 @@
-import { Db } from "mongodb";
+import { Db, ObjectId } from "mongodb";
 import IEvent from "./event";
 import { Router } from "express";
 import ATecBot from "../Bot/Bot";
@@ -94,47 +94,83 @@ export default function createEvent(db: Db, discord: ATecBot): Router {
         }
     });
 
+    router.delete("/event/:id", async (req, res) => {
+        try {
+            console.log(req.auth?.authenticated);
+            // check if the user is logged in and an admin
+            if (!req.auth?.user || req.auth?.user.permissionLevel != "admin") {
+                res.status(403).send("Forbidden");
+                return;
+            }
+
+            // check if the id is valid
+            if (!req.params.id) {
+                res.status(400).send("Bad Request");
+                return;
+            }
+
+            // check if the event exists
+            const event = await eventCollection.findOne({ _id: ObjectId.createFromHexString(req.params.id) });
+            if (!event) {
+                res.status(404).send("Not Found");
+                return;
+            }
+
+            // delete the event
+            const result = await eventCollection.deleteOne({ _id: ObjectId.createFromHexString(req.params.id) });
+            if (!result.acknowledged) {
+                res.status(500).send("Internal Server Error");
+                return;
+            }
+
+            res.status(200).send("OK");
+        } catch (error) {
+            console.error("Error deleting event:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    });
+
     return router;
 }
 
 function validateBody(body: any): body is IEvent {
-    if (!body) return false;
-    if (!body.name || typeof body.name !== "string") return false;
-    console.log(`Name ${body.name} is valid`);
-    if (!body.lastname || typeof body.lastname !== "string") return false;
-    console.log(`Lastname ${body.lastname} is valid`);
-    if (!body.email || typeof body.email !== "string") return false;
-    console.log(`E-mail ${body.email} is valid`);
-    if (!body.position || typeof body.position !== "string") return false;
-    console.log(`position ${body.position} is valid`);
-    if (!body.title || typeof body.title !== "string") return false;
-    console.log(`title ${body.title} is valid`);
-    if (!body.description || typeof body.description !== "string") return false;
-    console.log(`description ${body.description} is valid`);
-    if (!body.targetgroup || typeof body.targetgroup !== "string") return false;
-    console.log(`targetgroup ${body.targetgroup} is valid`);
-    if (!body.start || typeof body.start !== "number") return false;
-    console.log(`start ${body.start} is valid`);
-    if (!body.end || typeof body.end !== "number") return false;
-    console.log(`end ${body.end} is valid`);
-    if (!body.location || typeof body.location !== "string") return false;
-    console.log(`location ${body.location} is valid`);
-    if (body.microphones === undefined || typeof body.microphones !== "number")
-        return false;
-    console.log(`microphones ${body.microphones} is valid`);
-    if (body.headsets === undefined || typeof body.headsets !== "number")
-        return false;
-    console.log(`headsets ${body.headsets} is valid`);
-    if (body.beamer === undefined || typeof body.beamer !== "boolean") return false;
-    console.log(`beamer ${body.beamer} is valid`);
-    if (body.hdmi === undefined || typeof body.hdmi !== "boolean") return false;
-    console.log(`hdmi ${body.hdmi} is valid`);
-    if (body.vga === undefined || typeof body.vga !== "boolean") return false;
-    console.log(`vga ${body.vga} is valid`);
-    if (body.usb === undefined || typeof body.usb !== "boolean") return false;
-    console.log(`usb ${body.usb} is valid`);
-    if (body.notes !== undefined && typeof body.notes !== "string") return false;
-    console.log(`notes ${body.notes} is valid`);
-    console.log(`body is valid`);
-    return true;
-}
+            if (!body) return false;
+            if (!body.name || typeof body.name !== "string") return false;
+            console.log(`Name ${body.name} is valid`);
+            if (!body.lastname || typeof body.lastname !== "string") return false;
+            console.log(`Lastname ${body.lastname} is valid`);
+            if (!body.email || typeof body.email !== "string") return false;
+            console.log(`E-mail ${body.email} is valid`);
+            if (!body.position || typeof body.position !== "string") return false;
+            console.log(`position ${body.position} is valid`);
+            if (!body.title || typeof body.title !== "string") return false;
+            console.log(`title ${body.title} is valid`);
+            if (!body.description || typeof body.description !== "string") return false;
+            console.log(`description ${body.description} is valid`);
+            if (!body.targetgroup || typeof body.targetgroup !== "string") return false;
+            console.log(`targetgroup ${body.targetgroup} is valid`);
+            if (!body.start || typeof body.start !== "number") return false;
+            console.log(`start ${body.start} is valid`);
+            if (!body.end || typeof body.end !== "number") return false;
+            console.log(`end ${body.end} is valid`);
+            if (!body.location || typeof body.location !== "string") return false;
+            console.log(`location ${body.location} is valid`);
+            if (body.microphones === undefined || typeof body.microphones !== "number")
+                return false;
+            console.log(`microphones ${body.microphones} is valid`);
+            if (body.headsets === undefined || typeof body.headsets !== "number")
+                return false;
+            console.log(`headsets ${body.headsets} is valid`);
+            if (body.beamer === undefined || typeof body.beamer !== "boolean") return false;
+            console.log(`beamer ${body.beamer} is valid`);
+            if (body.hdmi === undefined || typeof body.hdmi !== "boolean") return false;
+            console.log(`hdmi ${body.hdmi} is valid`);
+            if (body.vga === undefined || typeof body.vga !== "boolean") return false;
+            console.log(`vga ${body.vga} is valid`);
+            if (body.usb === undefined || typeof body.usb !== "boolean") return false;
+            console.log(`usb ${body.usb} is valid`);
+            if (body.notes !== undefined && typeof body.notes !== "string") return false;
+            console.log(`notes ${body.notes} is valid`);
+            console.log(`body is valid`);
+            return true;
+        }
