@@ -56,14 +56,20 @@ export default async (interaction: CommandInteraction, db: Db): Promise<void> =>
                     await u.send(`Dein Account wurde erfolgreich erstellt. Dein Passwort lautet: ${pwd}. Bitte ändere es so schnell wie möglich.`);
                 });
             } else {
-                interaction.reply(`Der Benutzer konnte nicht registriert werden.`)
+                interaction.reply({
+                    content: `Der Benutzer konnte nicht registriert werden.`,
+                    ephemeral: true
+                })
             }
 
         } else {
-            interaction.reply(`Der Benutzer existiert bereits.`)
+            interaction.reply({
+                content: `Der Benutzer existiert bereits.`,
+                ephemeral: true
+            })
         }
     } catch (error) {
         console.error("Error creating event:", error);
-        interaction.reply(`Es ist ein Fehler aufgetreten.`)
+        interaction.reply({content: `Es ist ein Fehler aufgetreten.`, ephemeral: true})
     }
 }

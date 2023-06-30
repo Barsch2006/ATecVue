@@ -6,6 +6,6 @@ export default [
     .addUserOption(option => option.setName('target').setDescription('Der Benutzer, dessen Kontaktinformationen abgerufen werden sollen.').setRequired(true)),
   new SlashCommandBuilder().setName('register')
     .setDescription('Dich als neuen Benutzer registrieren.')
-    .addStringOption(option => option.setName('name').setDescription('Dein Name.').setRequired(true))
-    .addStringOption(option => option.setName('contact').setDescription('Deine Kontaktinformationen.').setRequired(true)),
+    .addStringOption(option => option.setName('name').setDescription('Dein zukünftiger username.').setRequired(true))
+    .addStringOption(option => option.setName('contact').setDescription('Deine Kontaktinformationen. (E-Mail)').setRequired(true)),
 ]
