@@ -19,16 +19,16 @@ export default {
                 <strong>
                     Aula-Technik-AG Gymnasium Riedberg
                 </strong> <br>
-                Friedrich-Dessauer-Str. 2 <br>
-                60438 Frankfurt am Main <br>
-                Fon: 069 / 212-44001 <br>
-                Fax: 069 / 212-44755 <br>
+                <br>
+                <br>
+                Fon: <br>
+                Fax: <br>
                 E-Mail: <a href="mailto:">
-                    todo 
+                     
                 </a>
                 <br> <br>
                 <strong>Verantwortliche Person (vgl. § 5 Abs. 1, Nr. 1 Telemediengesetz)</strong> <br>
-                AG-Leiter: todo <br>
+                <br>
             </v-card-text>
         </v-card>
     </div>

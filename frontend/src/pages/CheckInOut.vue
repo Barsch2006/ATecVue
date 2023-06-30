@@ -1,4 +1,34 @@
 <script lang="ts">
+interface ILog {
+    type: "CheckIn" | "CheckOut";
+    name: string;
+    lastname: string;
+    position: string;
+    contact: string;
+
+    event_name: string;
+    event_description: string;
+    event_date: string;
+    event_time: string;
+    event_location: string;
+
+    usage_aula: boolean;
+    usage_stage: boolean;
+    usage_backstage: boolean;
+    usage_regie: boolean;
+    usage_chairs: boolean;
+    usage_mobile: boolean;
+
+    checklist: {
+        doorsClosed: boolean,
+        emergencyDoorsClosed: boolean,
+        lightsOff: boolean,
+        backstageLightsOff: boolean,
+        systemOff: boolean,
+        lockesClosed: boolean,
+    },
+}
+
 export default {
     data() {
         return {
@@ -44,10 +74,110 @@ export default {
     },
     methods: {
         checkIn() {
-            // todo
+            // send data to backend
+            const log: ILog = {
+                type: "CheckIn",
+                name: this.technician.name,
+                lastname: this.technician.lastname,
+                position: this.technician.position,
+                contact: this.technician.contact,
+
+                event_name: this.event.name,
+                event_description: this.event.description,
+                event_date: this.event.date,
+                event_time: this.event.time,
+                event_location: this.event.location,
+
+                usage_aula: this.usage.aula,
+                usage_stage: this.usage.stage,
+                usage_backstage: this.usage.backstage,
+                usage_regie: this.usage.regie,
+                usage_chairs: this.usage.chairs,
+                usage_mobile: this.usage.mobile,
+
+                checklist: {
+                    doorsClosed: this.checklist.doorsClosed,
+                    emergencyDoorsClosed: this.checklist.emergencyDoorsClosed,
+                    lightsOff: this.checklist.lightsOff,
+                    backstageLightsOff: this.checklist.backstageLightsOff,
+                    systemOff: this.checklist.systemOff,
+                    lockesClosed: this.checklist.lockesClosed,
+                },
+            }
+            // post to backend
+            fetch("/checkin", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(log),
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    if (res.error) {
+                        this.error.message = res.error;
+                        this.error.show = true;
+                    } else {
+                        this.error.show = false;
+                    }
+                })
+                .catch((err) => {
+                    this.error.message = err;
+                    this.error.show = true;
+                });
         },
         checkOut() {
-            // todo
+            // data to backend
+            const log: ILog = {
+                type: "CheckOut",
+                name: this.technician.name,
+                lastname: this.technician.lastname,
+                position: this.technician.position,
+                contact: this.technician.contact,
+
+                event_name: this.event.name,
+                event_description: this.event.description,
+                event_date: this.event.date,
+                event_time: this.event.time,
+                event_location: this.event.location,
+
+                usage_aula: this.usage.aula,
+                usage_stage: this.usage.stage,
+                usage_backstage: this.usage.backstage,
+                usage_regie: this.usage.regie,
+                usage_chairs: this.usage.chairs,
+                usage_mobile: this.usage.mobile,
+
+                checklist: {
+                    doorsClosed: this.checklist.doorsClosed,
+                    emergencyDoorsClosed: this.checklist.emergencyDoorsClosed,
+                    lightsOff: this.checklist.lightsOff,
+                    backstageLightsOff: this.checklist.backstageLightsOff,
+                    systemOff: this.checklist.systemOff,
+                    lockesClosed: this.checklist.lockesClosed,
+                },
+            }
+            // post to backend
+            fetch("/checkout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(log),
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    if (res.error) {
+                        this.error.message = res.error;
+                        this.error.show = true;
+                    } else {
+                        this.error.show = false;
+                    }
+                })
+                .catch((err) => {
+                    this.error.message = err;
+                    this.error.show = true;
+                });
         }
     }
 }
@@ -133,7 +263,8 @@ export default {
                             <v-checkbox label="Keine frei liegenden Gegenstände auf dem Boden" />
                             <v-checkbox v-if="usage.regie"
                                 label="Regie war beim Betreten aufgeräumt, Gegenstände waren an der richtigen Position" />
-                            <v-checkbox label="Stühle waren beim Betreten an der rechten Wand gestapelt und/ oder im Stühlelager" />
+                            <v-checkbox
+                                label="Stühle waren beim Betreten an der rechten Wand gestapelt und/ oder im Stühlelager" />
                         </v-text>
                     </v-card>
 
@@ -215,15 +346,12 @@ export default {
                             <v-checkbox label="Alle Türen zur Aula sind geschlossen" />
                             <v-checkbox label="Notausgangstüren zur Aula sind geschlossen" />
                             <v-checkbox label="Lichter sind ausgeschaltet" />
-                            <v-checkbox v-if="usage.backstage"
-                                label="Lichter im Backstage sind ausgeschaltet" />
+                            <v-checkbox v-if="usage.backstage" label="Lichter im Backstage sind ausgeschaltet" />
                             <v-checkbox v-if="usage.regie" label="Anlage ist ausgeschaltet" />
                             <v-checkbox label="Strom für die Bühnenbeleuchtung ist ausgeschaltet" />
                             <v-checkbox v-if="usage.backstage" label="Backstage ist aufgeräumt" />
-                            <v-checkbox v-if="usage.backstage"
-                                label="Schränke im Backstage sind verschlossen" />
-                            <v-checkbox v-if="usage.backstage"
-                                label="Beide Türen zum Backstage sind abgeschlossen" />
+                            <v-checkbox v-if="usage.backstage" label="Schränke im Backstage sind verschlossen" />
+                            <v-checkbox v-if="usage.backstage" label="Beide Türen zum Backstage sind abgeschlossen" />
                             <v-checkbox v-if="usage.regie" label="Regie ist vollständig verschlossen" />
                             <v-checkbox v-if="usage.regie" label="Keine frei liegenden Gegenstände auf dem Regie-Tisch" />
                             <v-checkbox label="Keine frei liegenden Gegenstände auf dem Boden" />

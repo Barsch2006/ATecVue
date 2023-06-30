@@ -4,7 +4,8 @@ export default [
   new SlashCommandBuilder().setName('userinfo')
     .setDescription('Die Kontaktinformationen eines Benutzers abrufen.')
     .addUserOption(option => option.setName('target').setDescription('Der Benutzer, dessen Kontaktinformationen abgerufen werden sollen.').setRequired(true)),
-  new SlashCommandBuilder().setName('statistics')
-    .setDescription('Statistiken über die ATec abrufen.')
-    .addUserOption(option => option.setName('target').setDescription('Statistiken von einem Benutzer anzeigen').setRequired(false)),
+  new SlashCommandBuilder().setName('register')
+    .setDescription('Dich als neuen Benutzer registrieren.')
+    .addStringOption(option => option.setName('name').setDescription('Dein Name.').setRequired(true))
+    .addStringOption(option => option.setName('contact').setDescription('Deine Kontaktinformationen.').setRequired(true)),
 ]

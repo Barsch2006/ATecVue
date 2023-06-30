@@ -7,7 +7,7 @@ import Login from "./pages/Login.vue";
 import Admin from "./pages/Admin.vue";
 import Technician from "./pages/Technician.vue";
 import ATecRules from "./pages/ATecRules.vue";
-import IssueCreate from "./pages/IssueCreate.vue";
+import CheckInOut from "./pages/CheckInOut.vue";
 import LoggerView from "./pages/LoggerView.vue";
 import Datenschutz from "./pages/Datenschutz.vue";
 import Impressum from "./pages/Impressum.vue";
@@ -53,12 +53,7 @@ const routes = [
         component: ATecRules
     },
     // {
-    //     path: "/logger/create",
-    //     name: "IssueCreate",
-    //     component: IssueCreate
-    // },
-    // {
-    //     path: "/logger",
+    //     path: "/logs",
     //     name: "LoggerView",
     //     component: LoggerView
     // },
@@ -76,7 +71,7 @@ const routes = [
         path: "/chpwd",
         name: "ChangePassword",
         component: ChPwd
-    }
+    },
     // {
     //     path: "/checkin",
     //     name: "Checkin",

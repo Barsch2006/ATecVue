@@ -17,22 +17,14 @@ export default {
                     Haftungsbeschränkung
                 </v-card-title>
                 <v-card-text>
-                    Die Inhalte dieser Internetseite werden mit größtmöglicher Sorgfalt recherchiert. Dennoch können wir
+                    Die Inhalte dieser Internetseite werden mit größtmöglicher Sorgfalt auf dem neusten Stand gehalten.
+                    Dennoch können wir
                     keine
                     Haftung für die Richtigkeit, Vollständigkeit und Aktualität der bereit gestellten Informationen
                     übernehmen.
 
                     Wir sind bemüht, die Website unterbrechungsfrei zum Abruf anzubieten. Auch bei aller gebotenen Sorgfalt
                     können aber temporäre Ausfallzeiten nicht ausgeschlossen werden.
-
-                    Diese Website umfasst Links und Einbettung auf/ von andere Webseiten. Diese unterliegen der Haftung des
-                    jeweiligen Betreibers. Der Anbieter hat keinerlei Einfluss auf die aktuelle und zukünftige Gestaltung
-                    und
-                    auf die Inhalte der verknüpften Seiten. Etwaige Haftungsansprüche sind an den jeweiligen Anbieter zu
-                    richten. Eine ständige Kontrolle dieser externen Links ist für uns ohne einen Grund nicht zumutbar. Bei
-                    Kenntnis von Rechtsverstößen o.ä. werden derartige externe Links selbstverständlich so schnell wie
-                    möglich
-                    entfernt.
                 </v-card-text>
             </v-card>
             <v-card :width="width">
@@ -41,9 +33,7 @@ export default {
                 </v-card-title>
                 <v-card-text>
                     Sofern nicht anders gekenntzeichnet unterliegen alle Medien und Inhalte, sowohl in Bild als auch Schrift
-                    dem
-                    Betreiber
-                    der Website.
+                    dem Betreiber der Website.
                 </v-card-text>
             </v-card>
             <v-card :width="width">
@@ -54,12 +44,15 @@ export default {
                     Wir weisen ausdrücklich darauf hin, dass die Datenübertragung im Internet Sicherheitslücken aufweisen
                     kann
                     und nicht lückenlos vor dem Zugriff durch Dritte geschützt werden kann. Die Verwendung der im Rahmen der
-                    Website veröffentlichen Kontaktdaten zu gewerblichen Zwecken ist ausdrücklich nicht erwünscht, es sei
-                    denn,
-                    der Anbieter hat zuvor seine schriftliche Einwilligung erteilt oder es besteht bereits ein
-                    geschäftlicher
-                    Kontakt. Der Anbieter und alle auf dieser Website genannten Personen widersprechen hiermit jeder
-                    kommerziellen Verwendung und Weitergabe ihrer Daten.
+                    Website veröffentlichen Kontaktdaten zu jeglichen Zwecken außer den folgenden Ausnahmen ausdrücklich
+                    nicht gestattet. <br>
+                    Ausnahmen: <br>
+                    - Die Kontaktdaten werden zur Kontaktaufnahme verwendet. <br>
+                    Der Anbieter und alle auf dieser Website genannten Personen widersprechen hiermit jeder
+                    Verwendung und Weitergabe ihrer Daten sofern nicht den obrigen Ausnahmen entsprechend. <br>
+                    <br>
+                    Diese Website verwendet Cookies zur Authentifizierung der Nutzer. Diese Cookies sind technisch notwendig
+                    und sind nicht deaktivierbar.
                 </v-card-text>
             </v-card>
             <v-card :width="width">
@@ -78,6 +71,7 @@ export default {
 * {
     user-select: all !important;
 }
+
 .wrapper {
     display: flex;
     padding: 40px;

@@ -1,4 +1,5 @@
 import userinfo from '../actions/userinfo'
+import register from '../actions/register'
 
 import {
     CommandInteraction, Client, Interaction,
@@ -24,6 +25,9 @@ const handleSlashCommand = async (interaction: CommandInteraction, db: Db): Prom
     switch (interaction.commandName) {
         case 'userinfo':
             await userinfo(interaction, db);
+            break;
+        case 'register':
+            await register(interaction, db);
             break;
     }
 }
