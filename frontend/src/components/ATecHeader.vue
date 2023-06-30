@@ -6,21 +6,16 @@ export default {
 
 <template>
     <v-app-bar color="black" scroll-behavior="collapse">
+        <img @click="$router.push('/')" src="/Atec_small.jpg" />
+        <v-spacer></v-spacer>
         <v-app-bar-nav-icon>
-            <img src="/Atec_small.jpg" />
+            <v-icon size="32" @click="$router.push('/')" icon="mdi-home" ></v-icon>
         </v-app-bar-nav-icon>
-        <v-app-bar-title>
-            ATec Event-Anmeldung
-        </v-app-bar-title>
-        <template v-slot:append>
-            <v-btn @click="$router.push('/home')" prepend-icon="mdi-home">
-                Startseite
-            </v-btn>
-        </template>
     </v-app-bar>
 </template>
 
 <style scoped>
+
 header {
     font-size: 30px;
     padding: 10px;

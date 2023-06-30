@@ -76,6 +76,7 @@ export default {
         message: "",
       },
       loadingEvent: false,
+      copyColor: '',
     };
   },
   beforeMount() {
@@ -177,6 +178,14 @@ export default {
           this.error.message = err;
         });
     },
+    copyUrl() {
+      try {
+      navigator.clipboard.writeText("https://atec.heeecker.me/technician#" + this.viewingEvent?._id);
+        this.copyColor = 'success';
+      } catch (err) {
+        this.copyColor = 'error';
+      }
+    }
   },
   computed: {
     fullCalenderOptions() {
@@ -230,13 +239,13 @@ export default {
           <td>
             {{ item.title }}
           </td>
-          <td>
+          <td class="copy">
             {{ item.date }}
           </td>
-          <td>
+          <td class="copy">
             {{ item.start }}
           </td>
-          <td>
+          <td class="copy">
             {{ item.end }}
           </td>
           <td>
@@ -248,8 +257,12 @@ export default {
 
     <v-dialog v-model="viewEvent">
       <v-card>
+        <v-card-title style=" width: 100%; display: inline-flex; align-items: center; gap: 4px;">
+          <v-btn variant="tonal" @click="copyUrl()" icon="mdi-share" elevation="0" rounded :color="copyColor"></v-btn>
+          Veranstaltungs Details
+        </v-card-title>
         <v-alert v-if="error.show" color="error" :title="error.message"></v-alert>
-        <v-card-title> Angaben über den Veranstalter </v-card-title>
+        <v-card-title> Angaben über den Veranstalter</v-card-title>
         <v-card-text>
           <v-text-field readonly v-model="name" label="Vorname" density="compact" />
           <v-text-field readonly v-model="lastname" label="Nachname" density="compact" />

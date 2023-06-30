@@ -23,6 +23,10 @@ export default {
 </template>
 
 <style scoped>
+* {
+    user-select: all !important;
+}
+
 h3 {
     text-align: center;
 }

@@ -260,8 +260,8 @@ export default {
         <tr v-for="item in users" :key="item._id">
           <td>{{ item.username }}</td>
           <td>{{ item.permissionLevel }}</td>
-          <td>{{ item.contactAdress }}</td>
-          <td>{{ item.dId }}</td>
+          <td class="copy">{{ item.contactAdress }}</td>
+          <td class="copy">{{ item.dId }}</td>
           <td>
             <v-btn
               elevation="0"

@@ -35,6 +35,9 @@ export default {
 </template>
 
 <style scoped>
+* {
+    user-select: all !important;
+}
 .wrapper {
     display: flex;
     padding: 40px;

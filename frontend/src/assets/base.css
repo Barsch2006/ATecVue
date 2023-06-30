@@ -34,3 +34,16 @@ a:hover {
 .bg {
   z-index: 0;
 }
+
+.copy {
+  user-select: text;
+}
+
+.v-card-title,
+.v-card-subtitle {
+  white-space: normal !important;
+}
+
+.v-toolbar--collapse {
+  max-width: 100px !important;
+}

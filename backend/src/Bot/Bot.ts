@@ -60,6 +60,12 @@ class ATecBot extends Client {
                 await buildEventEmbed(this, event, this.db)
             ]
         });
+        // create a thread with the title under the message and send the same message as before
+        await message.startThread({
+            name: event.title,
+            autoArchiveDuration: 1440,
+            reason: "new event thread"
+        });
         return message.id;
     }
 }
