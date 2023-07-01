@@ -1,9 +1,10 @@
 import { Db } from "mongodb";
 import { Router } from "express";
 import ILog from "./ilog";
+import ATecBot from "Bot/Bot";
 
 // return a router with the event create route
-export default function createEvent(db: Db): Router {
+export default function createEvent(bot: ATecBot,  db: Db): Router {
     const router = Router();
 
     const logCollection = db.collection<ILog>("logs");
@@ -22,6 +23,8 @@ export default function createEvent(db: Db): Router {
                 res.status(403).send("Forbidden");
                 return;
             }
+
+            bot.sendStringMessage(`Logs wurden von @<${req.auth.user.dId}> gelöscht`);
 
             // delete all logs from the database
             const result = await logCollection.deleteMany({});
@@ -56,10 +59,11 @@ export default function createEvent(db: Db): Router {
 
             // insert log into database
             const result = await logCollection.insertOne(req.body);
+
             // send the id of the inserted log to the client
             res.status(200).json(result.insertedId);
         } catch (error) {
-            console.error("Error creating event:", error);
+            console.error("Error creating log:", error);
             res.status(500).send("Internal Server Error");
         }
     });
@@ -87,11 +91,12 @@ export default function createEvent(db: Db): Router {
 
             // insert log into database
             const result = await logCollection.insertOne(req.body);
+
             // send the id of the inserted log to the client
             res.status(200).json(result.insertedId);
 
         } catch (error) {
-            console.error("Error creating event:", error);
+            console.error("Error creating log:", error);
             res.status(500).send("Internal Server Error");
         }
     });
