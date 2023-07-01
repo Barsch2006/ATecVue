@@ -156,10 +156,10 @@ export default {
                         </v-card-title>
                         <v-alert v-if="error.show" color="error" :title="error.message"></v-alert>
                         <v-card-text>
-                            <v-text-field v-model="log.technician.name" clearable label="Name" density="compact" readonly />
-                            <v-text-field v-model="log.technician.position" clearable label="Position in der Schule"
+                            <v-text-field v-model="log.technician.name"  label="Name" density="compact" readonly />
+                            <v-text-field v-model="log.technician.position"  label="Position in der Schule"
                                 density="compact" readonly />
-                            <v-text-field v-model="log.technician.contact" clearable
+                            <v-text-field v-model="log.technician.contact"
                                 label="E-Mail oder andere Kontaktmöglichkeit" density="compact" readonly />
                         </v-card-text>
                     </v-card>
@@ -169,16 +169,16 @@ export default {
                             Nutzung der Aula / Veranstaltung
                         </v-card-title>
                         <v-card-text>
-                            <v-text-field v-model="log.eventinfo.name" clearable label="Kurze Bezeichnung" density="compact"
+                            <v-text-field v-model="log.eventinfo.name" label="Kurze Bezeichnung" density="compact"
                                 readonly />
-                            <v-textarea v-model="log.eventinfo.description" clearable label="Beschreibung" readonly />
-                            <v-text-field v-model="log.eventinfo.date" clearable label="Datum der Veranstaltung"
+                            <v-textarea v-model="log.eventinfo.description" label="Beschreibung" readonly />
+                            <v-text-field v-model="log.eventinfo.date" label="Datum der Veranstaltung"
                                 density="compact" readonly />
-                            <v-text-field v-model="log.eventinfo.time" clearable label="Aktuelle Uhrzeit" density="compact"
+                            <v-text-field v-model="log.eventinfo.time" label="Aktuelle Uhrzeit" density="compact"
                                 readonly />
-                            <v-text-field v-model="log.eventinfo.location" clearable label="Ort der Veranstaltung"
+                            <v-text-field v-model="log.eventinfo.location" label="Ort der Veranstaltung"
                                 density="compact" readonly />
-                            <v-text-field v-model="log.eventinfo.url" clearable label="URL im System falls vorhanden"
+                            <v-text-field v-model="log.eventinfo.url" label="URL im System falls vorhanden"
                                 density="compact" readonly />
                         </v-card-text>
                     </v-card>
@@ -238,7 +238,7 @@ export default {
                             Auffälligkeiten
                         </v-card-title>
                         <v-card-text>
-                            <v-textarea readonly v-model="log.issues" clearable label="Auffälligkeiten" />
+                            <v-textarea readonly v-model="log.issues" label="Auffälligkeiten" />
                         </v-card-text>
                     </v-card>
                 </v-expansion-panel-text>
