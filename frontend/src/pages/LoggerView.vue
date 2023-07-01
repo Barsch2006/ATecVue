@@ -123,7 +123,7 @@ export default {
             {{ error.message }}
         </v-alert>
 
-        <v-card v-if="admin">
+        <v-card color="background" v-if="admin">
             <v-card-title>
                 Clear Logs
             </v-card-title>
