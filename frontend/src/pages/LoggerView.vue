@@ -52,7 +52,9 @@ export default {
             error: {
                 show: false,
                 message: ''
-            }
+            },
+            admin: false,
+            del: false
         }
     },
     mounted() {
@@ -75,6 +77,43 @@ export default {
             this.error.message = error;
         })
     },
+    beforeMount() {
+        fetch("/checkaccess", { method: "GET" })
+            .then((response) => {
+
+                if (response.status === 401) {
+                    this.$router.push("/login");
+                }
+
+                return response.json();
+            })
+            .then((data) => {
+                if (data.adminAccess && typeof data.adminAccess === "string" && data.adminAccess === "granted") {
+                    this.admin = true;
+                }
+            })
+    },
+    methods: {
+        clearLogs() {
+            fetch('/logs', {
+                method: 'delete',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((response) => {
+                if (response.status != 200) {
+                    this.error.show = true;
+                    this.error.message = response.statusText;
+                } else {
+                    this.logs = [];
+                    this.del = false;
+                }
+            }).catch((error) => {
+                this.error.show = true;
+                this.error.message = error;
+            })
+        }
+    }
 }
 </script>
 
@@ -83,6 +122,23 @@ export default {
         <v-alert v-if="error.show" type="error">
             {{ error.message }}
         </v-alert>
+
+        <v-card v-if="admin">
+            <v-card-title>
+                Clear Logs
+            </v-card-title>
+            <v-card-text>
+                Alle Logs löschen und zurücksetzen. <br>
+                Diese Aktion kann nicht rückgängig gemacht werden und ist nicht zu empfehlen, wenn kritische Logs noch nicht
+                behoben wurden, und es noch keine Backups gibt.
+            </v-card-text>
+            <v-card-actions>
+                <v-checkbox v-model="del" label="Löschen"></v-checkbox>
+                <v-btn @click="clearLogs()" :disabled="!del">
+                    Entgültig Löschen
+                </v-btn>
+            </v-card-actions>
+        </v-card>
 
         <v-expansion-panels>
             <v-expansion-panel disable-icon-rotate v-for="(log, index) in logs" :key="index">

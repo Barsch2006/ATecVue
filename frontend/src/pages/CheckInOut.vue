@@ -61,7 +61,7 @@ export default {
                 message: "",
                 show: false,
             },
-            tab: 'CheckIn',
+            tab: 'checkin',
             checkIn: {
                 type: "",
                 technician: {
@@ -155,7 +155,7 @@ export default {
         }
     },
     methods: {
-        checkIn() {
+        postcheckIn() {
             // post log data to backend
             this.checkIn.type = "CheckIn"
             fetch('/checkin', {
@@ -173,7 +173,7 @@ export default {
                 }
             });
         },
-        checkOut() {
+        postcheckOut() {
             this.checkOut.type = "CheckOut"
             // post log data to backend
             fetch('/checkout', {
@@ -198,14 +198,14 @@ export default {
 <template>
     <div>
         <v-tabs v-model="tab" fixed-tabs center-active bg-color="background" dark density="comfortable">
-            <v-tab value="CheckIn">CheckIn</v-tab>
-            <v-tab value="CheckOut">CheckOut</v-tab>
+            <v-tab value="checkin">CheckIn</v-tab>
+            <v-tab value="checkout">CheckOut</v-tab>
         </v-tabs>
 
         <v-window v-model="tab">
             <!-- Checkin -->
-            <v-window-item value="CheckIn">
-                <v-form @submit.prevent="checkIn()">
+            <v-window-item value="checkin">
+                <v-form @submit.prevent="postcheckIn()">
                     <v-card>
                         <v-card-title>
                             Personalien
@@ -331,8 +331,8 @@ export default {
                 </v-form>
             </v-window-item>
             <!-- Checkout -->
-            <v-window-item value="CheckOut">
-                <v-form @submit.prevent="checkOut()">
+            <v-window-item value="checkout">
+                <v-form @submit.prevent="postcheckOut()">
                     <v-card>
                         <v-card-title>
                             Personalien
