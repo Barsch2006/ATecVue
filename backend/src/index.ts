@@ -73,7 +73,7 @@ async function main() {
     app.use(createEvent(db, bot));
     app.use(viewEvents(db));
     app.use(admin(db));
-    app.use(logger(db));
+    app.use(logger(bot, db));
 
     app.use(express.static(process.env.PUBLIC_DIR ?? "public"));
     app.use((req, res) => {
