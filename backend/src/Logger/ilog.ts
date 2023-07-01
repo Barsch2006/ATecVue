@@ -1,4 +1,5 @@
 export default interface ILog {
+    critical: boolean,
     type: "CheckIn" | "CheckOut",
     technician: {
         name: "",

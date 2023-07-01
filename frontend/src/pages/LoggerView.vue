@@ -2,46 +2,47 @@
 interface ILog {
     type: "CheckIn" | "CheckOut",
     technician: {
-        name: "",
-        position: "",
-        contact: "",
+        name: string,
+        position: string,
+        contact: string,
     },
     eventinfo: {
-        name: "",
-        description: "",
-        date: "",
-        time: "",
-        location: "",
-        url: ""
+        name: string,
+        description: string,
+        date: string,
+        time: string,
+        location: string,
+        url: string
     },
     usage: {
         // anlage
-        regie: false,
-        mobile: false,
+        regie: boolean,
+        mobile: boolean,
         // bühne
-        stage: false,
-        backstage: false,
+        stage: boolean,
+        backstage: boolean,
         // stühle und tische
-        chairs: false,
-        tables: false,
-        elements: false
+        chairs: boolean,
+        tables: boolean,
+        elements: boolean
     },
     checklist: {
-        doorsClosed: false,
-        emergencyDoorsClosed: false,
-        regieClosed: false,
-        lightsOff: false,
-        beamerOff: false,
-        clear: false,
-        regie: false,
-        powerOn: false,
-        powerOff: false,
-        stage: false,
-        backstage: false,
-        chairs: false,
-        tables: false,
+        doorsClosed: boolean,
+        emergencyDoorsClosed: boolean,
+        regieClosed: boolean,
+        lightsOff: boolean,
+        beamerOff: boolean,
+        clear: boolean,
+        regie: boolean,
+        powerOn: boolean,
+        powerOff: boolean,
+        stage: boolean,
+        backstage: boolean,
+        chairs: boolean,
+        tables: boolean,
     },
-    issues: "",
+    issues: string,
+    critical: boolean,
 }
 
 export default {
@@ -85,7 +86,7 @@ export default {
 
         <v-expansion-panels>
             <v-expansion-panel disable-icon-rotate v-for="(log, index) in logs" :key="index">
-                <v-expansion-panel-title disable-icon-rotate>
+                <v-expansion-panel-title :color="log.critical ? 'warning' : undefined" disable-icon-rotate>
                     {{ log.type }}: {{ log.eventinfo.date }} {{ log.eventinfo.time }}
                     <template v-slot:actions>
                         <v-icon :color="log.type == 'CheckIn' ? 'success' : 'warning'"
