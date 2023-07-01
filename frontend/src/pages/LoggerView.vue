@@ -142,7 +142,7 @@ export default {
 
         <v-expansion-panels>
             <v-expansion-panel disable-icon-rotate v-for="(log, index) in logs" :key="index">
-                <v-expansion-panel-title :color="log.critical ? 'warning' : undefined" disable-icon-rotate>
+                <v-expansion-panel-title :color="log.critical ? 'error' : undefined" disable-icon-rotate>
                     {{ log.type }}: {{ log.eventinfo.date }} {{ log.eventinfo.time }}
                     <template v-slot:actions>
                         <v-icon :color="log.type == 'CheckIn' ? 'success' : 'warning'"
