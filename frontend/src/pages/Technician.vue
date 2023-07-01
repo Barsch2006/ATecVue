@@ -98,8 +98,8 @@ export default {
           // modify data so start and end (UTC) are converted to local time
           this.events.forEach((event) => {
             event.date = new Date(parseInt(event.start) * 1000).toISOString().split('T')[0];
-            event.start = new Date(event.start).toLocaleTimeString().split(':').slice(0, -1).join(':');
-            event.end = new Date(event.end).toLocaleTimeString().split(':').slice(0, -1).join(':');
+            event.start = new Date(parseInt(event.start) * 1000).toLocaleTimeString().split(':').slice(0, -1).join(':');
+            event.end = new Date(parseInt(event.end) * 1000).toLocaleTimeString().split(':').slice(0, -1).join(':');
             console.log(event.start + " | " + event.end + " | " + event.date)
           });
         });
@@ -138,8 +138,8 @@ export default {
             this.description = this.viewingEvent?.description ?? "";
             this.targetgroup = this.viewingEvent?.targetgroup ?? "";
             this.date = new Date(parseInt(this.viewingEvent?.start ?? "") * 1000).toISOString().split('T')[0];
-            this.start = new Date(this.viewingEvent?.start ?? "").toLocaleTimeString().split(':').slice(0, -1).join(':');
-            this.end = new Date(this.viewingEvent?.end ?? "").toLocaleTimeString().split(':').slice(0, -1).join(':');
+            this.start = new Date(parseInt(this.viewingEvent?.start ?? "") * 1000).toLocaleTimeString().split(':').slice(0, -1).join(':');
+            this.end = new Date(parseInt(this.viewingEvent?.end ?? "") * 1000).toLocaleTimeString().split(':').slice(0, -1).join(':');
             this.location = this.viewingEvent?.location ?? "";
             this.beamer = this.viewingEvent?.beamer ?? false;
             this.hdmi = this.viewingEvent?.hdmi ?? false;
