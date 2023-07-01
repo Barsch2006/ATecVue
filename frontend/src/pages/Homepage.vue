@@ -70,14 +70,28 @@ export default {
           prepend-icon="mdi-calendar-multiple" @click="$router.push('/technician')">
           Events einsehen
         </v-btn>
+        <v-btn v-if="technicianAccess !== 'denied'" :loading="technicianAccess === 'loading'" prepend-icon="mdi-pencil-circle"
+          @click="$router.push('/logger')">
+          Logs einsehen
+        </v-btn>
         <v-btn v-if="adminAccess !== 'denied'" :loading="adminAccess === 'loading'" prepend-icon="mdi-security"
           @click="$router.push('/admin')">
           Nutzer verwalten
         </v-btn>
-        <v-btn prepend-icon="mdi-logout" @click="logout()">
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-title>
+        Logout
+      </v-card-title>
+      <v-card-subtitle>
+        Hier können Sie sich abmelden.
+      </v-card-subtitle>
+      <v-card-actions>
+        <v-btn variant="tonal" width="100%" prepend-icon="mdi-logout" @click="logout()">
           Ausloggen
         </v-btn>
-      </v-card-text>
+      </v-card-actions>
     </v-card>
   </div>
 </template>
@@ -169,6 +183,6 @@ export default {
     grid-template-rows: repeat(4, 1fr);
     gap: 10px;
   }
-  
+
 }
 </style>

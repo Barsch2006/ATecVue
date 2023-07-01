@@ -1,38 +1,53 @@
 <script lang="ts">
 interface ILog {
-    type: "CheckIn" | "CheckOut";
-    name: string;
-    lastname: string;
-    position: string;
-    contact: string;
-
-    event_name: string;
-    event_description: string;
-    event_date: string;
-    event_time: string;
-    event_location: string;
-
-    usage_aula: boolean;
-    usage_stage: boolean;
-    usage_backstage: boolean;
-    usage_regie: boolean;
-    usage_chairs: boolean;
-    usage_mobile: boolean;
-
-    checklist: {
-        doorsClosed: boolean,
-        emergencyDoorsClosed: boolean,
-        lightsOff: boolean,
-        backstageLightsOff: boolean,
-        systemOff: boolean,
-        lockesClosed: boolean,
+    type: "CheckIn" | "CheckOut",
+    technician: {
+        name: "",
+        position: "",
+        contact: "",
     },
+    eventinfo: {
+        name: "",
+        description: "",
+        date: "",
+        time: "",
+        location: "",
+        url: ""
+    },
+    usage: {
+        // anlage
+        regie: false,
+        mobile: false,
+        // bühne
+        stage: false,
+        backstage: false,
+        // stühle und tische
+        chairs: false,
+        tables: false,
+        elements: false
+    },
+    checklist: {
+        doorsClosed: false,
+        emergencyDoorsClosed: false,
+        regieClosed: false,
+        lightsOff: false,
+        beamerOff: false,
+        clear: false,
+        regie: false,
+        powerOn: false,
+        powerOff: false,
+        stage: false,
+        backstage: false,
+        chairs: false,
+        tables: false,
+    },
+    issues: "",
 }
 
 export default {
     data() {
         return {
-            issues: Array<ILog>(),
+            logs: Array<ILog>(),
             error: {
                 show: false,
                 message: ''
@@ -50,8 +65,8 @@ export default {
                 this.error.show = true;
                 this.error.message = response.statusText;
             } else {
-                response.json().then((data) => {
-                    this.issues = data;
+                response.json().then((data: ILog[]) => {
+                    this.logs = data;
                 });
             }
         }).catch((error) => {
@@ -69,41 +84,111 @@ export default {
         </v-alert>
 
         <v-expansion-panels>
-            <v-expansion-panel disable-icon-rotate v-for="(issue, index) in issues" :key="index">
+            <v-expansion-panel disable-icon-rotate v-for="(log, index) in logs" :key="index">
                 <v-expansion-panel-title disable-icon-rotate>
-                    {{ issue.type }}: {{ issue.event_date }} {{ issue.event_time }} - {{ issue.event_name }}
+                    {{ log.type }}: {{ log.eventinfo.date }} {{ log.eventinfo.time }}
                     <template v-slot:actions>
-                        <v-icon :color="issue.type == 'CheckIn' ? 'success' : 'warning'"
-                            :icon="issue.type == 'CheckIn' ? 'mdi-login-variant' : 'mdi-logout-variant'"></v-icon>
+                        <v-icon :color="log.type == 'CheckIn' ? 'success' : 'warning'"
+                            :icon="log.type == 'CheckIn' ? 'mdi-login-variant' : 'mdi-logout-variant'"></v-icon>
                     </template>
                 </v-expansion-panel-title>
                 <v-expansion-panel-text>
-                    <v-text-field label="Vorname" readonly v-model="issue.name"></v-text-field>
-                    <v-text-field label="Nachname" readonly v-model="issue.lastname"></v-text-field>
-                    <v-text-field label="Position" readonly v-model="issue.position"></v-text-field>
-                    <v-text-field label="Kontakt" readonly v-model="issue.contact"></v-text-field>
-                    <v-text-field label="Veranstaltung" readonly v-model="issue.event_name"></v-text-field>
-                    <v-textara label="Beschreibung" readonly v-model="issue.event_description"></v-textara>
-                    <v-text-field label="Ort" readonly v-model="issue.event_location"></v-text-field>
-                    <v-checkbox readonly v-model="issue.usage_aula" label="Aula benutzt"></v-checkbox>
-                    <v-checkbox readonly v-model="issue.usage_stage" label="Bühne benutzt"></v-checkbox>
-                    <v-checkbox readonly v-model="issue.usage_backstage" label="Backstage benutzt"></v-checkbox>
-                    <v-checkbox readonly v-model="issue.usage_chairs" label="Stühle benutzt"></v-checkbox>
-                    <v-checkbox readonly v-model="issue.usage_regie" label="Regie benutzt"></v-checkbox>
-                    <v-checkbox readonly v-model="issue.usage_mobile" label="Mobile Anlage benutzt"></v-checkbox>
-                    <v-checkbox readonly v-model="issue.checklist.doorsClosed" label="Türen geschlossen"></v-checkbox>
-                    <v-checkbox readonly v-model="issue.checklist.emergencyDoorsClosed"
-                        label="Notausgänge geschlossen"></v-checkbox>
-                    <v-checkbox readonly v-model="issue.checklist.lightsOff" label="Licht aus"></v-checkbox>
-                    <v-checkbox readonly v-model="issue.checklist.backstageLightsOff"
-                        label="Backstage Licht aus"></v-checkbox>
-                    <v-checkbox readonly v-model="issue.checklist.systemOff" label="Anlage aus"></v-checkbox>
-                    <v-checkbox readonly v-model="issue.checklist.lockesClosed" label="Schlösser geschlossen"></v-checkbox>
+                    <v-card>
+                        <v-card-title>
+                            Personalien
+                        </v-card-title>
+                        <v-alert v-if="error.show" color="error" :title="error.message"></v-alert>
+                        <v-card-text>
+                            <v-text-field v-model="log.technician.name" clearable label="Name" density="compact" readonly />
+                            <v-text-field v-model="log.technician.position" clearable label="Position in der Schule"
+                                density="compact" readonly />
+                            <v-text-field v-model="log.technician.contact" clearable
+                                label="E-Mail oder andere Kontaktmöglichkeit" density="compact" readonly />
+                        </v-card-text>
+                    </v-card>
+
+                    <v-card>
+                        <v-card-title>
+                            Nutzung der Aula / Veranstaltung
+                        </v-card-title>
+                        <v-card-text>
+                            <v-text-field v-model="log.eventinfo.name" clearable label="Kurze Bezeichnung" density="compact"
+                                readonly />
+                            <v-textarea v-model="log.eventinfo.description" clearable label="Beschreibung" readonly />
+                            <v-text-field v-model="log.eventinfo.date" clearable label="Datum der Veranstaltung"
+                                density="compact" readonly />
+                            <v-text-field v-model="log.eventinfo.time" clearable label="Aktuelle Uhrzeit" density="compact"
+                                readonly />
+                            <v-text-field v-model="log.eventinfo.location" clearable label="Ort der Veranstaltung"
+                                density="compact" readonly />
+                            <v-text-field v-model="log.eventinfo.url" clearable label="URL im System falls vorhanden"
+                                density="compact" readonly />
+                        </v-card-text>
+                    </v-card>
+
+                    <v-card>
+                        <v-card-title>
+                            Materialien
+                        </v-card-title>
+                        <v-card-text>
+                            <v-checkbox readonly label="Bühne" v-model="log.usage.stage" />
+                            <v-checkbox readonly label="Backstage" v-model="log.usage.backstage" />
+                            <v-checkbox readonly label="Regie" v-model="log.usage.regie" />
+                            <v-checkbox readonly label="Mobile Anlage" v-model="log.usage.mobile" />
+                            <v-checkbox readonly label="Stühle" v-model="log.usage.chairs" />
+                            <v-checkbox readonly label="Tische" v-model="log.usage.tables" />
+                            <v-checkbox readonly label="Bühnenelemente" v-model="log.usage.elements" />
+                        </v-card-text>
+                    </v-card>
+
+                    <v-card>
+                        <v-card-title>
+                            Checkliste
+                        </v-card-title>
+                        <v-card-text>
+                            <v-checkbox readonly v-model="log.checklist.doorsClosed"
+                                label="Die Türen der Aula sind/ waren verschlossen"></v-checkbox>
+                            <v-checkboxreadonly readonly v-model="log.checklist.emergencyDoorsClosed"
+                                label="Die Notausgänge der Aula sind/ waren verschlossen"></v-checkboxreadonly>
+                            <v-checkbox readonly v-model="log.checklist.regieClosed"
+                                label="Die Tür der Regie ist/ war vollständig verschlossen"></v-checkbox>
+                            <v-checkbox readonly v-model="log.checklist.lightsOff"
+                                label="Die Lichter der Aula sind/ waren aus"></v-checkbox>
+                            <v-checkbox readonly v-model="log.checklist.beamerOff"
+                                label="Der Beamer ist/ war ausgeschaltet"></v-checkbox>
+                            <v-checkbox readonly v-model="log.checklist.clear"
+                                label="Die Aula ist/ war sauber"></v-checkbox>
+                            <v-checkbox readonly v-model="log.checklist.regie"
+                                label="Die Regie ist/ war sauber und ordentlich"></v-checkbox>
+                            <v-checkbox readonly v-model="log.checklist.powerOn"
+                                label="Das I-Pad und der Laptop sind/ waren am laden"></v-checkbox>
+                            <v-checkbox readonly v-model="log.checklist.powerOff"
+                                label="Der Hauptschalter ist/ war aus"></v-checkbox>
+
+                            <v-checkbox readonly v-model="log.checklist.stage" label="Die Bühne war sauber"></v-checkbox>
+                            <v-checkbox readonly v-model="log.checklist.backstage"
+                                label="Das Backstage ist/ war sauber und aufgeräumt"></v-checkbox>
+
+                            <v-checkbox readonly v-model="log.checklist.chairs"
+                                label="Die Stühle sind/ waren ordnungsmäß an der Wand und im Stühlelager gelagert"></v-checkbox>
+                            <v-checkbox readonly v-model="log.checklist.tables"
+                                label="Die Tische sind/ waren ordnungsmäß unter der Bühne verstaut"></v-checkbox>
+                        </v-card-text>
+                    </v-card>
+
+                    <v-card>
+                        <v-card-title>
+                            Auffälligkeiten
+                        </v-card-title>
+                        <v-card-text>
+                            <v-textarea readonly v-model="log.issues" clearable label="Auffälligkeiten" />
+                        </v-card-text>
+                    </v-card>
                 </v-expansion-panel-text>
             </v-expansion-panel>
         </v-expansion-panels>
 
-        <v-btn class="floating_action_btn" @click="$router.push('/logger/create')" color="primary" icon="mdi-plus" rounded
+        <v-btn class="floating_action_btn" @click="$router.push('/checkinout')" color="primary" icon="mdi-plus" rounded
             title="Neuer Eintrag" />
     </div>
 </template>

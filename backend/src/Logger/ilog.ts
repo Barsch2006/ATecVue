@@ -1,29 +1,44 @@
 export default interface ILog {
-    type: "CheckIn" | "CheckOut";
-    name: string;
-    lastname: string;
-    position: string;
-    contact: string;
-
-    event_name: string;
-    event_description: string;
-    event_date: string;
-    event_time: string;
-    event_location: string;
-
-    usage_aula: boolean;
-    usage_stage: boolean;
-    usage_backstage: boolean;
-    usage_regie: boolean;
-    usage_chairs: boolean;
-    usage_mobile: boolean;
-
-    checklist: {
-        doorsClosed: boolean,
-        emergencyDoorsClosed: boolean,
-        lightsOff: boolean,
-        backstageLightsOff: boolean,
-        systemOff: boolean,
-        lockesClosed: boolean,
+    type: "CheckIn" | "CheckOut",
+    technician: {
+        name: "",
+        position: "",
+        contact: "",
     },
+    eventinfo: {
+        name: "",
+        description: "",
+        date: "",
+        time: "",
+        location: "",
+        url: ""
+    },
+    usage: {
+        // anlage
+        regie: false,
+        mobile: false,
+        // bühne
+        stage: false,
+        backstage: false,
+        // stühle und tische
+        chairs: false,
+        tables: false,
+        elements: false
+    },
+    checklist: {
+        doorsClosed: false,
+        emergencyDoorsClosed: false,
+        regieClosed: false,
+        lightsOff: false,
+        beamerOff: false,
+        clear: false,
+        regie: false,
+        powerOn: false,
+        powerOff: false,
+        stage: false,
+        backstage: false,
+        chairs: false,
+        tables: false,
+    },
+    issues: "",
 }

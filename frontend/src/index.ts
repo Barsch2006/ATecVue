@@ -52,11 +52,11 @@ const routes = [
         name: "Regeln",
         component: ATecRules
     },
-    // {
-    //     path: "/logs",
-    //     name: "LoggerView",
-    //     component: LoggerView
-    // },
+    {
+        path: "/logger",
+        name: "LoggerView",
+        component: LoggerView
+    },
     {
         path: "/datenschutz",
         name: "Datenschutz",
@@ -72,11 +72,11 @@ const routes = [
         name: "ChangePassword",
         component: ChPwd
     },
-    // {
-    //     path: "/checkin",
-    //     name: "Checkin",
-    //     component: CheckInOut
-    // },
+    {
+        path: "/checkinout",
+        name: "Checkinout",
+        component: CheckInOut
+    },
 ];
 
 const router = createRouter({

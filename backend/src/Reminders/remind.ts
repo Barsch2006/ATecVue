@@ -19,7 +19,7 @@ export default function reminder(client: ATecBot, db: Db) {
         }
 
         // check if it is 7:30 CET
-        if (checkTimeCET(7, 30)) {
+        if (checkTimeCET(13, 50)) {
 
             // get the reminders channel
             const channel = await client.channels.fetch(process.env.DISCORD_REMINDER_CHANNEL);
