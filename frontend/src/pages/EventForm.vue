@@ -84,7 +84,7 @@ export default {
                 beamer: this.beamer,
                 hdmi: this.hdmi,
                 vga: this.vga,
-                usb: this.usb
+                usb: this.usb,
             }));
         },
         async sendData() {
@@ -108,7 +108,7 @@ export default {
                 beamer: this.beamer,
                 hdmi: this.hdmi,
                 vga: this.vga,
-                usb: this.usb
+                usb: this.usb,
             }
 
             const result = await fetch("/event", {
@@ -132,7 +132,7 @@ export default {
                     this.button.icon = "mdi-alert";
                     this.button.text = "Login erforderlich";
                     this.button.disabled = false;
-                    setTimeout(() => {this.$router.push("/");}, 1500);
+                    setTimeout(() => { this.$router.push("/"); }, 1500);
                 } else {
                     this.button.allowSend = true;
                 }
@@ -146,7 +146,7 @@ export default {
                 this.button.text = "Erfolgreich!";
                 this.button.color = "success";
                 this.button.icon = "mdi-check";
-                setTimeout(() => {this.$router.push("/home");}, 1500);
+                setTimeout(() => { this.$router.push("/home"); }, 1500);
             }
         }
     }
@@ -236,20 +236,14 @@ export default {
             </v-card-title>
             <v-card-text>
                 <v-textarea @update:model-value="cacheFormInput()" name="notes" clearable
-                    label="Sonstiges, Anmerkungen, Generalprobe.." />
+                    label="Sonstiges, Anmerkungen, Generalprobe.." v-model="notes" />
             </v-card-text>
             <v-alert color="error" v-if="error.show" :title="error.message"></v-alert>
             <v-card-actions>
                 <v-btn type="reset" variant="tonal">Zurücksetzen</v-btn>
-                <v-btn
-                    type="submit"
-                    variant="tonal"
-                    :disabled="button.disabled"
-                    :loading="button.loading"
-                    :prepend-icon="button.icon"
-                    :color="button.color || undefined"
-                >
-                    {{ button.text}}
+                <v-btn type="submit" variant="tonal" :disabled="button.disabled" :loading="button.loading"
+                    :prepend-icon="button.icon" :color="button.color || undefined">
+                    {{ button.text }}
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -299,5 +293,4 @@ export default {
         grid-template-rows: repeat(2, 1fr);
     }
 }
-
 </style>
