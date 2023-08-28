@@ -131,10 +131,9 @@ export default {
       <v-form @submit.prevent="sendData()">
         <v-card>
           <v-card-title> Dateien </v-card-title>
-          <v-card-subtitle
-            >Optional Ablaufpläne, Präsentationen, etc.
-            anhängen.</v-card-subtitle
-          >
+          <v-card-subtitle>
+            Optional Ablaufpläne, Präsentationen, etc. anhängen.
+          </v-card-subtitle>
           <v-card-text>
             <v-file-input
               v-model="files"
