@@ -11,4 +11,5 @@ export default interface IItem {
   back_checklist: Checklist;
   location: string;
   category: ItemCategory;
+  code: string;
 }
