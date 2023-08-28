@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import ATecHeader from './components/ATecHeader.vue';
-import ATecFooter from './components/ATecFooter.vue';
+import ATecHeader from "./components/ATecHeader.vue";
+import ATecFooter from "./components/ATecFooter.vue";
 </script>
 
 <template>

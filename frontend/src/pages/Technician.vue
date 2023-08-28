@@ -439,6 +439,25 @@ export default {
           ></v-checkbox>
         </v-card-text>
 
+        <v-card-title> Dateien </v-card-title>
+        <v-card-text v-if="files.length > 0">
+          <v-btn
+            style="margin-left: 5px; margin-bottom: 10px; margin-right: 5px"
+            v-for="(file, index) in files"
+            :key="index"
+            variant="tonal"
+          >
+            <a style="color: #fff" :href="`/event/files/${file.id}`" download>{{
+              file.filename
+            }}</a>
+          </v-btn>
+        </v-card-text>
+        <v-card-text v-else>
+          <v-alert dense type="info" color="surface"
+            >Keine Dateien hochgeladen</v-alert
+          >
+        </v-card-text>
+
         <v-card-title> Schluss </v-card-title>
         <v-card-text>
           <v-textarea
@@ -447,15 +466,6 @@ export default {
             clearable
             label="Sonstiges, Anmerkungen, Generalprobe.."
           />
-        </v-card-text>
-
-        <v-card-title> Dateien </v-card-title>
-        <v-card-text>
-          <v-btn v-for="(file, index) in files" :key="index" variant="outlined">
-            <a :href="`/event/files/${file.id}`" download>{{
-              file.filename
-            }}</a>
-          </v-btn>
         </v-card-text>
 
         <v-card-actions v-if="isAdmin">

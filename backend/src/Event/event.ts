@@ -1,6 +1,9 @@
 import { ObjectId } from "mongodb";
 
 interface IEvent {
+  // backend info
+  createdBy: ObjectId;
+
   // creator info
   name: string;
   lastname: string;

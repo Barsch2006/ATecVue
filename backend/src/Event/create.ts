@@ -42,6 +42,16 @@ export default function createEvent(db: Db, discord: ATecBot): Router {
         filename: string;
       }>();
       for (const file of req.files as Express.Multer.File[]) {
+        // check if the file type is allowed (".html, image/*, .zip, .pdf, .txt, .pptx, .csv, video/*, audio/*")
+        if (
+          !file.mimetype.match(
+            /text\/html|image\/.*|application\/zip|application\/pdf|text\/plain|application\/vnd.openxmlformats-officedocument.presentationml.presentation|text\/csv|video\/.*|audio\/.*/
+          )
+        ) {
+          res.status(400).send("Bad Request");
+          return;
+        }
+
         const uploadStream = bucket.openUploadStream(file.originalname);
         uploadedFileIds.push({
           id: uploadStream.id,
@@ -53,6 +63,7 @@ export default function createEvent(db: Db, discord: ATecBot): Router {
 
       // when user is authenticated and body is valid, write event to the database
       const result = await eventCollection.insertOne({
+        createdBy: req.auth?.user._id,
         name: data.name,
         lastname: data.lastname,
         email: data.email,
@@ -80,6 +91,7 @@ export default function createEvent(db: Db, discord: ATecBot): Router {
       }
 
       const dcMessageId = await discord.sendEventForm({
+        createdBy: req.auth?.user._id,
         _id: result.insertedId,
         name: data.name,
         lastname: data.lastname,

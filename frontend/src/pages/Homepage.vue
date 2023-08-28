@@ -10,14 +10,13 @@ export default {
   methods: {
     logout() {
       window.location.href = "/logout";
-    }
+    },
   },
   beforeMount() {
     this.technicianAccess = "loading";
     this.adminAccess = "loading";
     fetch("/checkaccess", { method: "GET" })
       .then((response) => {
-
         if (response.status === 401) {
           this.$router.push("/login");
           return undefined;
@@ -26,7 +25,10 @@ export default {
         return response.json();
       })
       .then((data) => {
-        if (data.technicianAccess && typeof data.technicianAccess === "string") {
+        if (
+          data.technicianAccess &&
+          typeof data.technicianAccess === "string"
+        ) {
           this.technicianAccess = data.technicianAccess;
         } else {
           this.technicianAccess = "denied";
@@ -36,59 +38,80 @@ export default {
         } else {
           this.adminAccess = "denied";
         }
-      }).catch(() => {
+      })
+      .catch(() => {
         this.technicianAccess = "denied";
         this.adminAccess = "denied";
         this.$router.push("/");
       });
-  }
-}
+  },
+};
 </script>
 
 <template>
   <div class="wrapper">
     <v-card>
-      <v-card-title>
-        Veranstaltung anmelden
-      </v-card-title>
+      <v-card-title> Veranstaltung anmelden </v-card-title>
       <v-card-subtitle>
         Hier können Sie eine Veranstaltung anmelden.
       </v-card-subtitle>
       <v-card-actions>
-        <v-btn variant="tonal" width="100%" href="/createevent">zum Formular</v-btn>
+        <v-btn variant="tonal" width="100%" href="/createevent"
+          >zum Formular</v-btn
+        >
       </v-card-actions>
     </v-card>
     <v-card>
-      <v-card-title>
-        Actions
-      </v-card-title>
+      <v-card-title> Actions </v-card-title>
       <v-card-text>
-        <v-btn prepend-icon="mdi-form-textbox-password" @click="$router.push('/chpwd')">
+        <v-btn
+          prepend-icon="mdi-form-textbox-password"
+          @click="$router.push('/chpwd')"
+        >
           Passwort ändern
         </v-btn>
-        <v-btn v-if="technicianAccess !== 'denied'" :loading="technicianAccess === 'loading'"
-          prepend-icon="mdi-calendar-multiple" @click="$router.push('/technician')">
+        <v-btn
+          v-if="technicianAccess !== 'denied'"
+          :loading="technicianAccess === 'loading'"
+          prepend-icon="mdi-calendar-multiple"
+          @click="$router.push('/technician')"
+        >
           Events einsehen
         </v-btn>
-        <v-btn v-if="technicianAccess !== 'denied'" :loading="technicianAccess === 'loading'" prepend-icon="mdi-pencil-circle"
-          @click="$router.push('/logger')">
+        <v-btn
+          v-if="technicianAccess !== 'denied'"
+          :loading="technicianAccess === 'loading'"
+          prepend-icon="mdi-pencil-circle"
+          @click="$router.push('/logger')"
+        >
           Logs einsehen
         </v-btn>
-        <v-btn v-if="adminAccess !== 'denied'" :loading="adminAccess === 'loading'" prepend-icon="mdi-security"
-          @click="$router.push('/admin')">
+        <v-btn
+          prepend-icon="mdi-file-upload"
+          @click="$router.push('/myevents')"
+        >
+          Nachträgliches Hochladen
+        </v-btn>
+        <v-btn
+          v-if="adminAccess !== 'denied'"
+          :loading="adminAccess === 'loading'"
+          prepend-icon="mdi-security"
+          @click="$router.push('/admin')"
+        >
           Nutzer verwalten
         </v-btn>
       </v-card-text>
     </v-card>
     <v-card>
-      <v-card-title>
-        Logout
-      </v-card-title>
-      <v-card-subtitle>
-        Hier können Sie sich abmelden.
-      </v-card-subtitle>
+      <v-card-title> Logout </v-card-title>
+      <v-card-subtitle> Hier können Sie sich abmelden. </v-card-subtitle>
       <v-card-actions>
-        <v-btn variant="tonal" width="100%" prepend-icon="mdi-logout" @click="logout()">
+        <v-btn
+          variant="tonal"
+          width="100%"
+          prepend-icon="mdi-logout"
+          @click="logout()"
+        >
           Ausloggen
         </v-btn>
       </v-card-actions>
@@ -119,7 +142,7 @@ export default {
     display: flex;
     width: 100%;
     font-size: 18px;
-    height: 24px
+    height: 24px;
   }
 
   .wrapper {
@@ -142,7 +165,6 @@ export default {
 }
 
 @media screen and (max-width: 699.999px) {
-
   .v-card {
     width: 100%;
   }
@@ -164,7 +186,7 @@ export default {
     display: flex;
     width: 100%;
     font-size: 18px;
-    height: 24px
+    height: 24px;
   }
 
   .wrapper {
@@ -183,6 +205,5 @@ export default {
     grid-template-rows: repeat(4, 1fr);
     gap: 10px;
   }
-
 }
 </style>
