@@ -266,7 +266,6 @@ export default {
     <v-table style="margin-top: 40px" fixed-header>
       <thead>
         <tr>
-          <th class="text-left">ID</th>
           <th class="text-left">Titel</th>
           <th class="text-left">Datum</th>
           <th class="text-left">Start</th>
@@ -276,9 +275,6 @@ export default {
       </thead>
       <tbody>
         <tr @click="openEvent(item._id)" v-for="item in events" :key="item._id">
-          <td>
-            {{ item._id }}
-          </td>
           <td>
             {{ item.title }}
           </td>
