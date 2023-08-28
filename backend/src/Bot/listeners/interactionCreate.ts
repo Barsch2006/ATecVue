@@ -12,6 +12,7 @@ import IEvent from "../../Event/event";
 import IUser from "../../Auth/user";
 import buildEventEmbed from "../Embeds/buildEventEmbed";
 import { buildEventMessageComponents } from "../Bot";
+import about from "../actions/about";
 
 export default (client: Client, db: Db): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
@@ -34,6 +35,9 @@ const handleSlashCommand = async (
       break;
     case "register":
       await register(interaction, db);
+      break;
+    case "about":
+      await about(interaction);
       break;
   }
 };
