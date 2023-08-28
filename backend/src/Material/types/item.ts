@@ -12,4 +12,5 @@ export default interface IItem {
   location: string;
   category: ItemCategory;
   code: string;
+  img?: string;
 }

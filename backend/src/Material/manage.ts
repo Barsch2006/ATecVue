@@ -85,6 +85,7 @@ export default function manageMaterial(db: Db): Router {
       location: req.body.location,
       category: req.body.category,
       code: code,
+      img: req.body.img ? req.body.img : undefined,
     };
 
     // insert the item into the database
@@ -156,6 +157,7 @@ export default function manageMaterial(db: Db): Router {
       location: req.body.location,
       category: req.body.category,
       code: req.body.code,
+      img: req.body.img ? req.body.img : undefined,
     };
 
     // update the item in the database
