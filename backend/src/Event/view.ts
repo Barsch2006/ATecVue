@@ -1,4 +1,4 @@
-import { Db, ObjectId } from "mongodb";
+import { Db, GridFSBucket, ObjectId } from "mongodb";
 import IEvent from "./event";
 import { Router } from "express";
 
@@ -7,7 +7,7 @@ export default function viewEvents(db: Db): Router {
 
   const eventCollection = db.collection<IEvent>("events");
 
-  router.get('/event/:id', async (req, res) => {
+  router.get("/event/:id", async (req, res) => {
     try {
       if (!req.auth?.authenticated) {
         res.status(401).send("Unauthorized");
@@ -15,7 +15,11 @@ export default function viewEvents(db: Db): Router {
       }
 
       // check if the user is logged in and at least a user (not locked)
-      if (!req.auth?.user || (req.auth?.user.permissionLevel != "technician" && req.auth?.user.permissionLevel != "admin")) {
+      if (
+        !req.auth?.user ||
+        (req.auth?.user.permissionLevel != "technician" &&
+          req.auth?.user.permissionLevel != "admin")
+      ) {
         res.status(403).send("Forbidden");
         return;
       }
@@ -23,7 +27,9 @@ export default function viewEvents(db: Db): Router {
       const eventId = req.params.id;
 
       try {
-        const event = await eventCollection.findOne({ _id: new ObjectId(eventId) });
+        const event = await eventCollection.findOne({
+          _id: new ObjectId(eventId),
+        });
         if (event) {
           res.send(event);
         } else {
@@ -40,7 +46,7 @@ export default function viewEvents(db: Db): Router {
   });
 
   // get all events, sorted by date and in a short format
-  router.get('/events', async (req, res) => {
+  router.get("/events", async (req, res) => {
     try {
       if (!req.auth?.authenticated) {
         res.status(401).send("Unauthorized");
@@ -48,7 +54,11 @@ export default function viewEvents(db: Db): Router {
       }
 
       // check if the user is logged in and at least a user (not locked)
-      if (!req.auth?.user || (req.auth?.user.permissionLevel != "technician" && req.auth?.user.permissionLevel != "admin")) {
+      if (
+        !req.auth?.user ||
+        (req.auth?.user.permissionLevel != "technician" &&
+          req.auth?.user.permissionLevel != "admin")
+      ) {
         res.status(403).send("Forbidden");
         return;
       }
@@ -56,7 +66,7 @@ export default function viewEvents(db: Db): Router {
       try {
         const events = await eventCollection
           .find()
-          .map(event => {
+          .map((event) => {
             return {
               _id: event._id,
               title: event.title,
@@ -77,6 +87,40 @@ export default function viewEvents(db: Db): Router {
     } catch (error) {
       console.error("Error retrieving events:", error);
       res.status(500).send("Internal Server Error");
+    }
+  });
+
+  router.get("/event/files/:id", async (req, res) => {
+    try {
+      const bucket = new GridFSBucket(db);
+
+      const downloadStream = bucket.openDownloadStream(
+        new ObjectId(req.params.id)
+      );
+
+      // Zugriff auf Metadaten der Datei
+      const fileInfo = await bucket
+        .find({ _id: new ObjectId(req.params.id) })
+        .toArray();
+
+      if (fileInfo.length === 0) {
+        res.status(404).send("Datei nicht gefunden");
+        return;
+      }
+
+      const filename = fileInfo[0].filename;
+
+      // Setzen des Dateinamens im Response Header
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${filename}"`
+      );
+
+      // Streamen der Datei an das Frontend
+      downloadStream.pipe(res);
+    } catch (error) {
+      console.error("Fehler beim Abrufen der Datei:", error);
+      res.status(500).send("Fehler beim Abrufen der Datei");
     }
   });
 
