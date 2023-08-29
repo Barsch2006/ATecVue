@@ -13,10 +13,10 @@ import auth from "./Auth/auth";
 import { WithId } from "mongodb";
 import { join } from "path";
 import admin from "./Admin/admin";
-import wishlist from "Material/wishlist";
-import manageMaterial from "Material/manage";
-import takeMaterial from "Material/take";
-import getMaterial from "Material/get";
+import wishlist from "./Material/wishlist";
+import manageMaterial from "./Material/manage";
+import takeMaterial from "./Material/take";
+import getMaterial from "./Material/get";
 
 declare global {
   namespace Express {
