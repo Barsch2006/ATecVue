@@ -13,7 +13,6 @@ import auth from "./Auth/auth";
 import { WithId } from "mongodb";
 import { join } from "path";
 import admin from "./Admin/admin";
-import wishlist from "./Material/wishlist";
 import manageMaterial from "./Material/manage";
 import takeMaterial from "./Material/take";
 import getMaterial from "./Material/get";
@@ -78,7 +77,6 @@ async function main() {
   app.use(createEvent(db, bot));
   app.use(viewEvents(db));
   app.use(admin(db));
-  app.use(wishlist(db));
   app.use(manageMaterial(db));
   app.use(takeMaterial(db));
   app.use(getMaterial(db));

@@ -1,6 +1,7 @@
 # ATec-Website
 
 The Website of the ATec of the GRB. It is implemented in Vue and with Vuetify in the frontend and with MongoDB and Express in the backend.
+Tested on Node 18.x
 
 ## use
 
@@ -32,7 +33,7 @@ PUBLIC_DIR = <path_to_public_dir>
 
 ## usertypes
 
-The user types extend eachother, a user < technician < admin. 
+The user types extend eachother, a user < technician < admin.
 "locked" is a special case.
 
 ### user

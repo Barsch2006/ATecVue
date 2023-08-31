@@ -22,15 +22,7 @@
     "noFallthroughCasesInSwitch": true,
     "allowJs": true,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@apps/*": [
-        "./src/components/Apps/*"
-      ],
-      "@dolphintypes/*": [
-        "./src/types/*"
-      ]
+      "@/*": ["./src/*"]
     }
   }
 }
