@@ -12,7 +12,6 @@ import LoggerView from "./pages/LoggerView.vue";
 import Datenschutz from "./pages/Datenschutz.vue";
 import Impressum from "./pages/Impressum.vue";
 import ChPwd from "./pages/ChPwd.vue";
-import Wishlist from "./pages/Wishlist.vue";
 
 import "vuetify/styles";
 import "@mdi/font/css/materialdesignicons.css";
@@ -83,11 +82,6 @@ const routes = [
     path: "/myevents",
     name: "MyEvents",
     component: MyEvents,
-  },
-  {
-    path: "/wishlist",
-    name: "Wishlist",
-    component: Wishlist,
   },
 ];
 
