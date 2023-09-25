@@ -52,7 +52,7 @@ The user types extend eachother, a user < technician < admin.
 
 ### locked
 
-The user exists, but can't login (blocked). No rights
+The user exists, but can't login (blocked). No permissions
 
 ## features
 
