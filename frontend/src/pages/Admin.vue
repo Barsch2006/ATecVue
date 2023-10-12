@@ -298,7 +298,7 @@ export default {
             <v-select
               v-model="changeLevel"
               label="Permission-Level"
-              :items="['locked', 'user', 'technician', 'admin']"
+              :items="['locked', 'shared', 'user', 'technician', 'admin']"
             />
             <v-btn type="submit" :prepend-icon="editUserButton.icon" :loading="editUserButton.loading" :disabled="editUserButton.disabled">{{ editUserButton.text }} </v-btn>
           </v-form>
@@ -322,7 +322,7 @@ export default {
             <v-select
               v-model="createLevel"
               label="Permission-Level"
-              :items="['locked', 'user', 'technician', 'admin']"
+              :items="['locked', 'shared', 'user', 'technician', 'admin']"
             />
             <v-btn type="submit"
               :disabled="createUserButton.disabled"
