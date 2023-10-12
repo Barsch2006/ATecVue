@@ -4,6 +4,7 @@ export default {
     return {
       technicianAccess: "",
       adminAccess: "",
+      accountType: "" as "locked" | "shared" | "user" | "technician" | "admin",
     };
   },
 
@@ -38,6 +39,11 @@ export default {
         } else {
           this.adminAccess = "denied";
         }
+        if (data.accountType && typeof data.accountType === "string") {
+          this.accountType = data.accountType;
+        } else {
+          this.accountType = "locked";
+        }
       })
       .catch(() => {
         this.technicianAccess = "denied";
@@ -65,6 +71,7 @@ export default {
       <v-card-title> Actions </v-card-title>
       <v-card-text>
         <v-btn
+          v-if="accountType !== 'shared' && accountType !== 'locked'"
           prepend-icon="mdi-form-textbox-password"
           @click="$router.push('/chpwd')"
         >

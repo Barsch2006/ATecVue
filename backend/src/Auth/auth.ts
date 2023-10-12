@@ -254,6 +254,7 @@ export default function auth(db: Db): Router {
             res.status(200).json({
                 technicianAccess: "granted",
                 adminAccess: "granted",
+                accountType: req.auth?.user?.permissionLevel,
             })
             return;
         }
@@ -262,6 +263,7 @@ export default function auth(db: Db): Router {
             res.status(200).json({
                 technicianAccess: "granted",
                 adminAccess: "denied",
+                accountType: req.auth?.user?.permissionLevel,
             })
             return;
         }
@@ -269,6 +271,7 @@ export default function auth(db: Db): Router {
         res.status(200).json({
             technicianAccess: "denied",
             adminAccess: "denied",
+            accountType: req.auth?.user?.permissionLevel,
         });
     })
 
