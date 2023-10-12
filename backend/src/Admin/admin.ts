@@ -217,7 +217,7 @@ function validateBody(body: any): body is IUser {
     if (!body) return false;
     if (!body.username || !body.password || !body.permissionLevel || !body.contactAdress) return false;
     if (typeof body.username !== "string" || typeof body.password !== "string" || typeof body.permissionLevel !== "string" || typeof body.contactAdress !== "string") return false;
-    if (typeof body.permissionLevel !== "string" || (body.permissionLevel !== "locked" && body.permissionLevel !== "user" && body.permissionLevel !== "technician" && body.permissionLevel !== "admin")) return false;
+    if (typeof body.permissionLevel !== "string" || (body.permissionLevel !== "locked" && body.permissionLevel === "shared" && body.permissionLevel !== "user" && body.permissionLevel !== "technician" && body.permissionLevel !== "admin")) return false;
     if (body.dId !== undefined && typeof body.dId !== "string") return false;
     return true;
 }
