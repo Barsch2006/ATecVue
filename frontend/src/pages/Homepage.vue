@@ -4,12 +4,18 @@ export default {
     return {
       technicianAccess: "",
       adminAccess: "",
+      logout_err: null as string | null;
     };
   },
 
   methods: {
-    logout() {
-      window.location.href = "/logout";
+    async logout() {
+      const res = await fetch("/logout", { method: "GET" });
+      if (res.status === 200 || res.status === 401) {
+        return window.location.href = "/";
+      }
+      const resText = await res.text();
+      this.logout_err = `Fehler beim abmelden: ${resText}`;
     },
   },
   beforeMount() {
@@ -104,7 +110,7 @@ export default {
     </v-card>
     <v-card>
       <v-card-title> Logout </v-card-title>
-      <v-card-subtitle> Hier können Sie sich abmelden. </v-card-subtitle>
+      <v-card-subtitle> {{ logout_err ?? "Abmelden und zurück zum Login" }} </v-card-subtitle>
       <v-card-actions>
         <v-btn
           variant="tonal"
