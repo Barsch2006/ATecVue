@@ -203,6 +203,10 @@ export default function auth(db: Db): Router {
                 res.status(400).send("Bad Request");
                 return;
             }
+            if (req.auth?.user?.permissionLevel === "shared") {
+                res.status(403).send("Forbidden");
+                return;
+            }
 
             if (!req.body || !req.body.newPassword || !req.body.oldPassword) {
                 res.status(400).send("Bad Request");
@@ -250,6 +254,7 @@ export default function auth(db: Db): Router {
             res.status(200).json({
                 technicianAccess: "granted",
                 adminAccess: "granted",
+                accountType: req.auth?.user?.permissionLevel,
             })
             return;
         }
@@ -258,6 +263,7 @@ export default function auth(db: Db): Router {
             res.status(200).json({
                 technicianAccess: "granted",
                 adminAccess: "denied",
+                accountType: req.auth?.user?.permissionLevel,
             })
             return;
         }
@@ -265,6 +271,7 @@ export default function auth(db: Db): Router {
         res.status(200).json({
             technicianAccess: "denied",
             adminAccess: "denied",
+            accountType: req.auth?.user?.permissionLevel,
         });
     })
 
